@@ -3,7 +3,7 @@
 import django.contrib.auth.models
 from django.db import migrations, models
 import django.utils.timezone
-import users.custom_field
+import users.utility
 
 
 class Migration(migrations.Migration):
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
                 ('email', models.EmailField(max_length=254, primary_key=True, serialize=False)),
-                ('username', users.custom_field.HashedPrimaryKeyField(default=users.custom_field.HashedPrimaryKeyField.generate_hash, editable=False, max_length=32, unique=True)),
+                ('username', models.CharField(max_length=150, unique=True, editable=False)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],

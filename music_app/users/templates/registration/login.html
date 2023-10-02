@@ -29,7 +29,7 @@
 
         <div class="col">
             <!-- Simple link -->
-            <a href="#!">Forgot password?</a>
+            <a href="{% url 'password_reset' %}">Forgot password?</a>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
     {% endif %}
     <!-- Register buttons -->
     <div class="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
+        <p>Not a member? <a href="{% url 'register' %}">Register</a></p>
         <p>or sign up with:</p>
         <button type="button" class="btn btn-link btn-floating mx-1">
             <i class="fab fa-facebook-f"></i>

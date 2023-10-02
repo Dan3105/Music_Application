@@ -103,6 +103,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom Authentication Backend
+AUTHENTITACTION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -126,8 +131,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_REDIRECT_URL = 'profile' #name cua path
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
