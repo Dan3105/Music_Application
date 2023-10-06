@@ -12,5 +12,5 @@ class RegisterSerializer(UserSerializer):
     
     def create(self, validated_data):
         #Use create_user method we wrote earlier 
-        return User.objects.create(**validated_data)
+        return User.objects.create_user(**validated_data)
     
