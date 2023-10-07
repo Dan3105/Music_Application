@@ -7,11 +7,17 @@ from core.playlist.models import Playlist
 
 class PlaylistSerializers(AbstractSerializer):
     user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
-
-    def validate_author(self, value):
+    
+    def validate_user(self, value):
         if self.context['request'].user != value:
             raise ValidationError("You can't create a playlist for another user")
         return value
+    
+    def update(self, instance, validated_data):
+        #instance here is playlist reader
+        #validated_data dictionary data
+        #duma lạ vậy ta :)
+        return super().update(instance, validated_data)
     
     class Meta:
         model = Playlist

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     #my package
     'core',
     'core.user',
+    'core.playlist',
 
 ]
 

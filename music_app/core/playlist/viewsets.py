@@ -8,7 +8,7 @@ from core.playlist.serializers import PlaylistSerializers
 from rest_framework import status
 
 class PlaylistViewSet(AbstractViewSet):
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'put', 'delete']
     permission_classes = (IsAuthenticated, )
     serializer_class = PlaylistSerializers
 
@@ -26,3 +26,4 @@ class PlaylistViewSet(AbstractViewSet):
         self.perform_create(serializer)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
