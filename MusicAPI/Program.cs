@@ -6,7 +6,17 @@ builder.Services.AddDbContext<MusicAPIContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MusicAPIContext") ?? throw new InvalidOperationException("Connection string 'MusicAPIContext' not found.")));
 
 // Add services to the container.
-
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+    policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +34,7 @@ if (app.Environment.IsDevelopment())
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseHttpsRedirection();
+app.UseCors(myAllowSpecificOrigins);
 
 app.UseAuthorization();
 
