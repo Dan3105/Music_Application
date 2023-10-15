@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicAPI.Data;
-using MusicAPI.Models;
+using MusicAPI.Data.Entities;
 
 namespace MusicAPI.Controllers
 {

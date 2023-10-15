@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicAPI.Data;
-using MusicAPI.Models;
+using MusicAPI.Data.Entities;
 
 namespace MusicAPI.Controllers
 {
@@ -55,7 +55,7 @@ namespace MusicAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTrackPlaylist(int id, TrackPlaylist trackPlaylist)
         {
-            if (id != trackPlaylist.Track_id)
+            if (id != trackPlaylist.TrackId)
             {
                 return BadRequest();
             }
@@ -97,7 +97,7 @@ namespace MusicAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (TrackPlaylistExists(trackPlaylist.Track_id))
+                if (TrackPlaylistExists(trackPlaylist.TrackId))
                 {
                     return Conflict();
                 }
@@ -107,7 +107,7 @@ namespace MusicAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTrackPlaylist", new { id = trackPlaylist.Track_id }, trackPlaylist);
+            return CreatedAtAction("GetTrackPlaylist", new { id = trackPlaylist.TrackId }, trackPlaylist);
         }
 
         // DELETE: api/TrackPlaylists/5
@@ -132,7 +132,7 @@ namespace MusicAPI.Controllers
 
         private bool TrackPlaylistExists(int id)
         {
-            return (_context.TrackPlaylist?.Any(e => e.Track_id == id)).GetValueOrDefault();
+            return (_context.TrackPlaylist?.Any(e => e.TrackId == id)).GetValueOrDefault();
         }
     }
 }

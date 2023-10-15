@@ -1,0 +1,24 @@
+:root {
+--background-base: #121212;
+}
+
+.sidemenu-background {
+    background-color: transparent;
+    right: -4.5px;
+}
+
+.sidemenu-block{
+    background-color: var(--background-base);
+    border-radius: 8px;
+    color: #dbdbdb;
+    cursor: default;
+}
+
+.sidemenu-btn{
+    width: 100% !important;
+    padding: 8px 12px;
+}
+
+.ps-sidebar-container {
+    background-color: transparent !important;
+}

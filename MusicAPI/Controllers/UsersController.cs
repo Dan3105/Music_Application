@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicAPI.Data;
-using MusicAPI.Models;
+using MusicAPI.Data.Entities;
 using System.Security.Claims;
 
 namespace MusicAPI.Controllers
@@ -11,6 +12,7 @@ namespace MusicAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly MusicAPIContext _context;
+       
 
         public UsersController(MusicAPIContext context)
         {
@@ -18,6 +20,7 @@ namespace MusicAPI.Controllers
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {

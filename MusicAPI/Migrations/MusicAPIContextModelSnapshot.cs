@@ -121,6 +121,29 @@ namespace MusicAPI.Migrations
                     b.ToTable("playlist");
                 });
 
+            modelBuilder.Entity("MusicAPI.Models.Roles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("role_name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleName")
+                        .IsUnique();
+
+                    b.ToTable("roles");
+                });
+
             modelBuilder.Entity("MusicAPI.Models.Track", b =>
                 {
                     b.Property<int>("Id")
@@ -166,28 +189,20 @@ namespace MusicAPI.Migrations
 
             modelBuilder.Entity("MusicAPI.Models.TrackPlaylist", b =>
                 {
-                    b.Property<int>("Track_id")
+                    b.Property<int>("TrackId")
                         .HasColumnType("integer")
                         .HasColumnName("track_id");
 
-                    b.Property<int>("Playlist_id")
+                    b.Property<int>("PlaylistId")
                         .HasColumnType("integer")
                         .HasColumnName("playlist_id");
 
                     b.Property<DateTime>("Added")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TrackId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Track_id", "Playlist_id");
+                    b.HasKey("TrackId", "PlaylistId");
 
                     b.HasIndex("PlaylistId");
-
-                    b.HasIndex("TrackId");
 
                     b.ToTable("track_playlist");
                 });
@@ -240,6 +255,62 @@ namespace MusicAPI.Migrations
                     b.ToTable("user_account");
                 });
 
+            modelBuilder.Entity("MusicAPI.Models.UserRefreshToken", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsInvalidated")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_refresh_token");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.UserRoles", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user_roles");
+                });
+
             modelBuilder.Entity("MusicAPI.Models.Album", b =>
                 {
                     b.HasOne("MusicAPI.Models.Artist", "Artist")
@@ -277,15 +348,49 @@ namespace MusicAPI.Migrations
                 {
                     b.HasOne("MusicAPI.Models.Playlist", "Playlist")
                         .WithMany("tracks")
-                        .HasForeignKey("PlaylistId");
+                        .HasForeignKey("PlaylistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MusicAPI.Models.Track", "Track")
                         .WithMany("playlists")
-                        .HasForeignKey("TrackId");
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Playlist");
 
                     b.Navigation("Track");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.UserRefreshToken", b =>
+                {
+                    b.HasOne("MusicAPI.Models.User", "User")
+                        .WithMany("UserRefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.UserRoles", b =>
+                {
+                    b.HasOne("MusicAPI.Models.Roles", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicAPI.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MusicAPI.Models.Album", b =>
@@ -303,6 +408,11 @@ namespace MusicAPI.Migrations
                     b.Navigation("tracks");
                 });
 
+            modelBuilder.Entity("MusicAPI.Models.Roles", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("MusicAPI.Models.Track", b =>
                 {
                     b.Navigation("playlists");
@@ -310,6 +420,10 @@ namespace MusicAPI.Migrations
 
             modelBuilder.Entity("MusicAPI.Models.User", b =>
                 {
+                    b.Navigation("UserRefreshTokens");
+
+                    b.Navigation("UserRoles");
+
                     b.Navigation("playlists");
                 });
 #pragma warning restore 612, 618

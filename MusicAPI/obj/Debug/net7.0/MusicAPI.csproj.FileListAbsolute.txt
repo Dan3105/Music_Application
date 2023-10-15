@@ -232,3 +232,11 @@ D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\runtimes\unix\lib\n
 D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+D:\Self-Prj\OnIdea\dotnet_musicapp\MusicAPI\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MusicAPI.Models;
+namespace MusicAPI.Data.Entities;
 
 [Table("album")]
 public class Album

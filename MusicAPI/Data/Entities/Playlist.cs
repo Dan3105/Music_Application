@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MusicAPI.Models;
+namespace MusicAPI.Data.Entities;
 
 [Table("playlist")]
 public class Playlist
@@ -18,7 +18,7 @@ public class Playlist
     public string? Title { get; set; }
 
     [AllowNull]
-    [Column("description", TypeName ="text")]
+    [Column("description", TypeName = "text")]
     public string? Description { get; set; }
 
     [Required]
