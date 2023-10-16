@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MusicAPI.Data;
@@ -81,10 +80,19 @@ builder.Services.AddAuthentication(authOptions =>
     authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
+    .AddCookie(x =>
+    {
+        x.Cookie.Name = "token";
+    })
    .AddJwtBearer(jwtOptions =>
    {
        jwtOptions.TokenValidationParameters = tokenValidation;
        jwtOptions.Events = new JwtBearerEvents();
+       jwtOptions.Events.OnMessageReceived = context =>
+       {
+           context.Token = context.Request.Cookies["access_token"];
+           return Task.CompletedTask;
+       };
        jwtOptions.Events.OnTokenValidated = async (context) =>
        {
            var ipAddress = context.Request.HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -95,11 +103,16 @@ builder.Services.AddAuthentication(authOptions =>
                context.Fail("Invalid Token Details");
            }
        };
+       
    });
 #endregion
 
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options => 
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 #region Injection Dependency
 builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 #endregion
 
 builder.Services.AddDbContext<MusicAPIContext>(options =>

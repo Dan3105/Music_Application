@@ -2,9 +2,9 @@
 {
     public class AuthResponse
     {
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
+        public AccessToken AccessToken { get; set; }
         public bool IsSuccess { get; set; }
         public string Reason { get; set; }
+        public RefreshToken RefreshToken { get; set; }
     }
 }

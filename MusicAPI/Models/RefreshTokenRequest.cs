@@ -7,9 +7,5 @@ namespace MusicAPI.Models
         [Required]
         public string ExpiredToken { set; get; }
 
-        [Required]
-        public string RefreshToken { set; get; }
-
-
     }
 }

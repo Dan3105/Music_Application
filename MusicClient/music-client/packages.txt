@@ -3,3 +3,7 @@ npm install @mui/icons-material
 npm install react-router-dom react-icons
 npm install react-bootstrap bootstrap
 #npm install -D tailwindcss
+npm install mdb-react-ui-kit
+npm install formik
+npm install yup
+npm install --save react-toastify

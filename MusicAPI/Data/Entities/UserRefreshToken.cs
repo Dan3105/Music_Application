@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MusicAPI.Data.Entities;
 
-namespace MusicAPI.Models;
+namespace MusicAPI.Data.Entities;
 [Table("user_refresh_token")]
 public class UserRefreshToken
 {
@@ -11,7 +10,7 @@ public class UserRefreshToken
 
     [Required]
     public string Token { get; set; }
-    
+
     [Required]
     public string RefreshToken { get; set; }
 
@@ -26,7 +25,7 @@ public class UserRefreshToken
     {
         get
         {
-            return ExpirationDate >DateTime.UtcNow;
+            return ExpirationDate > DateTime.UtcNow;
         }
     }
 

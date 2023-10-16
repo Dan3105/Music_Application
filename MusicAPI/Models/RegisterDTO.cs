@@ -2,7 +2,7 @@
 
 namespace MusicAPI.Models
 {
-    public class RegisterModel
+    public class RegisterDTO
     {
         [Required]
         [DataType(DataType.EmailAddress)]

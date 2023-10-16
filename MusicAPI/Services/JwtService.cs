@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
+using MusicAPI.Data.Entities;
 
 namespace MusicAPI.Services
 {
@@ -34,27 +35,29 @@ namespace MusicAPI.Services
             if (user == null)
                 return await Task.FromResult<AuthResponse>(null);
 
-            string tokenString = GenerateToken(user.Email, tokenForm.Roles);
+            AccessToken accessToken = GenerateToken(user.Email, tokenForm.Roles);
             string refreshToken = GenerateRefreshToken();
-            return await SaveTokenDetails(tokenForm.IpAddress, user.Id, tokenString, refreshToken);
+            return await SaveTokenDetails(tokenForm.IpAddress, user.Id, accessToken, refreshToken);
         }
 
-        private async Task<AuthResponse> SaveTokenDetails(string ipAddress, int userId, string tokenString, string refreshToken)
+        private async Task<AuthResponse> SaveTokenDetails(string ipAddress, int userId, AccessToken access, string refreshToken)
         {
+            var CreatedDate = DateTime.UtcNow;
+            var ExpiredDate = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JwtSetting:RefreshLifeTimeMinutes"));
             var userRefreshToken = new UserRefreshToken()
             {
-                CreatedDate = DateTime.UtcNow,
-                ExpirationDate = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JwtSetting:RefreshLifeTimeMinutes")),
+                CreatedDate = CreatedDate,
+                ExpirationDate = ExpiredDate,
                 IpAddress = ipAddress,
                 IsInvalidated = false,
                 RefreshToken = refreshToken,
-                Token = tokenString,
+                Token = access.Token,
                 UserId = userId
             };
 
             await _context.UserRefreshToken.AddAsync(userRefreshToken);
             await _context.SaveChangesAsync();
-            return new AuthResponse() { Token = tokenString, IsSuccess = true, RefreshToken = refreshToken };
+            return new AuthResponse() { AccessToken = access, RefreshToken = new RefreshToken { Token = refreshToken, Created = CreatedDate, Expired = ExpiredDate } };
         }
 
         private string GenerateRefreshToken()
@@ -68,8 +71,11 @@ namespace MusicAPI.Services
             return Convert.ToBase64String(byteArray);
         }
 
-        private string GenerateToken(string? userEmail, string[] listRoles)
+        private AccessToken GenerateToken(string? userEmail, string[] listRoles)
         {
+            var create = DateTime.UtcNow;
+            var expired = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JwtSetting:AccessLifeTimeMinutes"));
+
             var jwtKey = _configuration.GetValue<string>("JwtSetting:Key");
             var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
 
@@ -93,7 +99,7 @@ namespace MusicAPI.Services
                     new Claim(ClaimTypes.Email, userEmail),
                     
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JwtSetting:AccessLifeTimeMinutes")),
+                Expires = expired,
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes),
                 SecurityAlgorithms.HmacSha256)
@@ -102,7 +108,7 @@ namespace MusicAPI.Services
             var token = tokenHandler.CreateToken(description);
             string tokenString = tokenHandler.WriteToken(token);
             //string tokenString = await Task.FromResult(tokenHandler.WriteToken(token));
-            return tokenString;
+            return new AccessToken { Token = tokenString, Created = create, Expired = expired};
         }
 
         public async Task<bool> IsValidated(string Token, string ipAddress)

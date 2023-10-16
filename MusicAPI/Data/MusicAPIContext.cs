@@ -26,7 +26,7 @@ namespace MusicAPI.Data
 
         public DbSet<TrackPlaylist> TrackPlaylist { get; set; } = default!;
 
-        public DbSet<MusicAPI.Models.UserRefreshToken> UserRefreshToken { get; set; } = default!;
+        public DbSet<UserRefreshToken> UserRefreshToken { get; set; } = default!;
         public DbSet<Roles> Roles { get; set; } = default!;
         public DbSet<UserRoles> UserRoles { get; set; } = default!;
 
