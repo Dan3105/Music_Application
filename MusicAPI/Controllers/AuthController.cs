@@ -37,7 +37,6 @@ namespace MusicAPI.Controllers
             {
                 return Problem("Entity set 'MusicAPIContext.User'  is null.");
             }
-            Console.WriteLine(registerForm.Email);
 
             // Validate the user input.
             if (!ModelState.IsValid)
@@ -51,7 +50,7 @@ namespace MusicAPI.Controllers
             if (existingUser != null)
             {
                 // The user already exists. Return a BadRequestObjectResult with an error message.
-                return BadRequest("The user already exists.");
+                return BadRequest(new { message = "The user already exists." });
             }
 
             await _userRepository.Create(registerForm);

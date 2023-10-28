@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj": {}
+    "E:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj": {}
   },
   "projects": {
-    "D:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj": {
+    "E:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj",
+        "projectUniqueName": "E:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj",
         "projectName": "MusicAPI",
-        "projectPath": "D:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj",
+        "projectPath": "E:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\MusicAPI.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\obj\\",
+        "outputPath": "E:\\Self-Prj\\OnIdea\\dotnet_musicapp\\MusicAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",

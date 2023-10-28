@@ -7,3 +7,7 @@ npm install mdb-react-ui-kit
 npm install formik
 npm install yup
 npm install --save react-toastify
+#npm install recharts
+npm install --save-dev webpack
+npm install -D babel-loader @babel/core @babel/preset-env webpack
+npm install react-redux

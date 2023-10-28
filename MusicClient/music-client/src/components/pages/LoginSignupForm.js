@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { FormHelperText } from '@mui/material';
-import axios from 'axios'
-
+import { LoginUser, RegisterUser} from '../../services/auth-api.js'
+import { useNavigate } from 'react-router-dom';
 
 const LoginSignupForm = () => {
+  document.body.classList = []
+  document.body.classList.add('login__body');
   const [activeForm, setActiveForm] = useState('login');
-
+  const navigator = useNavigate();
   const SignupSchema = Yup.object().shape({
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters long.')
@@ -19,42 +21,19 @@ const LoginSignupForm = () => {
       .required('Email is required'),
   })
 
+  const LoginSchema = Yup.object().shape({
+    password: Yup.string()
+      .required('Password is required'),
+    email: Yup.string()
+      .email('Email must be a valid email address')
+      .required('Email is required')
+  })
+
   const handleSwitch = (formType) => {
     setActiveForm(formType);
   };
 
-  const LoginUser = (e) => {
-    e.preventDefault();
-    console.log('Hahaha')
-  }
-
-  const RegisterUser = async (e) => {
-      const _email = e.email;
-      const _password = e.password;
-      
-      try {
-        const instance = axios.create({
-          baseURL: "http://localhost:5268/"
-        });
-    
-        // Send data as an object, no need for JSON.stringify
-        const response = await instance.post('/api/Auth/register', {
-          email: _email,
-          password: _password
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-    
-        // Handle the response here
-        console.log('Registration response:', response.data);
-      } catch (error) {
-        // Handle any errors here
-        console.error('Registration failed', error);
-      }
-    }
-
+  
   return (
     <section className="forms-section">
       <h1 className="section-title">Animated Forms</h1>
@@ -65,24 +44,36 @@ const LoginSignupForm = () => {
             <span className="underline" />
           </button>
           <Formik
-
-          >
+            initialValues={{
+              password: '',
+              email: '',
+            }}
+            validationSchema={LoginSchema}
+            onSubmit={(e) => {
+              LoginUser(e, () => {
+                navigator('/');
+              })
+            }}
+          >{({errors, touched}) => (
             <Form className="form form-login">
               {/* Login form content */}
               <fieldset>
                 <legend>Please, enter your email and password for login.</legend>
                 <div className="input-block">
                   <label htmlFor="login-email">E-mail</label>
-                  <input id="login-email" type="email" required />
+                  <Field name="email" id="login-email" type="email" required />
+                  {errors.email && touched.email && <FormHelperText className="MuiFormHelperText-error">{errors.email}</FormHelperText>}
                 </div>
                 <div className="input-block">
                   <label htmlFor="login-password">Password</label>
-                  <input id="login-password" type="password" required />
+                  <Field name="password" id="login-password" type="password" required />
+                  {errors.password && touched.password && <FormHelperText className="MuiFormHelperText-error">{errors.password}</FormHelperText>}
                 </div>
               </fieldset>
               <button type="submit" className="btn-login">Login</button>
 
             </Form>
+            )}
           </Formik>
         </div>
 
@@ -92,14 +83,14 @@ const LoginSignupForm = () => {
             <span className="underline" />
           </button>
           <Formik
-          initialValues={{
-            password:'',
-            confirmPassword: '',
-            email: '',
-          }}
-          validationSchema={SignupSchema}
-          onSubmit={RegisterUser}
-          >{({ errors, touched}) => (
+            initialValues={{
+              password: '',
+              confirmPassword: '',
+              email: '',
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={RegisterUser}
+          >{({ errors, touched }) => (
             <Form className="form form-signup" >
               <fieldset>
                 <legend>Please, enter your email, password and password confirmation for sign up.</legend>
@@ -122,7 +113,7 @@ const LoginSignupForm = () => {
               <button type="submit" className="btn-signup">Continue</button>
 
             </Form>
-            )}
+          )}
           </Formik>
         </div>
       </div>

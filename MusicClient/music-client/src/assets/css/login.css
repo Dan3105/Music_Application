@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 }
 
-body {
+.login__body {
 	margin: 0;
 	font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
 	background: #3b4465;
