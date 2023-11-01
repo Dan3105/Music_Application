@@ -1,0 +1,35 @@
+.header {
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+  }
+  .header__left {
+    background-color: white;
+    color: gray;
+    min-width: 80px;
+    border-radius: 30px;
+    padding: 10px;
+    align-items: center;
+    display: flex;
+    flex: 0.5;
+  }
+  .header__left > input {
+    border: none;
+    width: 100%;
+    background-color: inherit;
+    color: black;
+  }
+  .header__left > input:focus
+  {
+    outline: none;
+  }
+
+
+  .header__right {
+    display: flex;
+    padding-right: 1rem;
+    align-items: center;
+  }
+  .header__right > h4 {
+    margin-right: 10px;
+  }
