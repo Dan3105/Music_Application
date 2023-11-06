@@ -2,34 +2,34 @@ import { useEffect, useState } from "react";
 import { AiFillPlayCircle, AiOutlineLoading } from "react-icons/ai";
 import SongCard from "./SongCard";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
-// import { client } from "../api";
+import { client } from "../api";
 import { Link } from "react-router-dom";
 import { song_db } from "../data/data";
 const SmallSection = ({ title, endpoint }) => {
   const [loading, setLoading] = useState(false);
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const [error, setError] = useState(false);
 
-  // const fetchData = async () => {
-  // 	setError(false);
-  // 	setLoading(true);
-  // 	await client
-  // 		.get(`${endpoint}`)
-  // 		.then((res) => {
-  // 			setData(res.data);
-  // 			setLoading(false);
-  // 		})
-  // 		.catch(() => {
-  // 			setError(true);
-  // 			setLoading(false);
-  // 		});
-  // };
+  const fetchData = async () => {
+    setError(false);
+    setLoading(true);
+    await client
+      .get(`${endpoint}`)
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  };
 
-  // useEffect(() => {
-  // 	fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  let fake_data = song_db;
+  //let fake_data = song_db;
 
   return (
     <Box mt={8}>
@@ -70,7 +70,7 @@ const SmallSection = ({ title, endpoint }) => {
           pb={4}
           className="scrollbar_style"
         >
-          {fake_data?.map((song) => (
+          {data?.map((song) => (
             <SongCard key={song._id} song={song} />
             // <div>{song?.title}</div>
           ))}

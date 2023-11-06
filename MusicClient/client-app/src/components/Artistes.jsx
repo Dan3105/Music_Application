@@ -2,33 +2,33 @@ import { useEffect, useState } from "react";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { AiOutlineLoading } from "react-icons/ai";
 import ArtisteCard from "./ArtisteCard";
-// import { client } from "../api";
+import { client } from "../api";
 import { Link } from "react-router-dom";
 import { artiste_db } from "../data/data";
 const Artistes = () => {
-	// const [artistes, setArtistes] = useState([]);
+	const [artistes, setArtistes] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
-	// const fetchArtistes = async () => {
-	// 	setLoading(true);
-	// 	setError(false);
-	// 	await client
-	// 		.get("/artistes/top")
-	// 		.then((res) => {
-	// 			setArtistes(res.data);
-	// 			setLoading(false);
-	// 		})
-	// 		.catch(() => {
-	// 			setError(true);
-	// 			setLoading(false);
-	// 		});
-	// };
+	const fetchArtistes = async () => {
+		setLoading(true);
+		setError(false);
+		await client
+			.get("/Artist")
+			.then((res) => {
+				setArtistes(res.data);
+				setLoading(false);
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	};
 
-	// useEffect(() => {
-	// 	fetchArtistes();
-	// }, []);
-    let fake_data = artiste_db;
+	useEffect(() => {
+		fetchArtistes();
+	}, []);
+    //let fake_data = artiste_db;
 	return (
 		<Box mt={8}>
 			<Flex align="center" justify="space-between" mb={3}>
@@ -63,7 +63,7 @@ const Artistes = () => {
 					pb={4}
 					px={2}
 					className="scrollbar_style">
-					{fake_data?.map((artiste) => (
+					{artistes?.map((artiste) => (
 						<ArtisteCard key={artiste._id} artiste={artiste} />
                         // <div>{artiste.name}</div>
 					))}

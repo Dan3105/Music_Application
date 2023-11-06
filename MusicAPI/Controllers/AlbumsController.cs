@@ -13,7 +13,6 @@ namespace MusicAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AlbumsController : ControllerBase
     {
         private readonly MusicAPIContext _context;
@@ -31,7 +30,10 @@ namespace MusicAPI.Controllers
           {
               return NotFound();
           }
-            return await _context.Album.ToListAsync();
+          var album = _context.Album.Include(a => a.Artist)
+                .Include(a => a.tracks);
+
+          return await album.ToListAsync();
         }
 
         // GET: api/Albums/5

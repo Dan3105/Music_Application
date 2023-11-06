@@ -64,7 +64,7 @@ namespace MusicAPI.Controllers
         {
             HttpContext.Response.Cookies.Delete("access_token");
             HttpContext.Response.Cookies.Delete("refresh_token");
-            return Ok();
+            return Ok(); 
         }
 
         [AllowAnonymous]

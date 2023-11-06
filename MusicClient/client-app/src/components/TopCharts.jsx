@@ -11,28 +11,28 @@ import { song_db } from "../data/data";
 const TopCharts = () => {
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState(false);
-	// const [data, setData] = useState([]);
+	const [data, setData] = useState([]);
 	const [error, setError] = useState(false);
 
-	// const fetchData = async () => {
-	// 	setLoading(true);
-	// 	setError(false);
-	// 	await client
-	// 		.get("/songs/top")
-	// 		.then((res) => {
-	// 			setData(res.data);
-	// 			setLoading(false);
-	// 		})
-	// 		.catch(() => {
-	// 			setError(true);
-	// 			setLoading(false);
-	// 		});
-	// };
+	const fetchData = async () => {
+		setLoading(true);
+		setError(false);
+		await client
+			.get("/Song/most-liked")
+			.then((res) => {
+				setData(res.data);
+				setLoading(false);
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	};
 
-	// useEffect(() => {
-	// 	fetchData();
-	// }, []);
-    let data = song_db;
+	useEffect(() => {
+		fetchData();
+	}, []);
+    // let data = song_db;
 	const handlePlaySong = (song) => {
 		const index = data?.findIndex((s) => s._id == song._id);
 

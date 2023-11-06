@@ -59,7 +59,7 @@ const SongCard = ({ song }) => {
 	// 			});
 	// 		});
 	// };
-
+	console.log(song)
 	const isCurrentTrack = false;// currentTrack?._id === song?._id;
 	const isFavorite = false; //user?.favorites.includes(song._id);
 
@@ -83,7 +83,7 @@ const SongCard = ({ song }) => {
 				overflow="hidden"
 				position="relative">
 				<Image
-					src={song?.coverImage}
+					src={song?.coverImage ||  "https://wallpaperset.com/w/full/0/3/f/466996.jpg"}
 					alt={song?.title}
 					w="full"
 					roundedTop="base"
@@ -128,13 +128,13 @@ const SongCard = ({ song }) => {
 						fontWeight={500}>
 						{song?.title}
 					</Heading>
-					<Link to={`/artiste/${song?.artistes[0]}`}>
+					<Link to={`/Artist/${song?.artists[0].id}`}>
 						<Text
 							fontSize={{ base: "xs", md: "sm" }}
 							color="zinc.400"
 							noOfLines={1}>
 							{" "}
-							{song?.artistes.join(", ")}{" "}
+							{song?.artists?.map(artist => artist.name).join(", ")}{" "}
 						</Text>
 					</Link>
 				</Box>
