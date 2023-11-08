@@ -7,6 +7,7 @@ import HomeLayout from "../layouts/HomeLayout";
 import PlaylistsPage from "../pages/PlaylistsPage";
 import PlaylistPage from "../pages/PlaylistPage";
 import EditPlaylistPage from "../pages/EditPlaylistPage";
+import CreatePlaylistPage from "../pages/CreatePlaylistPage";
 
 import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/LoginPage";
@@ -15,7 +16,6 @@ import RegisterPage from "../pages/RegisterPage";
 // import ArtistesPage from "../pages/ArtistesPage";
 // import FavoritesPage from "../pages/FavoritesPage";
 
-// import CreatePlaylistPage from "../pages/CreatePlaylistPage";
 
 export const router = createBrowserRouter([
 	{
@@ -40,10 +40,10 @@ export const router = createBrowserRouter([
 				path: "playlists/:id",
 				element: <PlaylistPage />,
 			},
-			// {
-			// 	path: "playlists/create",
-			// 	element: <CreatePlaylistPage />,
-			// },
+			{
+				path: "playlists/create",
+				element: <CreatePlaylistPage />,
+			},
 			{
 				path: "playlists/edit/:id",
 				element: <EditPlaylistPage />,

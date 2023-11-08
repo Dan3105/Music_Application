@@ -15,21 +15,22 @@ import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdError } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { client } from "../api";
-import { loginUser } from "../redux/slices/userSlice";
+import { loginUser, setUser } from "../redux/slices/userSlice";
 import { resetPlayer } from "../redux/slices/playerSlice";
 
 const LoginPage = () => {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const validateFields = () => {
-		if (username == "" || password == "") {
+		if (email == "" || password == "") {
 			setError("All fields are required!");
 			return false;
 		} else {
@@ -42,14 +43,16 @@ const LoginPage = () => {
 		if (validateFields()) {
 			setLoading(true);
 			await client
-				.post("/users/login", {
-					username,
+				.post("/Auth/login", {
+					email,
 					password,
-				})
+				}, {withCredentials: true})
 				.then((res) => {
 					dispatch(resetPlayer());
 					dispatch(loginUser(res.data));
+					dispatch(setUser(res.data))
 					setLoading(false);
+					navigate('/home');
 				})
 				.catch((err) => {
 					setError(err?.response?.data?.message);
@@ -73,7 +76,7 @@ const LoginPage = () => {
 				<Flex direction="column" gap={4}>
 					<FormControl>
 						<FormLabel fontSize="xs" color="zinc.400">
-							Username
+							Email
 						</FormLabel>
 						<Input
 							border="1px"
@@ -83,8 +86,8 @@ const LoginPage = () => {
 							type="text"
 							color="zinc.300"
 							fontSize="sm"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
 					<FormControl>

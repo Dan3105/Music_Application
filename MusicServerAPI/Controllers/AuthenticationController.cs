@@ -69,19 +69,19 @@ namespace MusicServerAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new AuthResponse() { IsSuccess = false, Reason = "Username and password must be provided" });
+                return BadRequest(new { message = "Username and password must be provided" });
             }
 
             var user = _userRepository.GetUserByLogin(request.Email, request.Password);
             if (user != null)
             {
                 if (user.Is_activate == false)
-                    return BadRequest(new AuthResponse() { IsSuccess = false, Reason = "Username has been blocked from this website" });
+                    return BadRequest(new { message = "Username has been blocked from this website" });
+                
             }
             else
             {
-                return BadRequest(new AuthResponse() { IsSuccess = false, Reason = "Username or password not correct" });
-
+                return BadRequest(new { message = "Username or password not correct" });
             }
 
             var tokenForm = GenerateUserRequest(user);
@@ -104,6 +104,7 @@ namespace MusicServerAPI.Controllers
                 ?.ToArray();
             UserRequest userRequest = new UserRequest
             {
+                Id = user.Id,
                 UserEmail = user.Email,
                 Roles = roles
             };
@@ -168,7 +169,7 @@ namespace MusicServerAPI.Controllers
             HttpContext.Response.Cookies.Append("refresh_token", authResponse.RefreshToken.Token,
                             new CookieOptions
                             {
-                                Expires = authResponse.RefreshToken.Expired.AddSeconds(5),
+                                Expires = authResponse.RefreshToken.Expired,
                                 HttpOnly = true,
                                 Secure = true,
                                 IsEssential = true,
@@ -181,6 +182,7 @@ namespace MusicServerAPI.Controllers
             HttpContext.Response.Cookies.Append("access_token", authResponse.AccessToken.Token,
                             new CookieOptions
                             {
+                                //Domain= "localhost",
                                 Expires = authResponse.AccessToken.Expired,
                                 HttpOnly = true,
                                 Secure = true,

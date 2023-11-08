@@ -12,7 +12,7 @@ const PlaylistSong = ({ song, isAdded, onToggleAdd }) => {
 			p={2}>
 			<Flex align="center" gap={2}>
 				<Image
-					src={song?.coverImage}
+					src={song?.coverImage ||  "https://wallpaperset.com/w/full/0/3/f/466996.jpg"}
 					alt={song?.title}
 					rounded="sm"
 					boxSize="2rem"
@@ -20,7 +20,7 @@ const PlaylistSong = ({ song, isAdded, onToggleAdd }) => {
 				<Box>
 					<Text fontSize="sm">{song?.title}</Text>
 					<Text fontSize="xs" color="zinc.600">
-						{song?.artistes.join(", ")}
+						{song?.artists?.map(artist => artist.name).join(", ")}{" "}
 					</Text>
 				</Box>
 			</Flex>

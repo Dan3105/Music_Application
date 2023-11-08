@@ -92,7 +92,7 @@ const NavContent = () => {
 	const { user } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	console.log(user);
 	const handleLogout = () => {
 		dispatch(resetPlayer());
         //custom role in here
@@ -201,7 +201,8 @@ const NavContent = () => {
 						<Flex align="center" gap={4} color="accent.light">
 							<HiOutlineUserCircle size={20} color="inherit" />
 							<Text color="inherit" fontSize="sm">
-								{user?.username}
+								{/* {console.log(user)} */}
+								{user?.userEmail}
 							</Text>
 						</Flex>
 						<Button

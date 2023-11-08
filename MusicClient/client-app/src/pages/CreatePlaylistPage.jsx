@@ -40,7 +40,7 @@ const CreatePlaylistPage = () => {
 	const { user, token } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
-    const fetchFavorites = () => {};
+    //const fetchFavorites = () => {};
 	// const fetchFavorites = async () => {
 	// 	setFavoritesLoading(true);
 	// 	setError({ ...error, favorites: false });
@@ -59,27 +59,42 @@ const CreatePlaylistPage = () => {
 	// 			setError({ ...error, favorites: true });
 	// 		});
 	// };
-    const fetchOtherSongs = () => {};
-	// const fetchOtherSongs = async () => {
-	// 	setError({ ...error, otherSongs: false });
-	// 	setOtherSongsLoading(true);
-	// 	await client
-	// 		.get("/songs/random")
-	// 		.then((res) => {
-	// 			setOtherSongs(res.data);
-	// 			setOtherSongsLoading(false);
-	// 		})
-	// 		.catch(() => {
-	// 			setError({ ...error, otherSongs: true });
-	// 			setOtherSongsLoading(false);
-	// 		});
-	// };
+
+	const fetchFavorites = async () => {
+		setFavoritesLoading(true);
+		setError({ ...error, favorites: false });
+		await client
+			.get("/Song/latest")
+			.then((res) => {
+				setFavoritesLoading(false);
+				setFavorites(res.data);
+			})
+			.catch(() => {
+				setFavoritesLoading(false);
+				setError({ ...error, favorites: true });
+			});
+	};
+	
+	const fetchOtherSongs = async () => {
+		setError({ ...error, otherSongs: false });
+		setOtherSongsLoading(true);
+		await client
+			.get("/Song/most-liked")
+			.then((res) => {
+				setOtherSongs(res.data);
+				setOtherSongsLoading(false);
+			})
+			.catch(() => {
+				setError({ ...error, otherSongs: true });
+				setOtherSongsLoading(false);
+			});
+	};
 
 	useEffect(() => {
-		// fetchFavorites();
-		setFavorites(favorites_db)
-		// fetchOtherSongs();
-		setOtherSongs(song_db)
+		fetchFavorites();
+		//setFavorites(favorites_db)
+		fetchOtherSongs();
+		//setOtherSongs(song_db)
 	}, []);
 
 	const createPlaylist = async () => {

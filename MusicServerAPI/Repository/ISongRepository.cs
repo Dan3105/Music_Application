@@ -11,5 +11,6 @@ namespace MusicServerAPI.Repository
         Task<ICollection<Song>> GetSongsOrderDateRealease(int length=10);
         Task<ICollection<Song>> GetSongsOrderLikes(int length = 10);
         Task<ICollection<Song>> GetSongsBySearch(string search, int length = 10);
+        
     }
 }

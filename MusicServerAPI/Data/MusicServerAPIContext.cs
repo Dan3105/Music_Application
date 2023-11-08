@@ -31,12 +31,22 @@ namespace MusicServerAPI.Data
             modelBuilder.Entity<Song>()
                 .HasMany(e => e.Artists)
                 .WithMany(e => e.Songs)
-                .UsingEntity<ArtistSong>();
+                .UsingEntity<ArtistSong>();           
 
-            modelBuilder.Entity<Playlist>()
-                .HasMany(e => e.Songs)
-                .WithMany(e => e.Playlists)
-                .UsingEntity<PlaylistSong>();
+            modelBuilder.Entity<Playlist>()  // create table Playlist
+                .HasMany(e => e.Songs)       // table Playlist has many Song (show relationship between Playlist and SOng)
+                .WithMany(e => e.Playlists)   // table Song has many Playlist (show relationsthip between Song adn Playlist)
+                .UsingEntity<PlaylistSong>( // using table PlaylistSong to show relationship between Playlist and Song
+                   j => j.HasOne(p => p.Song) // inside PlaylistSong we have reference to single Song
+                    .WithMany(s => s.PlaylistSongs) // inside PlaylistSong we have reference to many Song
+                    .HasForeignKey(p => p.SongId) // specificy foreing key in  table Playlistsong
+                    .OnDelete(DeleteBehavior.Cascade),  // if song is delete, delete it in PlaylistSong too
+
+                   j => j.HasOne(p => p.Playlist)
+                    .WithMany(s => s.PlaylistSongs) 
+                    .HasForeignKey(p => p.PlaylistId) 
+                    .OnDelete(DeleteBehavior.Cascade)
+                 );
 
             modelBuilder.Entity<Song>()
                 .HasMany(e => e.Playlists)
@@ -52,6 +62,7 @@ namespace MusicServerAPI.Data
                 .HasMany(e => e.Users)
                 .WithMany(e => e.Roles)
                 .UsingEntity<UserRole>();
+        
         }
     }
 }

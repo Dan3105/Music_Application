@@ -38,6 +38,9 @@ namespace MusicServerAPI.Entity
         [Required]
         public DateTime ExpirationTokenDate { get; set; }
 
+        public virtual ICollection<Playlist>? Playlists { set; get; }
+        
+
         public virtual ICollection<UserRole>? UserRoles { set; get; }
         public virtual ICollection<Role>? Roles { set; get; }
     }

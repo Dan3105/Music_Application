@@ -6,32 +6,34 @@ import { client } from "../api";
 import { AiOutlineLoading } from "react-icons/ai";
 import { MdErrorOutline } from "react-icons/md";
 import { playlist_db } from "../data/data";
+import { useSelector } from "react-redux";
 
 const PlaylistsPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [playlists, setPlaylists] = useState([]);
+	const { user } = useSelector((state) => state.user);
 
-	// const fetchPlaylists = async () => {
-	// 	setLoading(true);
-	// 	setError(false);
-	// 	await client
-	// 		.get("/playlists")
-	// 		.then((res) => {
-	// 			setLoading(false);
-	// 			setPlaylists(res.data);
-	// 		})
-	// 		.catch(() => {
-	// 			setLoading(false);
-	// 			setError(true);
-	// 		});
-	// };
+	const fetchPlaylists = async () => {
+		setLoading(true);
+		setError(false);
+		await client
+			.get(`/Playlist/user/${user.id}`)
+			.then((res) => {
+				setLoading(false);
+				setPlaylists(res.data);
+			})
+			.catch(() => {
+				setLoading(false);
+				setError(true);
+			});
+	};
 
-	// useEffect(() => {
-	// 	fetchPlaylists();
-	// }, []);
+	useEffect(() => {
+		fetchPlaylists();
+	}, []);
 
-    let fake_data = playlist_db; 
+    
 	if (error) {
 		return (
 			<Flex align="center" justify="center" minH="100vh">
@@ -75,7 +77,7 @@ const PlaylistsPage = () => {
 					gap={5}
 					mt={10}>
 					<CreatePlaylistCard />
-					{fake_data.map((playlist) => (
+					{playlists.map((playlist) => (
 						<PlaylistCard key={playlist?._id} playlist={playlist} />
 					))}
 				</Grid>

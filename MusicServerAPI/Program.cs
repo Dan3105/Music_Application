@@ -16,9 +16,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
     policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://localhost:5173")
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -68,10 +69,12 @@ builder.Services.AddAuthentication(authOptions =>
 builder.Services.AddDbContext<MusicServerAPIContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("MusicServerAPI") ?? throw new InvalidOperationException("Connection string 'MusicServerAPI' not found.")));
 
+builder.Services.ConfigureApplicationCookie(o => o.Cookie.Domain = "");
 #region Add Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 #endregion
 
 var app = builder.Build();

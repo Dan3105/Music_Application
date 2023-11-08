@@ -4,7 +4,7 @@ namespace MusicServerAPI.Model
 {
     public class ArtisteDTO
     {
-        public int _id;
+        public int id { set; get; }
         public string? name { set; get; }
         public string? bio { set; get; }
 
@@ -13,7 +13,7 @@ namespace MusicServerAPI.Model
 
         public ArtisteDTO(Artist artist)
         {
-            _id = artist.Id;
+            id = artist.Id;
             name = artist.Name;
             bio = artist.Biography;
             image = artist.Image;

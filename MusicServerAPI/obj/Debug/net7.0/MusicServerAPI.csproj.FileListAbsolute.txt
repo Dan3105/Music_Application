@@ -56,3 +56,4 @@ E:\Self-Prj\OnIdea\dotnet_musicapp\MusicServerAPI\bin\Debug\net7.0\Microsoft.Ide
 E:\Self-Prj\OnIdea\dotnet_musicapp\MusicServerAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\Self-Prj\OnIdea\dotnet_musicapp\MusicServerAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 E:\Self-Prj\OnIdea\dotnet_musicapp\MusicServerAPI\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+E:\Self-Prj\OnIdea\dotnet_musicapp\MusicServerAPI\bin\Debug\net7.0\libman.json

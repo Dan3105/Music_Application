@@ -23,13 +23,13 @@ import { resetPlayer } from "../redux/slices/playerSlice";
 const RegisterPage = () => {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
 
 	const validateFields = () => {
-		if (username == "" || password == "") {
+		if (email == "" || password == "") {
 			setError("All fields are required!");
 			return false;
 		} else {
@@ -42,14 +42,16 @@ const RegisterPage = () => {
 		if (validateFields()) {
 			setLoading(true);
 			await client
-				.post("/users/register", {
-					username,
+				.post("/Auth/register", {
+					email,
 					password,
 				})
 				.then((res) => {
 					dispatch(resetPlayer());
 					dispatch(loginUser(res.data));
 					setLoading(false);
+
+					
 				})
 				.catch((err) => {
 					setError(err?.response?.data?.message);
@@ -83,8 +85,8 @@ const RegisterPage = () => {
 							type="text"
 							color="zinc.300"
 							fontSize="sm"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
 					<FormControl>

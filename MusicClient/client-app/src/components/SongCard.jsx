@@ -37,7 +37,7 @@ const SongCard = ({ song }) => {
 		// dispatch(setTrackList({ list: [song] }));
 		// dispatch(setPlaying(true));
 	};
-
+	const handleLike = () => {}
 	// const handleLike = async () => {
 	// 	await client
 	// 		.patch(`/songs/like/${song?._id}`, null, {
@@ -59,7 +59,6 @@ const SongCard = ({ song }) => {
 	// 			});
 	// 		});
 	// };
-	console.log(song)
 	const isCurrentTrack = false;// currentTrack?._id === song?._id;
 	const isFavorite = false; //user?.favorites.includes(song._id);
 
