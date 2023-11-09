@@ -71,7 +71,7 @@ const SmallSection = ({ title, endpoint }) => {
           className="scrollbar_style"
         >
           {data?.map((song) => (
-            <SongCard key={song._id} song={song} />
+            <SongCard key={song.id} song={song} />
             // <div>{song?.title}</div>
           ))}
         </Flex>

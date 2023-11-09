@@ -21,22 +21,38 @@ namespace MusicServerAPI.Controllers
         }
 
         [HttpGet]
-        public ICollection<ArtisteDTO> GetArtists()
+        public async Task<IActionResult> GetArtists()
         {
-            ICollection<Artist> artistes = _artistRepository.GetArtists();
+            ICollection<Artist> artistes = await _artistRepository.GetArtists();
             List<ArtisteDTO> artisteList = new List<ArtisteDTO>();
             foreach(var artist in artistes)
             {
                 artisteList.Add(new ArtisteDTO(artist));
             }
-            return artisteList;
+            return Ok(artisteList);
+        }
+
+        [HttpGet("with-songs/{id}")]
+        public async Task<IActionResult> GetArtistWithSongs(int id)
+        {
+            try
+            {
+                Artist artist = await _artistRepository.GetArtistFetchSong(id);
+                ArtisteDTO artisteDTO = new ArtisteDTO(artist);
+                return Ok(artisteDTO);
+            }
+            catch
+            {
+                return BadRequest("Failed in Request");
+            }
+
         }
 
         [HttpGet("{id}")]
-        public ArtisteDTO GetArtist(int id)
+        public async Task<IActionResult> GetArtist(int id)
         {
-            Artist artist = _artistRepository.GetArtist(id);
-            return new ArtisteDTO(artist);
+            Artist artist = await _artistRepository.GetArtist(id);
+            return Ok(new ArtisteDTO(artist));
         }
     }
 }

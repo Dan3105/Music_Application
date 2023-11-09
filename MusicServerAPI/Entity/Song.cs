@@ -34,5 +34,8 @@ namespace MusicServerAPI.Entity
         public virtual ICollection<Artist>? Artists { get; }
         public virtual ICollection<PlaylistSong>? PlaylistSongs { get; }
         public virtual ICollection<Playlist>? Playlists { get; }
+    
+        public virtual ICollection<FavoriteSongs>? FavoriteSongs { get; }
+        public virtual ICollection<User>? Users { get; }
     }
 }

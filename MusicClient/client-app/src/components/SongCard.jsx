@@ -26,41 +26,39 @@ import { client } from "../api";
 import { setUser } from "../redux/slices/userSlice";
 
 const SongCard = ({ song }) => {
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const { currentTrack, isPlaying } = useSelector((state) => state.player);
-	const { user, token } = useSelector((state) => state.user);
+	const { user } = useSelector((state) => state.user);
 
-	// const toast = useToast();
+	const toast = useToast();
 
 	const playSong = () => {
 		// dispatch(setCurrentTrack(song));
 		// dispatch(setTrackList({ list: [song] }));
 		// dispatch(setPlaying(true));
 	};
-	const handleLike = () => {}
-	// const handleLike = async () => {
-	// 	await client
-	// 		.patch(`/songs/like/${song?._id}`, null, {
-	// 			headers: {
-	// 				Authorization: `Bearer ${token}`,
-	// 			},
-	// 		})
-	// 		.then((res) => {
-	// 			dispatch(setUser(res.data));
-	// 			toast({
-	// 				description: "Your favorites have been updated",
-	// 				status: "success",
-	// 			});
-	// 		})
-	// 		.catch(() => {
-	// 			toast({
-	// 				description: "An error occured",
-	// 				status: "error",
-	// 			});
-	// 		});
-	// };
+	//const handleLike = () => {}
+	const handleLike = async () => {
+		await client
+			.patch(`/Song/like/${song?.id}`, null,  {withCredentials: true})
+			.then((res) => {
+				dispatch(setUser(res.data));
+				toast({
+					description: "Your favorites have been updated",
+					status: "success",
+				});
+			})
+			.catch((err) => {
+				console.error(err);
+				toast({
+					description: "An error occured",
+					status: "error",
+				});
+			});
+	};
+
 	const isCurrentTrack = false;// currentTrack?._id === song?._id;
-	const isFavorite = false; //user?.favorites.includes(song._id);
+	const isFavorite = user?.favorites?.includes(song.id);
 
 	return (
 		<Box
@@ -127,7 +125,7 @@ const SongCard = ({ song }) => {
 						fontWeight={500}>
 						{song?.title}
 					</Heading>
-					<Link to={`/Artist/${song?.artists[0].id}`}>
+					<Link to={`/Artist/${song?.artists?.at(0).id}`}>
 						<Text
 							fontSize={{ base: "xs", md: "sm" }}
 							color="zinc.400"

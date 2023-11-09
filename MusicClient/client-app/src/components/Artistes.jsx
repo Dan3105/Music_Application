@@ -64,7 +64,7 @@ const Artistes = () => {
 					px={2}
 					className="scrollbar_style">
 					{artistes?.map((artiste) => (
-						<ArtisteCard key={artiste._id} artiste={artiste} />
+						<ArtisteCard key={artiste.id} artiste={artiste} />
                         // <div>{artiste.name}</div>
 					))}
 				</Flex>

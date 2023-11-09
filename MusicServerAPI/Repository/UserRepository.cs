@@ -41,12 +41,23 @@ namespace MusicServerAPI.Repository
 
         public User GetUser(int id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Users?
+                .Include(u => u.Roles)
+                .Include(u => u.Songs)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public User GetUser(string email)
+        {
+            return _dbContext.Users?
+                .Include(u => u.Roles)
+                .Include(u => u.Songs)
+                .FirstOrDefault(x => x.Email == email);
         }
 
         public User GetUserByLogin(string emailUser, string password)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Email == emailUser);
+            var user = GetUser(emailUser);
             if (user != null)
             {
                 if (BCrypt.Net.BCrypt.Verify(password, user.password))

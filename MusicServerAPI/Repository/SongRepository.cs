@@ -18,15 +18,14 @@ namespace MusicServerAPI.Repository
             throw new NotImplementedException();
         }
 
-        public Song GetSong(int id)
+        public async Task<Song> GetSong(int id)
         {
-            return _dbContext.Songs.Include(s => s.Artists).FirstOrDefault(song => song.Id == id);
+            return await _dbContext.Songs.Include(s => s.Artists).FirstOrDefaultAsync(song => song.Id == id);
         }
 
         public async Task<ICollection<Song>> GetSongs()
         {
             return await _dbContext.Songs
-                .Include(s => s.ArtistSongs)
                 .Include(s => s.Artists)
                 .ToListAsync();
         }
@@ -34,7 +33,6 @@ namespace MusicServerAPI.Repository
         public async Task<ICollection<Song>> GetSongsByArtistId(int artistId, int length = 10)
         {
             return await _dbContext.Artists
-                .Include(s => s.ArtistSongs)
                 .Include(s => s.Songs)
                 .Where(s => s.Id == artistId)
                 .SelectMany(s => s.Songs)
@@ -44,10 +42,10 @@ namespace MusicServerAPI.Repository
 
         }
 
+
         public async Task<ICollection<Song>> GetSongsOrderDateRealease(int length=10)
         {
             return await _dbContext.Songs
-                .Include(s => s.ArtistSongs)
                 .Include(s => s.Artists)
                 .OrderByDescending(song => song.ReleaseDate)
                 .Take(length)
@@ -62,7 +60,6 @@ namespace MusicServerAPI.Repository
         public async Task<ICollection<Song>> GetSongsOrderLikes(int length=10)
         {
             return await _dbContext.Songs
-                .Include(s => s.ArtistSongs)
                 .Include(s => s.Artists)
                 .OrderByDescending(song => song.Likes)
                 .Take(length)
@@ -72,6 +69,17 @@ namespace MusicServerAPI.Repository
         public void Update(Song entity)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ICollection<Song>> GetSongsByUserAccount(User user)
+        {
+            var songs = await _dbContext.Songs
+                                    .Include(p => p.Users)
+                                    .Where(p => p.Users.Contains(user))
+                                    .Include(p => p.Artists)
+                                    .ToListAsync();
+                                        
+            return songs;
         }
     }
 }

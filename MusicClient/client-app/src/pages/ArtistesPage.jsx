@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import SongCard from "../components/SongCard";
+import ArtisteCard from "../components/ArtisteCard";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import { client } from "../api";
 
-const LibraryPage = () => {
-	const [songs, setSongs] = useState([]);
+const ArtistesPage = () => {
+	const [artistes, setArtistes] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 
-	const fetchSongs = async () => {
+	const fetchArtistes = async () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get("/Song")
+			.get("/Artist")
 			.then((res) => {
-				setSongs(res.data);
+				setArtistes(res.data);
 				setLoading(false);
 			})
 			.catch(() => {
@@ -25,28 +25,28 @@ const LibraryPage = () => {
 	};
 
 	useEffect(() => {
-		fetchSongs();
+		fetchArtistes();
 	}, []);
 
 	return (
 		<Box
 			p={6}
 			pb={32}
+			minH="100vh"
 			pt={{ base: 20, md: 6 }}
-			pl={{ base: 4, md: 14, xl: 0 }}
-			minH="100vh">
+			pl={{ base: 4, md: 14, xl: 0 }}>
 			<Box mb={6}>
 				<Heading
-					fontSize={{ base: "lg", md: "2xl" }}
+					fontSize={{ base: "xl", md: "2xl" }}
 					fontWeight="semibold"
 					mb={{ base: 1, md: 3 }}>
-					Library
+					Artistes
 				</Heading>
 				<Text fontSize="sm" color="zinc.400">
-					Discover interesting songs
+					Discover new artistes
 				</Text>
 			</Box>
-			{loading && songs.length < 1 && (
+			{loading && artistes.length < 1 && (
 				<Flex align="center" justify="center" color="accent.main" minH="20rem">
 					<AiOutlineLoading className="spin" size={36} />
 				</Flex>
@@ -58,9 +58,9 @@ const LibraryPage = () => {
 					lg: "repeat(4, 1fr)",
 					xl: "repeat(5, 1fr)",
 				}}
-				gap={{ base: 3, md: 6 }}>
-				{songs.map((song) => (
-					<SongCard key={song.id} song={song} />
+				gap={6}>
+				{artistes.map((artiste) => (
+					<ArtisteCard key={artiste.id} artiste={artiste} />
 				))}
 			</Grid>
 			{error && (
@@ -72,4 +72,4 @@ const LibraryPage = () => {
 	);
 };
 
-export default LibraryPage;
+export default ArtistesPage;

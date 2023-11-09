@@ -10,9 +10,10 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		loginUser: (state, action) => {
-			state.id = action.payload.id;
+			//state.id = action.payload.id;
+			//state.token = action.payload.token;
 			state.email = action.payload.email;
-			// state.token = action.payload.token;
+			state.favorites = action.payload.favorites;
 		},
 
 		logoutUser: (state) => {

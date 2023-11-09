@@ -7,6 +7,7 @@ namespace MusicServerAPI.Repository
     {
         public Task<bool> Create(RegisterDTO registerDTO);
         public User GetUser(int id);
+        public User GetUser(string email);
         public User GetUserByLogin(string emailUser, string password);
         public void Update(User entity);
         public bool SaveChanges();

@@ -26,7 +26,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
   const modalRef = useRef();
   const toast = useToast();
 
-  const isCurrentTrack = currentTrack?._id === song?._id;
+  const isCurrentTrack = currentTrack?._id === song?.id;
 
   const playSong = () => {
     handlePlay(song);
@@ -34,11 +34,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
 
   const likeSong = async () => {
     await client
-      .patch(`/songs/like/${song?._id}`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .patch(`/Song/like/${song?.id}`, null,{withCredentials: true})
       .then((res) => {
         dispatch(setUser(res.data));
         toast({
@@ -135,7 +131,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
             color="accent.main"
             onClick={handleLike}
           >
-            {user?.favorites?.includes(song?._id) ? (
+            {user?.favorites?.includes(song?.id) ? (
               <AiFillHeart color="inherit" />
             ) : (
               <AiOutlineHeart color="#ddd" />

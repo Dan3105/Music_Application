@@ -8,6 +8,7 @@ using MusicServerAPI.Model.ModelAuthentication;
 using MusicServerAPI.Repository;
 using MusicServerAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace MusicServerAPI.Controllers
 {
@@ -18,12 +19,15 @@ namespace MusicServerAPI.Controllers
         private readonly IJwtService _jwtService;
         private readonly MusicServerAPIContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly ISongRepository _songRepository;
 
-        public AuthenticationController(IJwtService IJwtService, MusicServerAPIContext MusicServerAPIContext, IUserRepository IUserRepository)
+        public AuthenticationController(IJwtService IJwtService, MusicServerAPIContext MusicServerAPIContext, 
+            IUserRepository IUserRepository, ISongRepository songRepository)
         {
             _jwtService = IJwtService;
             _context = MusicServerAPIContext;
             _userRepository = IUserRepository;
+            _songRepository = songRepository;
         }
 
         [AllowAnonymous]
@@ -58,6 +62,7 @@ namespace MusicServerAPI.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
+            
             HttpContext.Response.Cookies.Delete("access_token");
             HttpContext.Response.Cookies.Delete("refresh_token");
             return Ok();
@@ -97,6 +102,7 @@ namespace MusicServerAPI.Controllers
 
         private UserRequest GenerateUserRequest(User user)
         {
+            
             var roles = user.UserRoles
                 ?.Where(u => u.UserId == user.Id)
                 ?.Select(rt => rt.Role)
@@ -104,9 +110,9 @@ namespace MusicServerAPI.Controllers
                 ?.ToArray();
             UserRequest userRequest = new UserRequest
             {
-                Id = user.Id,
                 UserEmail = user.Email,
-                Roles = roles
+                Roles = user.Roles?.Select(r => r.RoleName)?.ToArray(),
+                Favorites = user?.FavoriteSongs?.Select(p => p.SongId).ToArray()
             };
             return userRequest;
 
@@ -115,17 +121,13 @@ namespace MusicServerAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> RefreshToken()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new AuthResponse() { IsSuccess = false, Reason = "Token must be provided" });
-            }
 
-            string expiredToken = Request.Cookies["access_token"];
-            string refreshToken = Request.Cookies["refresh_token"];
+            string expiredToken = HttpContext.Request.Cookies["access_token"];
+            string refreshToken = HttpContext.Request.Cookies["refresh_token"];
 
             if (refreshToken == null )
             {
-                return BadRequest(new AuthResponse() { IsSuccess = false, Reason = "Refresh token not found" });
+                return BadRequest("Refresh token not found");
             }
             JwtSecurityToken token = null;
             if (expiredToken != null)
@@ -148,6 +150,35 @@ namespace MusicServerAPI.Controllers
             return Ok(newResponse);
         }
 
+        [Authorize]
+        [HttpGet("favorites")]
+        public async Task<IActionResult> GetFavorites()
+        {
+            try
+            {
+                string emailClaim = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                if (emailClaim == null)
+                {
+                    return BadRequest(400);
+                }
+                User user = _userRepository.GetUser(emailClaim);
+
+                ICollection<SongDTO> favoriteSongs= new List<SongDTO>();
+                var songsFavorite = await _songRepository.GetSongsByUserAccount(user);
+                
+                foreach(Song song in songsFavorite)
+                {
+                    favoriteSongs.Add(new SongDTO(song));
+                }
+
+                return Ok(favoriteSongs);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(400);
+            }
+        }
+
         private AuthResponse ValidateDetails(User? user, JwtSecurityToken token)
         {
             if (user == null)
@@ -156,7 +187,6 @@ namespace MusicServerAPI.Controllers
                 return new AuthResponse { IsSuccess = false, Reason = "Token has not been expired" };
             return new AuthResponse { IsSuccess = true };
         }
-
 
         private JwtSecurityToken GetJwtToken(string expiredToken)
         {
@@ -190,5 +220,6 @@ namespace MusicServerAPI.Controllers
                                 SameSite = SameSiteMode.None
                             });
         }
+    
     }
 }

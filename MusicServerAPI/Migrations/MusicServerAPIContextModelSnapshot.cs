@@ -61,6 +61,21 @@ namespace MusicServerAPI.Migrations
                     b.ToTable("ArtistSongs");
                 });
 
+            modelBuilder.Entity("MusicServerAPI.Entity.FavoriteSongs", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SongId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "SongId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("FavoriteSongs");
+                });
+
             modelBuilder.Entity("MusicServerAPI.Entity.Playlist", b =>
                 {
                     b.Property<int>("Id")
@@ -246,6 +261,25 @@ namespace MusicServerAPI.Migrations
                     b.Navigation("Song");
                 });
 
+            modelBuilder.Entity("MusicServerAPI.Entity.FavoriteSongs", b =>
+                {
+                    b.HasOne("MusicServerAPI.Entity.Song", "Song")
+                        .WithMany("FavoriteSongs")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicServerAPI.Entity.User", "User")
+                        .WithMany("FavoriteSongs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Song");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MusicServerAPI.Entity.Playlist", b =>
                 {
                     b.HasOne("MusicServerAPI.Entity.User", "user")
@@ -314,11 +348,15 @@ namespace MusicServerAPI.Migrations
                 {
                     b.Navigation("ArtistSongs");
 
+                    b.Navigation("FavoriteSongs");
+
                     b.Navigation("PlaylistSongs");
                 });
 
             modelBuilder.Entity("MusicServerAPI.Entity.User", b =>
                 {
+                    b.Navigation("FavoriteSongs");
+
                     b.Navigation("Playlists");
 
                     b.Navigation("UserRoles");

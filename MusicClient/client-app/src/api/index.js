@@ -5,3 +5,22 @@ export const client = axios.create({
 	// https://localhost:7263/api/
 	// http://localhost:5070/api/
 });
+
+client.interceptors.response.use(
+	(response) => {return response;},
+	(error) => {
+		if(error.response && error.response.status === 401)
+		{
+			return client.post("/Auth/RefreshToken", []	, {
+				withCredentials: true,
+			  })
+			  .then(() => {
+				return client(error.config);
+			  })
+				.catch((errorRefresh) => {
+					return Promise.reject(errorRefresh)
+				})
+		}
+		return Promise.reject(error);
+	}
+	);

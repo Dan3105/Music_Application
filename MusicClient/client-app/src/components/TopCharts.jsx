@@ -34,7 +34,7 @@ const TopCharts = () => {
 	}, []);
     // let data = song_db;
 	const handlePlaySong = (song) => {
-		const index = data?.findIndex((s) => s._id == song._id);
+		const index = data?.findIndex((s) => s.id == song.id);
 
 		dispatch(setTrackList({ list: data, index }));
 		dispatch(playTrack(song));
@@ -62,7 +62,7 @@ const TopCharts = () => {
 						<Flex key={i} align="center" gap={4}>
 							<Text>{1 + i}</Text>
 							<HorizontalMusicCard
-								key={song._id}
+								key={song.id}
 								song={song}
 								onPlay={handlePlaySong}
 							/>

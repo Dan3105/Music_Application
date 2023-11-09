@@ -4,18 +4,26 @@ namespace MusicServerAPI.Model
 {
     public class SongDTO
     {
-        public int _id { get; set; }
+        public int id { get; set; }
         public string? title { get; set; }
         public int duration { get; set; }
         public int likes { get; set; }
         public string? coverImage { get; set; }
         public string? songURL { get; set; } 
         public ICollection<ArtisteDTO> artists { get; set; } = default;
-
+        public SongDTO(int _id, string title, int duration, int likes, string coverImage, string songURL)
+        {
+            this.id = _id;
+            this.title = title;
+            this.duration = duration;
+            this.likes = likes;
+            this.coverImage = coverImage;
+            this.songURL = songURL;
+        }
         public SongDTO(Song song)
         {
             this.artists = new List<ArtisteDTO>();
-            this._id = song.Id;
+            this.id = song.Id;
             this.title = song.Title;
             this.duration = song.Duration;
             this.likes = song.Likes;
@@ -25,13 +33,17 @@ namespace MusicServerAPI.Model
             {
                 foreach (var artist in song?.Artists)
                 {
-                    this.artists.Add(new ArtisteDTO(artist));
+                    this.artists.Add(new ArtisteDTO(
+                        artist.Id, artist.Name, artist.Biography, artist.Image, "Artiste"
+                        ));
                 }
             }
             else
             {
-                Console.WriteLine($"{song.Id}:{song.Title} don't fetch artist");
+                //Console.WriteLine($"{song.Id}:{song.Title} don't fetch artist");
             }
         }
+
+
     }
 }

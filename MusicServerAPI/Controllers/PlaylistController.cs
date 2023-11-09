@@ -28,9 +28,9 @@ namespace MusicServerAPI.Controllers
         {
             var emailClaim = HttpContext.User.FindFirstValue(ClaimTypes.Email);// User.FindFirst(ClaimTypes.Email);
             
-            if (emailClaim == null || emailClaim == "")
+            if (emailClaim == null)
             {
-                return BadRequest("Authorize Failed");
+                return BadRequest(400);
             }
             try
             {

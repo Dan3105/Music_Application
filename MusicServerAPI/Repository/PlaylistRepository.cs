@@ -38,7 +38,6 @@ namespace MusicServerAPI.Repository
             
             return await _dbContext.Playlists
                 .Include(p => p.user)
-                .Include(p => p.PlaylistSongs)
                 .Include(p => p.Songs)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

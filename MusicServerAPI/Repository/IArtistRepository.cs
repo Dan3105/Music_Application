@@ -4,7 +4,8 @@ namespace MusicServerAPI.Repository
 {
     public interface IArtistRepository : IRepository<Artist>
     {
-        public Artist GetArtist(int id);
-        public ICollection<Artist> GetArtists();
+        public Task<Artist> GetArtist(int id);
+        public Task<ICollection<Artist>> GetArtists();
+        public Task<Artist> GetArtistFetchSong(int id);
     }
 }

@@ -62,7 +62,21 @@ namespace MusicServerAPI.Data
                 .HasMany(e => e.Users)
                 .WithMany(e => e.Roles)
                 .UsingEntity<UserRole>();
-        
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Songs)
+                .WithMany(e => e.Users)
+                .UsingEntity<FavoriteSongs>(
+                    j => j.HasOne(p => p.Song)
+                        .WithMany(p => p.FavoriteSongs)
+                        .HasForeignKey(p => p.SongId)
+                        .OnDelete(DeleteBehavior.Cascade),
+
+                    j => j.HasOne(p => p.User)
+                        .WithMany(p => p.FavoriteSongs)
+                        .HasForeignKey(p => p.UserId)
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
         }
     }
 }

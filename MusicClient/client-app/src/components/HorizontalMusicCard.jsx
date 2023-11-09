@@ -45,7 +45,7 @@ const HorizontalMusicCard = ({ song, onPlay }) => {
 							fontSize={{ base: "sm", md: "md" }}
 							fontWeight={500}
 							color={
-								currentTrack?._id == song?._id ? "accent.light" : "zinc.200"
+								currentTrack?._id == song?.id ? "accent.light" : "zinc.200"
 							}
 							noOfLines={1}>
 							{song?.title}
@@ -63,7 +63,7 @@ const HorizontalMusicCard = ({ song, onPlay }) => {
 						</Text>
 					</Hide>
 					<Button variant="unstyled" minW={5} color="zinc.300">
-						{user?.favorites?.includes(song._id) ? (
+						{user?.favorites?.includes(song.id) ? (
 							<AiFillHeart color="inherit" />
 						) : (	
 							<AiOutlineHeart color="#ddd" />

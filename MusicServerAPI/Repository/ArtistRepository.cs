@@ -17,14 +17,21 @@ namespace MusicServerAPI.Repository
             throw new NotImplementedException();
         }
 
-        public Artist GetArtist(int id)
+        public async Task<Artist> GetArtist(int id)
         {
-            return _dbContext.Artists.FirstOrDefault(x => x.Id == id);
+            return await _dbContext.Artists.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public ICollection<Artist> GetArtists()
+        public async Task<Artist> GetArtistFetchSong(int id)
         {
-            ICollection<Artist> artists =  _dbContext.Artists.ToList();
+            return await _dbContext.Artists
+                .Include(a => a.Songs)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<ICollection<Artist>> GetArtists()
+        {
+            ICollection<Artist> artists =  await _dbContext.Artists.ToListAsync();
             return artists;
         }
 
