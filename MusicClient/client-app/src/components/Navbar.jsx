@@ -92,7 +92,7 @@ const NavContent = () => {
 	const { user } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	console.log(user);
+
 	const handleLogout = () => {
 		dispatch(resetPlayer());
         //custom role in here

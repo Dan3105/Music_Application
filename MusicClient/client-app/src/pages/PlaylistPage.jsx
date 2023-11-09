@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { client } from "../api";
 import { useParams, Link } from "react-router-dom";
 // import LoadingSkeleton from "../components/LoadingSkeleton";
@@ -13,47 +13,53 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import ArtisteSong from "../components/ArtisteSong";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { playTrack, setTrackList } from "../redux/slices/playerSlice";
 import { BsFillPlayFill } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import { playlist_db } from "../data/data";
+import { useToast, useDisclosure } from "@chakra-ui/react";
+import AlertForm from "../components/AlertForm";
+import { useNavigate } from "react-router-dom";
 const PlaylistPage = () => {
-	// const [data, setData] = useState(null);
+	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.user);
-	const isUserPlaylist = true; //user?.id === data?.userId;
+	let isUserPlaylist = user?.id === data?.userId;;
+	const fetchPlaylist = async () => {
+		setLoading(true);
+		setError(false);
+		await client
+			.get(`/Playlist/${id}`, { withCredentials: true })
+			.then((res) => {
+				setData(res.data);
+				setLoading(false);
 
-	// const fetchPlaylist = async () => {
-	// 	setLoading(true);
-	// 	setError(false);
-	// 	await client
-	// 		.get(`/playlists/${id}`)
-	// 		.then((res) => {
-	// 			setData(res.data);
-	// 			setLoading(false);
-	// 		})
-	// 		.catch(() => {
-	// 			setError(true);
-	// 			setLoading(false);
-	// 		});
-	// };
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	};
 
-	// useEffect(() => {
-	// 	fetchPlaylist();
-	// }, []);
-    // a_user_playlist
-    let data = playlist_db[2];
+	useEffect(() => {
+		fetchPlaylist();
+	}, []);
+	const toast = useToast();
 	const handlePlay = () => {
 		// dispatch(setTrackList({ list: data?.songs }));
 		// dispatch(playTrack(data?.songs[0]));
 	};
 
+	const { isOpen, onOpen, onClose } = useDisclosure()
+	const cancelRef = useRef()
 	const onSongPlay = (song) => {
 		const index = data?.songs.findIndex((s) => s._id == song._id);
 
@@ -61,9 +67,28 @@ const PlaylistPage = () => {
 		dispatch(playTrack(song));
 	};
 
-	// if (loading) {
-	// 	return <LoadingSkeleton />;
-	// }
+	const onDeletePlaylist = async () => {
+		await client.delete(`/Playlist/${id}`, { withCredentials: true })
+				.then((res) => {
+				if (res.status === 200) {
+					toast({
+						description: "Delete Playlist Successfully",
+						status: "success",
+					});
+					navigate('/home');
+				}
+			})
+			.catch((err) => {
+				toast({
+					description: `${err.message ? err.message : "Failed in Request"}`,
+					status: "Error",
+				});
+			});
+	}
+
+	if (loading) {
+		return <LoadingSkeleton />;
+	}
 
 	if (error) {
 		return (
@@ -122,17 +147,49 @@ const PlaylistPage = () => {
 							{data?.description}
 						</Text>
 						{isUserPlaylist && (
-							<Link to={`/playlists/edit/${id}`}>
+							<>
+								<Link to={`/playlists/edit/${id}`}>
+									<Button
+										variant="outline"
+										leftIcon={<AiFillEdit />}
+										size="sm"
+										mt={2}
+										color="whiteAlpha.400"
+										_hover={{
+											color: "white",
+											borderColor: "white"
+										}}>
+										Edit
+									</Button>
+								</Link>
+
 								<Button
+									marginLeft={2}
 									variant="outline"
 									leftIcon={<AiFillEdit />}
 									size="sm"
+									color="whiteAlpha.400"
 									mt={2}
-									_hover={{}}>
-									Edit
+									_hover={{
+										color: "white",
+										borderColor: "white"
+									}}
+									onClick={onOpen}
+								>
+									<AlertForm
+										isOpen={isOpen}
+										cancelRef={cancelRef}
+										onClose={onClose}
+										title="Delete Playlist"
+										desc="Do you want delete this Playlist"
+										callbackAgree={
+											onDeletePlaylist
+										}
+									/>
+									Delete
 								</Button>
-							</Link>
-						)}
+
+							</>)}
 					</Box>
 				</Flex>
 				<Box mt={12}>
@@ -167,7 +224,7 @@ const PlaylistPage = () => {
 								song={song}
 								handlePlay={onSongPlay}
 							/>
-                            // <div>{song.title}</div>
+							// <div>{song.title}</div>
 						))}
 					</Flex>
 				</Box>

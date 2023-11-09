@@ -106,12 +106,7 @@ const CreatePlaylistPage = () => {
 		};
 		setCreatePlLoading(true);
 		await client
-			.post("/playlists/create", playlistDetails, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-			})
+			.post("/Playlist/create", playlistDetails,{withCredentials: true})
 			.then((res) => {
 				setCreatePlLoading(false);
 				toast({
@@ -120,7 +115,7 @@ const CreatePlaylistPage = () => {
 				});
 				navigate("/home");
 				dispatch(
-					setUser({ ...user, playlists: [...user?.playlists, res.data?._id] })
+					// setUser({ ...user, playlists: [...user?.playlists, res.data?._id] })
 				);
 			})
 			.catch(() => {

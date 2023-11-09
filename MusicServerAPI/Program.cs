@@ -23,6 +23,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -44,23 +47,26 @@ TokenValidationParameters tokenValidation = new TokenValidationParameters
     ClockSkew = TimeSpan.Zero
 };
 
+
 builder.Services.AddSingleton<TokenValidationParameters>(tokenValidation);
 builder.Services.AddAuthentication(authOptions =>
 {
     authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddCookie(x =>
-    {
-        x.Cookie.Name = "token";
-    })
+    
    .AddJwtBearer(jwtOptions =>
    {
+       jwtOptions.RequireHttpsMetadata = false;
+       jwtOptions.SaveToken = true;
        jwtOptions.TokenValidationParameters = tokenValidation;
        jwtOptions.Events = new JwtBearerEvents();
        jwtOptions.Events.OnMessageReceived = context =>
        {
-           context.Token = context.Request.Cookies["access_token"];
+           if(context.Request.Cookies.ContainsKey("access_token"))
+           {
+            context.Token = context.Request.Cookies["access_token"];
+           }
            return Task.CompletedTask;
        };
    });
@@ -90,6 +96,7 @@ app.UseCors(myAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

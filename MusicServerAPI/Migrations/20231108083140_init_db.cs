@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicServerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class initdb : Migration
+    public partial class init_db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,6 +47,7 @@ namespace MusicServerAPI.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CoverImage = table.Column<string>(type: "text", nullable: true),
                     ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Duration = table.Column<int>(type: "integer", nullable: false),
                     Likes = table.Column<int>(type: "integer", nullable: false),
@@ -69,9 +70,9 @@ namespace MusicServerAPI.Migrations
                     Is_staff = table.Column<bool>(type: "boolean", nullable: false),
                     Is_superuser = table.Column<bool>(type: "boolean", nullable: false),
                     Is_activate = table.Column<bool>(type: "boolean", nullable: false),
-                    RefreshToken = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExpirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    CreatedTokenDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpirationTokenDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

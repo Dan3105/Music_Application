@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MusicServerAPI.Migrations
 {
     [DbContext(typeof(MusicServerAPIContext))]
-    [Migration("20231105114020_del-table-unuse")]
-    partial class deltableunuse
+    [Migration("20231108083140_init_db")]
+    partial class init_db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,7 +252,7 @@ namespace MusicServerAPI.Migrations
             modelBuilder.Entity("MusicServerAPI.Entity.Playlist", b =>
                 {
                     b.HasOne("MusicServerAPI.Entity.User", "user")
-                        .WithMany()
+                        .WithMany("Playlists")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -322,6 +322,8 @@ namespace MusicServerAPI.Migrations
 
             modelBuilder.Entity("MusicServerAPI.Entity.User", b =>
                 {
+                    b.Navigation("Playlists");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

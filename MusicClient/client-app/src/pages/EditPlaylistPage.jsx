@@ -18,7 +18,7 @@ import { client } from "../api";
 import PlaylistSong from "../components/PlaylistSong";
 import { useSelector } from "react-redux";
 import { AiOutlineLoading } from "react-icons/ai";
-import { playlist_db } from "../data/data";
+
 const EditPlaylistPage = () => {
 	const [fetchPlaylistStatus, setFetchPlaylistStatus] = useState({
 		loading: false,
@@ -43,50 +43,50 @@ const EditPlaylistPage = () => {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	// const fetchPlaylist = async () => {
-	// 	setFetchPlaylistStatus({ loading: true, error: false });
-	// 	await client
-	// 		.get(`/playlists/${id}`)
-	// 		.then((res) => {
-	// 			setInputs({
-	// 				playlistName: res.data.title,
-	// 				playlistDesc: res.data.description,
-	// 			});
-	// 			setPlaylistSongs(res.data.songs);
+	const fetchPlaylist = async () => {
+		setFetchPlaylistStatus({ loading: true, error: false });
+		await client
+			.get(`/Playlist/${id}`, {withCredentials: true})
+			.then((res) => {
+				setInputs({
+					playlistName: res.data.title,
+					playlistDesc: res.data.description,
+				});
+				setPlaylistSongs(res.data.songs);
 
-	// 			setFetchPlaylistStatus({ loading: false, error: false });
-	// 		})
-	// 		.catch(() => {
-	// 			setFetchPlaylistStatus({ loading: false, error: true });
-	// 		});
-	// };
+				setFetchPlaylistStatus({ loading: false, error: false });
+			})
+			.catch(() => {
+				setFetchPlaylistStatus({ loading: false, error: true });
+			});
+	};
 
-    const fetchOtherSongs = () => {}
-	// const fetchOtherSongs = async () => {
-	// 	setOtherSongs((prev) => {
-	// 		return { ...prev, error: false, loading: true };
-	// 	});
-	// 	await client
-	// 		.get("/songs/random")
-	// 		.then((res) => {
-	// 			setOtherSongs((prev) => {
-	// 				return { ...prev, data: res.data, loading: false };
-	// 			});
-	// 		})
-	// 		.catch(() => {
-	// 			setOtherSongs((prev) => {
-	// 				return { ...prev, error: true, loading: false };
-	// 			});
-	// 		});
-	// };
+    // const fetchOtherSongs = () => {}
+	const fetchOtherSongs = async () => {
+		setOtherSongs((prev) => {
+			return { ...prev, error: false, loading: true };
+		});
+		await client
+			.get("/Song/most-liked")
+			.then((res) => {
+				setOtherSongs((prev) => {
+					return { ...prev, data: res.data, loading: false };
+				});
+			})
+			.catch(() => {
+				setOtherSongs((prev) => {
+					return { ...prev, error: true, loading: false };
+				});
+			});
+	};
 
-	// useEffect(() => {
-	// 	fetchPlaylist();
-	// 	fetchOtherSongs();
-	// }, []);
+	useEffect(() => {
+		fetchPlaylist();
+		fetchOtherSongs();
+	}, []);
 
     useEffect(() => {
-        setPlaylistSongs(playlist_db[2].songs);
+        setPlaylistSongs(playlistSongs);
     })
 
 	const songIsInPlaylist = (song) => {
@@ -125,42 +125,39 @@ const EditPlaylistPage = () => {
 				status: "error",
 			});
 		} else {
-			// editPlaylist();
+			editPlaylist();
 		}
 	};
 
-	// const editPlaylist = async () => {
-	// 	setEditLoading(true);
-	// 	const songIds = playlistSongs.map((song) => song._id);
-	// 	const playlistDetails = {
-	// 		title: inputs.playlistName,
-	// 		description: inputs.playlistDesc,
-	// 		songIds,
-	// 	};
-	// 	await client
-	// 		.patch(`/playlists/${id}`, playlistDetails, {
-	// 			headers: {
-	// 				Authorization: `Bearer ${token}`,
-	// 				"Content-Type": "application/json",
-	// 			},
-	// 		})
-	// 		.then(() => {
-	// 			setEditLoading(false);
-	// 			toast({
-	// 				description: "Playlist updated!",
-	// 				status: "success",
-	// 			});
-	// 			navigate("/home");
-	// 		})
-	// 		.catch((err) => {
-	// 			setEditLoading(false);
-	// 			toast({
-	// 				description:
-	// 					err?.response.data.message || "Could not update playlist!",
-	// 				status: "error",
-	// 			});
-	// 		});
-	// };
+	const editPlaylist = async () => {
+		setEditLoading(true);
+		const songIds = playlistSongs.map((song) => song._id);
+		const playlistDetails = {
+			title: inputs.playlistName,
+			description: inputs.playlistDesc,
+			songIds,
+		};
+		await client
+			.patch(`/Playlist/edit/${id}`, playlistDetails, {
+				withCredentials:true
+			})
+			.then(() => {
+				setEditLoading(false);
+				toast({
+					description: "Playlist updated!",
+					status: "success",
+				});
+				navigate("/home");
+			})
+			.catch((err) => {
+				setEditLoading(false);
+				toast({
+					description:
+						err?.response.data.message || "Could not update playlist!",
+					status: "error",
+				});
+			});
+	};
 
 	return (
 		<Box p={4} pb={32} pt={{ base: 24, md: 4 }} pl={{ base: 4, md: 14, xl: 0 }}>

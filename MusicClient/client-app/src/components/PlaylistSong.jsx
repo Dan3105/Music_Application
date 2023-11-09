@@ -12,6 +12,7 @@ const PlaylistSong = ({ song, isAdded, onToggleAdd }) => {
 			p={2}>
 			<Flex align="center" gap={2}>
 				<Image
+					loading="lazy"
 					src={song?.coverImage ||  "https://wallpaperset.com/w/full/0/3/f/466996.jpg"}
 					alt={song?.title}
 					rounded="sm"

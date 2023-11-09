@@ -14,15 +14,30 @@ namespace MusicServerAPI.Repository
             _dbContext = dbContext;
         }
 
+        public void AddPlaylist(Playlist entity)
+        {
+            try
+            {
+                _dbContext.Playlists.Add(entity);
+            }
+            catch(Exception e) 
+            { 
+                Console.WriteLine(e.ToString());
+            }
+            
+        }
+
         public void Delete(Playlist entity)
         {
             _dbContext.Remove(entity);
         }
 
+        //Has include: User, PlaylistsSong, Song
         public async Task<Playlist> GetPlaylist(int id)
         {
             
             return await _dbContext.Playlists
+                .Include(p => p.user)
                 .Include(p => p.PlaylistSongs)
                 .Include(p => p.Songs)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -32,17 +47,17 @@ namespace MusicServerAPI.Repository
         {
             var user = await _dbContext.Users.Include(u => u.Playlists)
                 .FirstOrDefaultAsync(u => u.Id == idUser);
-            return user.Playlists.ToList();
+            return user.Playlists?.ToList();
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _dbContext.SaveChanges();
         }
 
         public void Update(Playlist entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Playlists.Update(entity);
         }
     }
 }

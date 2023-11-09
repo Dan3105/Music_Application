@@ -23,8 +23,8 @@ namespace MusicServerAPI.Entity
         [Required]
         public User? user { get; set; }
 
-        public virtual ICollection<PlaylistSong>? PlaylistSongs { get; }
-        public virtual ICollection<Song>? Songs { get; }
+        public virtual ICollection<PlaylistSong>? PlaylistSongs { get; set; }
+        public virtual ICollection<Song>? Songs { get; set; }
 
     }
 }

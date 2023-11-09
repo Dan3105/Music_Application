@@ -18,12 +18,14 @@ const PlaylistsPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Playlist/user/${user.id}`)
+			.get(`/Playlist/user`, {withCredentials: true})
 			.then((res) => {
 				setLoading(false);
 				setPlaylists(res.data);
+
 			})
-			.catch(() => {
+			.catch((e) => {
+				console.log(e);
 				setLoading(false);
 				setError(true);
 			});
@@ -31,9 +33,9 @@ const PlaylistsPage = () => {
 
 	useEffect(() => {
 		fetchPlaylists();
+
 	}, []);
 
-    
 	if (error) {
 		return (
 			<Flex align="center" justify="center" minH="100vh">
@@ -78,7 +80,7 @@ const PlaylistsPage = () => {
 					mt={10}>
 					<CreatePlaylistCard />
 					{playlists.map((playlist) => (
-						<PlaylistCard key={playlist?._id} playlist={playlist} />
+						<PlaylistCard key={playlist?.id} playlist={playlist} />
 					))}
 				</Grid>
 			)}

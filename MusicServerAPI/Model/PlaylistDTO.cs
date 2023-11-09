@@ -8,6 +8,7 @@ namespace MusicServerAPI.Model
         public string? Title { get; set; }
         public string? Description { get; set; }
         public bool IsPrivate { get; set; }
+        public int UserId { get; set; }
         public ICollection<SongDTO> Songs { get; set; }
         public PlaylistDTO(Playlist playlist)
         {
@@ -15,10 +16,15 @@ namespace MusicServerAPI.Model
             Title = playlist.Title;
             Description = playlist.Description;
             IsPrivate = playlist.isPrivate;
-            Songs = new List<SongDTO>();
-            foreach(var song in playlist.Songs)
+            UserId = playlist.user.Id;
+            if (playlist.Songs != null)
             {
-                Songs.Add(new SongDTO(song));
+                Songs = new List<SongDTO>();
+                foreach (var song in playlist?.Songs)
+                {
+                    Songs.Add(new SongDTO(song));
+                }
+
             }
         }
     }

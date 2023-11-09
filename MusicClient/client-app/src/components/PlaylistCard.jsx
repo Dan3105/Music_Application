@@ -5,7 +5,7 @@ import { fadeInUp } from "../theme/motionVariants";
 
 const PlaylistCard = ({ playlist }) => {
 	return (
-		<Link to={`/playlists/${playlist?._id}`}>
+		<Link to={`/playlists/${playlist?.id}`}>
 			<Box
 				rounded="md"
 				bg="zinc.900"
