@@ -97,7 +97,7 @@ namespace MusicServerAPI.Controllers
             SetAccessToken(authResponse);
             SetRefreshToken(authResponse);
 
-            return Ok(tokenForm);
+            return Ok(authResponse);
         }
 
         private UserRequest GenerateUserRequest(User user)

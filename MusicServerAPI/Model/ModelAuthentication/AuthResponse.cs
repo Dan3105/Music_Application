@@ -6,5 +6,6 @@
         public bool IsSuccess { get; set; } = true;
         public string? Reason { get; set; }
         public RefreshToken? RefreshToken { get; set; }
+        public UserRequest? UserRequest { get; set; }
     }
 }

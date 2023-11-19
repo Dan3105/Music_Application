@@ -245,7 +245,7 @@ const EditPlaylistPage = () => {
 							mt={2}>
 							{playlistSongs?.map((song) => (
 								<PlaylistSong
-									key={song?._id}
+									key={song?.id}
 									song={song}
 									onToggleAdd={() => toggleAddSong(song)}
 									isAdded={songIsInPlaylist(song)}

@@ -23,7 +23,9 @@ namespace MusicServerAPI.Services
         {
             var refreshToken = GenerateRefreshToken();
             var accessToken = GenerateAccessToken(request.UserEmail, request.Roles);
-            return await UpdateToken(request.UserEmail, accessToken, refreshToken);
+            AuthResponse newAuthResponse = await UpdateToken(request.UserEmail, accessToken, refreshToken);
+            newAuthResponse.UserRequest = request;
+            return newAuthResponse;
         }
 
         public async Task<AuthResponse> GetTokenAsync(UserRequest request)
@@ -38,6 +40,7 @@ namespace MusicServerAPI.Services
             RefreshToken refreshToken = GenerateRefreshToken();
             
             var authResponse = await UpdateToken(user.Email, accessToken, refreshToken);
+            authResponse.UserRequest = request;
             return authResponse;
         }
 

@@ -12,6 +12,7 @@ export const userSlice = createSlice({
 		loginUser: (state, action) => {
 			//state.id = action.payload.id;
 			//state.token = action.payload.token;
+			// console.log(action);
 			state.email = action.payload.email;
 			state.favorites = action.payload.favorites;
 		},
@@ -21,7 +22,7 @@ export const userSlice = createSlice({
 			// state.token = null;
 		},
 		setUser: (state, action) => {
-			state.user = action.payload;
+			state.user = action.payload.userRequest;
 		},
 	},
 });
