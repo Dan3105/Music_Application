@@ -9,6 +9,7 @@ namespace MusicServerAPI.Repository
         public User GetUser(int id);
         public User GetUser(string email);
         public User GetUserByLogin(string emailUser, string password);
+        public Task<ICollection<User>> GetAll();
         public void Update(User entity);
         public bool SaveChanges();
     }

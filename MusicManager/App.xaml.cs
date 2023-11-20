@@ -21,18 +21,10 @@ namespace MusicManager
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             RepositoryManager = new RepositoryManager();
-            
-            var loginView = new LoginView();
-            loginView.Show();
-            loginView.IsVisibleChanged += (s, ev) =>
-            {
-                if(!loginView.IsVisible)
-                {
-                    var mainView = new MainView();
-                    mainView.Show();
-                    loginView.Close();
-                }
-            };
+
+            var mainView = new MainView();
+            mainView.Show();
+
         }
     }
 }

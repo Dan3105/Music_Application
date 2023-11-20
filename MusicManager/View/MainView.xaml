@@ -3,14 +3,255 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:MusicManager.ViewModel"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:local="clr-namespace:MusicManager.View"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
-        Title="MainView" Height="450" Width="800"
-        Background="White">
-    <Grid>
-        <TextBlock Text="Hello success! :>"
-            FontSize="36"
-            VerticalAlignment="Center"
-        HorizontalAlignment="Center"/>
+        Title="MainView" Height="700" Width="1300"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="False">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
+            <local:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:UserManageViewModel}">
+            <local:UserManageView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Border CornerRadius="15"
+            BorderThickness="1"
+            Opacity="0.95">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.5"/>
+                <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="75"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Navigation Menu-->
+                <Border CornerRadius="15,0,0,0"
+                        Grid.Column="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
+                            <GradientStop Color="{StaticResource secondaryBackColor1}"/>
+                            <GradientStop Color="{StaticResource secondaryBackColor2}"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <StackPanel>
+                        <!--Logo-->
+                        <StackPanel Orientation="Horizontal"
+                                    Height="35"
+                                    Margin="15,25,0,40">
+                            <ui:SymbolIcon Symbol="MusicNote224"
+                                           FontSize="40"
+                                           FontWeight="Medium"
+                                           Foreground="{StaticResource logoColor}"/>
+                            <TextBlock Text="BeatBox"
+                                       FontSize="25"
+                                       LineHeight="1.2"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       Margin="15,0,0,0"/>
+                        </StackPanel>
+
+                        <!--Menu Button-->
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color1}"
+                                     IsChecked="True"
+                                     Command="{Binding ShowHomeViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Home12"
+                                               Style="{StaticResource menuButtonIcon}"/>
+                                <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color2}"
+                                     Command="{Binding ShowUserManagementViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <!--<fa:IconImage Icon="Users" Style="{StaticResource menuButtonIcon}"/>-->
+                                <ui:SymbolIcon Symbol="PeopleList20"
+                                               Style="{StaticResource menuButtonIcon}"/>
+                                <TextBlock Text="Users" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color3}">
+                            <StackPanel Orientation="Horizontal">
+                                <!--<fa:IconImage Icon="FileAudio" Style="{StaticResource menuButtonIcon}"/>-->
+                                <ui:SymbolIcon Symbol="MusicNote124"
+                                               Style="{StaticResource menuButtonIcon}"/>
+                                <TextBlock Text="Musics" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color4}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon
+                                    Symbol="SlideMicrophone24"
+                                    Style="{StaticResource menuButtonIcon}"/><TextBlock Text="Artists" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <Separator Margin="10,0,10,0"
+                                   BorderThickness="1"/>
+
+
+                        <TextBlock
+                            x:Name="txtUsername"
+                            Text="Hello @user"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Center"
+                            Foreground="Wheat"
+                            FontWeight="Medium"/>
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color5}">
+                            <StackPanel Orientation="Horizontal">
+                                <!--<fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}"/>-->
+
+                                <ui:SymbolIcon
+                                    Style="{StaticResource menuButtonIcon}"
+                                    Symbol="ContentSettings24"
+                                    /><TextBlock Text="Setting" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Tag="{StaticResource color6}">
+                            <StackPanel Orientation="Horizontal">
+                                <!--<fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>-->
+
+                                <ui:SymbolIcon
+                                    Symbol="SignOut24"
+                                    Style="{StaticResource menuButtonIcon}"/><TextBlock Text="Singout" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </Border>
+
+                <!--Main Section-->
+                <Border CornerRadius="0,15,0,10" Grid.Column="1">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="{StaticResource primaryBackColor1}"/>
+                            <GradientStop Color="{StaticResource primaryBackColor2}"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Control bar-->
+                        <StackPanel x:Name="pnlController"
+                                    Orientation="Horizontal"
+                                    Grid.Row="0"
+                                    FlowDirection="RightToLeft"
+                                    Background="Transparent"
+                                    Margin="0,0,20,0"
+                                    MouseLeftButtonDown="pnlController_MouseLeftButtonDown"
+                                    MouseEnter="pnlController_MouseEnter"
+                                    >
+                            <Button x:Name="btnClose"
+                                    Style="{StaticResource controlButton}"
+                                    Tag="{StaticResource color7}"
+                                    Click="btnClose_Click"
+                                    >
+                                <fa:IconImage Icon="Xmark"
+                                              Style="{StaticResource controlButtonIcon}"
+                                              Width="15"/>
+                            </Button>
+
+                            <Button
+                                x:Name="btnMaximize"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color5}"
+                                Click="btnMaximize_Click"
+                                >
+                                <fa:IconImage Icon="Square"
+                                              Style="{StaticResource controlButtonIcon}"
+                                              Width="15"/>
+                            </Button>
+
+                            <Button
+                                x:Name="btnMinimize"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color6}"
+                                Click="btnMinimize_Click"
+                                >
+                                <fa:IconImage Icon="WindowMinimize"
+                                              Style="{StaticResource controlButtonIcon}"
+                                              Width="15"/>
+                            </Button>
+
+
+                        </StackPanel>
+                        <!--Breadcrumb-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <ui:SymbolIcon Symbol="{Binding SymbolIcon}"
+                                               Foreground="White"
+                                               FontSize="30"
+                                               Margin="0,0,10,0"/>
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding CurrentBreadCrumb}"
+                                           Foreground="White"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           />
+                            </StackPanel>
+
+
+                        </Grid>
+
+                        <!--Control Content-->
+                        <ContentControl Grid.Row="2"
+                                        Margin="20"
+                                        Content="{Binding CurrentView}"/>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
-    </Window>
+    </Border>
+</Window>

@@ -12,6 +12,7 @@ namespace MusicManager.ViewModel
         //Fields
         private readonly Action<object> _executeAction;
         private readonly Predicate<object> _canExecuteAction;
+        private ICommand? getReleasesSongs;
 
         public ViewModelCommand(Action<object> executeAction, Predicate<object> canExecuteAction)
         {
@@ -23,6 +24,11 @@ namespace MusicManager.ViewModel
         {
             _executeAction = executeAction;
             _canExecuteAction = null;
+        }
+
+        public ViewModelCommand(ICommand? getReleasesSongs)
+        {
+            this.getReleasesSongs = getReleasesSongs;
         }
 
         public event EventHandler? CanExecuteChanged

@@ -11,7 +11,7 @@ namespace MusicServerAPI.Entity
         [Column("id")]
         public int Id { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(50)]
         [Column("role_name")]
         public string? RoleName { get; set; }
 

@@ -39,6 +39,13 @@ namespace MusicServerAPI.Repository
             throw new NotImplementedException();
         }
 
+        public async Task<ICollection<User>> GetAll()
+        {
+            return await _dbContext.Users
+                .Include(p => p.Roles)
+                .ToListAsync();
+        }
+
         public User GetUser(int id)
         {
             return _dbContext.Users?

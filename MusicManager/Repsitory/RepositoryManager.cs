@@ -31,5 +31,29 @@ namespace MusicManager.Repsitory
                 return repoAuthentication;
             }
         }
+
+        RepoArtistes repoArtistes;
+        public IRepoArtistes RepoArtistes
+        {
+            get
+            {
+                if (repoArtistes == null)
+                {
+                    repoArtistes = new RepoArtistes();
+                }
+                return repoArtistes;
+            }
+        }
+
+        RepoSongs repoSongs;
+        public IRepoSongs RepoSongs
+        {
+            get
+            {
+                if(repoSongs == null)
+                    repoSongs = new RepoSongs();
+                return repoSongs;
+            }
+        }
     }
 }

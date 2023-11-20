@@ -7,7 +7,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Theme/CommonTheme.xaml"/>
+                <ResourceDictionary Source="/Styles/UIColors.xaml"/>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/SongCard.xaml"/>
+                <ResourceDictionary Source="/Styles/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/ArtistCard.xaml"/>
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
