@@ -86,7 +86,7 @@ namespace MusicServerAPI.Controllers
                 {
                     return BadRequest(400);
                 }
-                User user = _userRepository.GetUser(emailClaim); //_context.Users.FirstOrDefault(x => x.Email == emailClaim);
+                User user = await _userRepository.GetUser(emailClaim); //_context.Users.FirstOrDefault(x => x.Email == emailClaim);
      
                 if (user.Songs.Select(p => p.Id).Contains(id))
                 {

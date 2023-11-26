@@ -1,54 +1,96 @@
-﻿using System;
+﻿using MusicManager.Model;
+using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows;
 
 namespace MusicManager.ViewModel
 {
     class UserManageViewModel : ViewModelBase
     {
-        public UserManageViewModel() { }
-        public class fUser
+        public ICommand LoadDataFromServerCommand { get; set; }
+        public ICommand SubmitEditFormCommand { get; set; }
+
+        #region Database Container
+        private ObservableCollection<Model.User> users;
+        public ObservableCollection<Model.User> Users
         {
-            public string Email { get; set; }
-            public DateTime Created { get; set; }
-            public bool IsActive { get; set; }
+            get
+            {
+                return users;
+            }
+            set
+            {
+                users = value;
+                OnPropertyChanged(nameof(Users));
+            }
         }
 
-        public ObservableCollection<fUser> FakeUsers { get; set; } = new ObservableCollection<fUser>
+        private Model.User selectedUser;
+        public Model.User SelectedUser
         {
-            new fUser
+            get { return selectedUser; }
+            set
             {
-                Email = "user1@example.com",
-                Created = DateTime.Now.AddMonths(-3),
-                IsActive = true
-            },
-            new fUser
-            {
-                Email = "user2@example.com",
-                Created = DateTime.Now.AddMonths(-5),
-                IsActive = false
-            },
-            new fUser
-            {
-                Email = "user3@example.com",
-                Created = DateTime.Now.AddMonths(-2),
-                IsActive = true
-            },
-            new fUser
-            {
-                Email = "user4@example.com",
-                Created = DateTime.Now.AddMonths(-7),
-                IsActive = false
-            },
-            new fUser
-            {
-                Email = "user5@example.com",
-                Created = DateTime.Now.AddMonths(-1),
-                IsActive = true
+                selectedUser = value;
+                OnPropertyChanged(nameof(SelectedUser));
             }
-        };
+        }
+        #endregion
+
+        public UserManageViewModel() {
+            LoadDataFromServerCommand = new ViewModelCommand(LoadDataFromServer);
+            SubmitEditFormCommand = new ViewModelCommand(SubmitToServer);
+        }
+
+        private void SubmitToServer(object obj)
+        {
+            if (obj is User user)
+            {
+                PatchUserToServer(user);
+            }
+            else
+            {
+                MessageBox.Show("Object is not user");
+            }
+        }
+
+        private void LoadDataFromServer(object obj)
+        {
+            GetListUsersFromServer();
+        }
+
+        #region Database Retrieve Handler
+        private async void GetListUsersFromServer()
+        {
+            try
+            {
+                Users = new ObservableCollection<Model.User>((await App.RepositoryManager.RepoUsers.GetUsers()).ToList());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Users = new ObservableCollection<Model.User>();
+            }
+        }
+        private async void PatchUserToServer(Model.User user)
+        {
+            try
+            {
+                if(await App.RepositoryManager.RepoUsers.PatchUser(user))
+                {
+                    MessageBox.Show("Update user successfully");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
     }
 }

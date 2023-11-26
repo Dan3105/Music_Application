@@ -77,7 +77,7 @@ namespace MusicServerAPI.Controllers
                 return BadRequest(new { message = "Username and password must be provided" });
             }
 
-            var user = _userRepository.GetUserByLogin(request.Email, request.Password);
+            var user = await _userRepository.GetUserByLogin(request.Email, request.Password);
             if (user != null)
             {
                 if (user.Is_activate == false)
@@ -161,7 +161,7 @@ namespace MusicServerAPI.Controllers
                 {
                     return BadRequest(400);
                 }
-                User user = _userRepository.GetUser(emailClaim);
+                User user = await _userRepository.GetUser(emailClaim);
 
                 ICollection<SongDTO> favoriteSongs= new List<SongDTO>();
                 var songsFavorite = await _songRepository.GetSongsByUserAccount(user);

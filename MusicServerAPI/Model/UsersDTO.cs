@@ -17,10 +17,14 @@ namespace MusicServerAPI.Model
             Id = id;
             Name = name;
         }
+
+        public RoleDTO() { }
     }
 
     public class UsersDTO
     {
+        public UsersDTO() { }
+
         public UsersDTO(int id, string? email, DateTime createdDate, List<RoleDTO>? roleDTOs, bool isActive)
         {
             Id = id;

@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.Sharp" Version="6.3.0" />
+    <PackageReference Include="HandyControl" Version="3.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="8.0.0" />
     <PackageReference Include="WPF-UI" Version="3.0.0-preview.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1 " />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1 " />
@@ -25,6 +27,7 @@
     <None Remove="Assets\wpfui-icon-256.png" />
     <None Remove="Assets\wpfui-icon-1024.png" />
     <None Remove="Image\favicon.ico" />
+    <None Remove="Image\gradient_bg.jpg" />
     <None Remove="Image\music_theme.png" />
   </ItemGroup>
 
@@ -32,7 +35,14 @@
     <Resource Include="Assets\wpfui-icon-256.png" />
     <Resource Include="Assets\wpfui-icon-1024.png" />
     <Resource Include="Image\favicon.ico" />
+    <Resource Include="Image\gradient_bg.jpg" />
     <Resource Include="Image\music_theme.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\SubView\FormEditDataUser.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

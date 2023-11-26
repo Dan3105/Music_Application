@@ -9,8 +9,11 @@ namespace MusicServerAPI.Model
         public int duration { get; set; }
         public int likes { get; set; }
         public string? coverImage { get; set; }
-        public string? songURL { get; set; } 
+        public string? songURL { get; set; }
         public ICollection<ArtisteDTO> artists { get; set; } = default;
+
+        public SongDTO() {}
+        
         public SongDTO(int _id, string title, int duration, int likes, string coverImage, string songURL)
         {
             this.id = _id;

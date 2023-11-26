@@ -1,4 +1,5 @@
-﻿using MusicManager.Model;
+﻿using MusicManager.Client;
+using MusicManager.Model;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,17 +15,15 @@ namespace MusicManager.Repsitory
     public class RepoAuthentication : IRepoAuthentication
     {
         private readonly string api_login = "api/Auth/login";
-        static HttpClient client = new HttpClient();
         public RepoAuthentication()
         {
-            client.BaseAddress = new Uri(Config.Config.REQUEST_API);
         }
 
         public async Task<AuthenticateModel> Authenticate(string _username, string _password)
         {
             try
             {
-                HttpResponseMessage responseMessage = await client.PostAsJsonAsync(api_login,
+                HttpResponseMessage responseMessage = await Axios.Client.PostAsJsonAsync(api_login,
                 new
                 {
                     email = _username,

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MusicManager.Client;
+using MusicManager.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -86,8 +88,12 @@ namespace MusicManager.ViewModel
                 return;
             }
 
-            Thread.CurrentPrincipal =  new GenericPrincipal(new GenericIdentity(Username), null);
+            //Thread.CurrentPrincipal =  new GenericPrincipal(new GenericIdentity(AuthModel), null);
+            App.AuthenticateModel = AuthModel;
+            Axios.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {App.AuthenticateModel.AccessToken.Token}");
             IsViewVisible = false;
+            MainView mainWindow = new MainView();
+            mainWindow.Show();
         }
     }
 }

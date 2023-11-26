@@ -12,8 +12,13 @@
                 <ResourceDictionary Source="/Styles/SongCard.xaml"/>
                 <ResourceDictionary Source="/Styles/DataGridStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/ArtistCard.xaml"/>
+                <ResourceDictionary Source="/Styles/RoundButton.xaml"/>
+                <ResourceDictionary Source="/Styles/TextBoxSearchStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/DataButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/FormStyle.xaml"/>
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

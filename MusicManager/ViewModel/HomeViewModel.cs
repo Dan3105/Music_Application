@@ -39,15 +39,12 @@ namespace MusicManager.ViewModel
             }
         }
 
-        private ICommand GetListArtistCommand;
-        private ICommand GetReleasesSongsCommand;
+        public ICommand GetListArtistCommand;
+        public ICommand GetReleasesSongsCommand;
         public HomeViewModel()
         {
             GetListArtistCommand = new ViewModelCommand(GetListArtists);
             GetReleasesSongsCommand = new ViewModelCommand(GetReleasesSongs);
-            GetListArtists(null);
-            GetReleasesSongs(null);
-            
         }
 
         private async void GetReleasesSongs(object obj)
@@ -76,7 +73,5 @@ namespace MusicManager.ViewModel
                 Artists = new ObservableCollection<Artist>();
             }
         }
-
-
     }
 }

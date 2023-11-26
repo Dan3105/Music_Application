@@ -5,6 +5,7 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using MusicManager.Model;
 using MusicManager.Repsitory;
 using MusicManager.View;
 using System.IO;
@@ -17,13 +18,17 @@ namespace MusicManager
 
     public partial class App : Application
     {
+        public static AuthenticateModel AuthenticateModel { get; set; }
+
         public static RepositoryManager RepositoryManager ;
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             RepositoryManager = new RepositoryManager();
 
-            var mainView = new MainView();
-            mainView.Show();
+            //var mainView = new MainView();
+            //mainView.Show();
+            var loginView = new LoginView();
+            loginView.Show();
 
         }
     }

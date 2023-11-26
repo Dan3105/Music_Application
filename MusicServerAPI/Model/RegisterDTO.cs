@@ -11,5 +11,7 @@ namespace MusicServerAPI.Model
         [Required]
         [DataType(DataType.Password)]
         public required string Password { get; set; }
+
+        public RegisterDTO() { }
     }
 }

@@ -6,5 +6,7 @@
         public string? Description { get; set; }
         public bool IsPrivate { get; set; }
         public int[]? SongIds { get; set; }
+
+        public PlaylistRequestDTO() { } 
     }
 }

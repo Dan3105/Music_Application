@@ -1,4 +1,5 @@
 ﻿using MusicManager.Model;
+using MusicManager.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,6 +38,15 @@ namespace MusicManager.View
         private void Debug_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine(this.listArtists);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is HomeViewModel homeViewModel)
+            {
+                homeViewModel.GetReleasesSongsCommand.Execute(null);
+                homeViewModel.GetListArtistCommand.Execute(null);
+            }
         }
     }
 }

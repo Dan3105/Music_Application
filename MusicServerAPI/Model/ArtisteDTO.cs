@@ -13,6 +13,8 @@ namespace MusicServerAPI.Model
 
         public ICollection<SongDTO> Songs { set; get; }
 
+        public ArtisteDTO() { }
+
         public ArtisteDTO(int id, string? name, string? bio, string? image, string type)
         {
             this.id = id;

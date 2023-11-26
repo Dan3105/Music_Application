@@ -10,6 +10,9 @@ namespace MusicServerAPI.Model
         public bool IsPrivate { get; set; }
         public int UserId { get; set; }
         public ICollection<SongDTO> Songs { get; set; }
+
+        public PlaylistDTO() { }
+
         public PlaylistDTO(Playlist playlist)
         {
             Id = playlist.Id;

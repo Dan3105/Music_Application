@@ -8,22 +8,22 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MusicManager.Client;
 using MusicManager.Model;
 namespace MusicManager.Repsitory
 {
     class RepoArtistes : IRepoArtistes
     {
         private readonly string api_get_artists = "api/Artist";
-        static HttpClient client = new HttpClient();
         public RepoArtistes() { 
-            client.BaseAddress = new Uri(Config.Config.REQUEST_API);
+            
         }
 
         public async Task<IEnumerable<Artist>> GetArtistsAsync()
         {
             try
             {
-                HttpResponseMessage responseMessage = await client.GetAsync(api_get_artists);
+                HttpResponseMessage responseMessage = await Axios.Client.GetAsync(api_get_artists);
                 responseMessage.EnsureSuccessStatusCode();
                 string jsonResponse = await responseMessage.Content.ReadAsStringAsync();
                 List<Artist> artists = await JsonSerializer.DeserializeAsync<List<Artist>>

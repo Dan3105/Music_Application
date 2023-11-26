@@ -68,6 +68,7 @@ namespace MusicManager.ViewModel
 
         private void ExecuteManagementViewCommand(object obj)
         {
+            
             CurrentView = new UserManageViewModel();
             CurrentBreadCrumb = "User Management";
             SymbolIcon = "PeopleList20";

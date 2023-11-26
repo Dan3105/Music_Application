@@ -7,64 +7,103 @@
              xmlns:viewModel="clr-namespace:MusicManager.ViewModel"
              mc:Ignorable="d"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             Height="450" Width="800">
+             Height="450" Width="1000"
+             Loaded="UserControl_Loaded">
     <UserControl.DataContext>
         <viewModel:UserManageViewModel/>
     </UserControl.DataContext>
 
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-    </UserControl.Resources>
+    <Grid>
+        <Border CornerRadius="20"
+                BorderThickness="4"
+                BorderBrush="#2596BE"
+                Opacity="0.95">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#313437" Offset="0.0"/>
+                    <GradientStop Color="#516473" Offset="1.5"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
 
-    <Grid
-        Width="800"
-        Background="{StaticResource panelActiveColor}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid
-            Grid.Column="0"
-            Margin="10">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*"/>
-                <RowDefinition/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Vertical">
-                <DataGrid
-                    x:Name="datagrid"
-                    ItemsSource="{Binding FakeUsers}"
-                    IsReadOnly="True"
-                    Width="Auto"
-                    >
-                    <DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="Green" />
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background"
-                                            Value="Aqua"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Style.Setters>
-                                <Setter Property="Cursor" Value="Hand"/>
-                            </Style.Setters>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <!--<DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                    --><!--<Setter Property="Background" Value="LightGray"/>--><!--
 
-                    </Style>
-                    </DataGrid.RowStyle>-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="700"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 0 5">
+                <Grid>
+                    <TextBox x:Name="TBoxSearch"
+                             SelectionChanged="TBoxSearch_SelectionChanged"
+                             Style="{StaticResource TextBoxSearchStyle}"/>
+                    <ui:SymbolIcon Symbol="Search16"
+                                   Foreground="White"
+                                   Style="{StaticResource IconSymbolSearch}"/>
+                </Grid>
+
+                <DataGrid x:Name="DGridCustomer"
+                          x:FieldModifier="public"
+                          ItemsSource="{Binding Users, IsAsync=True}"
+                          FontFamily="Roboto"
+                          Margin="0,15,0,0"
+                          Style="{DynamicResource DataGridStyle1}"
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                          CellStyle="{DynamicResource DataGridCellStyle1}"
+                          RowStyle="{DynamicResource DataGridRowStyle1}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Email"
+                                            IsReadOnly="True"
+                                            Width="300"
+                                            Binding="{Binding Email}"/>
+
+                        <DataGridTextColumn Header="Created Date"
+                                            IsReadOnly="True"
+                                            Width="*"
+                                            Binding="{Binding CreatedDate}"/>
+
+                        <DataGridCheckBoxColumn Header="Active"
+                                                IsReadOnly="True"
+                                                Width="*"
+                                                Binding="{Binding IsActive}"/>
+
+                        <DataGridTemplateColumn Header="Operations"
+                                                IsReadOnly="True"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="BtnEdit"
+                                                Click="BtnEdit_Click"
+                                                Cursor="Hand"
+                                                Style="{StaticResource ButtonEditDGStyle}"/>
+                                        <Button x:Name="BtnDelete"
+                                                Cursor="Hand"
+                                                Style="{StaticResource ButtonDeleteDGStyle}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
                 </DataGrid>
             </StackPanel>
+            <StackPanel Grid.Row="2"
+                        Grid.Column="1"
+                        VerticalAlignment="Center">
+                <Button x:Name="BtnAdd"
+                        Cursor="Hand"
+                        Background="Transparent"
+                        Click="BtnAdd_Click"
+                        Style="{StaticResource ButtonAddDGStyle}"/>
+            </StackPanel>
         </Grid>
-
     </Grid>
 </UserControl>

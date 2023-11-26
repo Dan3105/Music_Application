@@ -19,7 +19,7 @@ namespace MusicManager.Repsitory
         }
 
         //List of Repohandler
-        RepoAuthentication repoAuthentication;
+        private IRepoAuthentication repoAuthentication;
         public IRepoAuthentication RepoAuthentication
         {
             get
@@ -32,7 +32,7 @@ namespace MusicManager.Repsitory
             }
         }
 
-        RepoArtistes repoArtistes;
+        private IRepoArtistes repoArtistes;
         public IRepoArtistes RepoArtistes
         {
             get
@@ -45,7 +45,7 @@ namespace MusicManager.Repsitory
             }
         }
 
-        RepoSongs repoSongs;
+        private IRepoSongs repoSongs;
         public IRepoSongs RepoSongs
         {
             get
@@ -53,6 +53,19 @@ namespace MusicManager.Repsitory
                 if(repoSongs == null)
                     repoSongs = new RepoSongs();
                 return repoSongs;
+            }
+        }
+
+        private IRepoUser repoUsers;
+        public IRepoUser RepoUsers
+        {
+            get
+            {
+                if (repoUsers == null)
+                {
+                    repoUsers = new RepoUser();
+                }
+                return repoUsers;
             }
         }
     }
