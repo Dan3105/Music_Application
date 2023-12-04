@@ -5,10 +5,33 @@ services:
     image: 'webapi-image:latest'
     build: 
       context: ./MusicServerAPI
+      dockerfile: Dockerfile
     ports: 
       - "5070:80"
+      - "443:443"
     environment:
+      - ConnectionStrings__MusicServerAPI=User ID=postgres;Server=host.docker.internal;Port=5432;Database=music_pg;Password=postgres;Pooling=True;
       - ASPNETCORE_URLS=http://+80
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=music_pg
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - app-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    
 
   webclient:
     image: 'webclient-image:latest'
@@ -18,4 +41,12 @@ services:
       - "3000:3000"
     depends_on:
       - webapi
-  
+    networks:
+      - frontend
+
+networks:
+  backend:
+  frontend:
+
+volumes:
+  app-data:
