@@ -192,37 +192,7 @@ namespace MusicManager.View.SubView
 
         private async Task<string> UpdateImageToFirebase()
         {
-            try
-            {
-                if (imgArtist.Source != null)
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        var imgSource = imgArtist.Source as BitmapSource;
-
-                        BitmapEncoder encoder = new PngBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(imgSource));
-                        encoder.Save(ms);
-
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        var urlUpload = await new FirebaseStorage(Config.Config.FIREBASE_STORAGE)
-                        .Child($"{Config.Config.FIREBASE_ARTIST_IMG_FOLDER}/{txbArtistName.Text}{DateTime.Now.ToString("yyyyMMddHHmmss")}.png")
-                        .PutAsync(ms);
-
-                        Console.WriteLine(urlUpload);
-                        return urlUpload;
-                    }
-                }
-                MessageBox.Show("Image is null");
-                return string.Empty;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return string.Empty;
-
-            }
+            return await App.FirebaseService.UpdateDataImageToCloud(imgArtist.Source, txbArtistName.Text, FIREBASE_ARTIST_IMG_FOLDER);
         }
 
 
@@ -230,7 +200,8 @@ namespace MusicManager.View.SubView
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            WindowInteropHelper hepler = new WindowInteropHelper(this);
+            SendMessage(hepler.Handle, 161, 2, 0);
         }
     }
 }

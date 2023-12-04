@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MusicManager.Client;
 using MusicManager.Model;
 using MusicManager.Repsitory;
+using MusicManager.Services;
 using MusicManager.View;
 using System.IO;
 using System.Reflection;
@@ -20,9 +21,24 @@ namespace MusicManager
 
     public partial class App : Application
     {
+        //User binding
         public static AuthenticateModel AuthenticateModel { get; set; }
-        public static Window currentWindow;
+
+        //Data handler 
+        private static IFirebaseService _firebaseService;
+        public static IFirebaseService FirebaseService
+        {
+            get
+            {
+                if( _firebaseService == null )
+                    _firebaseService = new FirebaseService();
+                return _firebaseService;
+            }
+        }
         public static RepositoryManager RepositoryManager ;
+            
+        //Window UI handler
+        public static Window currentWindow;
         public static Action<Song> InvokePlayMusic;
         public static Action DiscloseMediaPlayer;
 
