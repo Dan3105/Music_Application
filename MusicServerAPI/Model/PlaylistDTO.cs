@@ -19,7 +19,7 @@ namespace MusicServerAPI.Model
             Title = playlist.Title;
             Description = playlist.Description;
             IsPrivate = playlist.isPrivate;
-            UserId = playlist.user.Id;
+            UserId = playlist.user != null ? playlist.user.Id : -1;
             if (playlist.PlaylistSongs != null)
             {
                 Songs = new List<SongDTO>();

@@ -72,7 +72,9 @@ namespace MusicServerAPI.Repository
             //var user = await _dbContext.Users.Include(u => u.Playlists)
             //    .FirstOrDefaultAsync(u => u.Id == idUser);
 
-            var playlists = await _dbContext.Playlists.Where(p => p.isPrivate == true).ToListAsync();
+            var playlists = await _dbContext.Playlists
+                .Include(p => p.user)
+                .Where(p => p.isPrivate == false).ToListAsync();
             return playlists;
         }
 

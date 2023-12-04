@@ -13,6 +13,7 @@ export const userSlice = createSlice({
 			//state.id = action.payload.id;
 			//state.token = action.payload.token;
 			// console.log(action);
+			state.id = action.payload.id;
 			state.email = action.payload.email;
 			state.favorites = action.payload.favorites;
 		},

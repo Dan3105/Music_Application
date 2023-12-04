@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { client } from "../api";
 import { useParams, Link } from "react-router-dom";
-// import LoadingSkeleton from "../components/LoadingSkeleton";
 import { MdErrorOutline } from "react-icons/md";
 import {
 	Box,
@@ -18,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { playTrack, setTrackList } from "../redux/slices/playerSlice";
 import { BsFillPlayFill } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
-import { playlist_db } from "../data/data";
 import { useToast, useDisclosure } from "@chakra-ui/react";
 import AlertForm from "../components/AlertForm";
 import { useNavigate } from "react-router-dom";
@@ -54,15 +52,14 @@ const PlaylistPage = () => {
 	}, []);
 	const toast = useToast();
 	const handlePlay = () => {
-		// dispatch(setTrackList({ list: data?.songs }));
-		// dispatch(playTrack(data?.songs[0]));
+		dispatch(setTrackList({ list: data?.songs }));
+		dispatch(playTrack(data?.songs[0]));
 	};
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const cancelRef = useRef()
 	const onSongPlay = (song) => {
 		const index = data?.songs.findIndex((s) => s.id == song.id);
-
 		dispatch(setTrackList({ list: data?.songs, index }));
 		dispatch(playTrack(song));
 	};

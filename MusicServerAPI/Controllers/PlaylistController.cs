@@ -27,7 +27,7 @@ namespace MusicServerAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetPlaylistsByUserId()
+        public async Task<IActionResult> GetPlaylists()
         {
             try { 
                 var playlists = await _playlistRepository.GetPlaylists();
@@ -72,7 +72,7 @@ namespace MusicServerAPI.Controllers
                     {
                         return Ok(playlistDTO);
                     }
-                    return playlist.user.Id == currentUserId ? Ok(playlistDTO) : BadRequest("This Playlist is private");
+                    return BadRequest("This Playlist is private");
                 }
 
                 return BadRequest("Failed in Request");
@@ -148,7 +148,7 @@ namespace MusicServerAPI.Controllers
                 {
                     return BadRequest("Failed in Request Playlist");
                 }
-                if(currentUser.Id != playlist.user.Id)
+                if(currentUser.Id != playlist.user?.Id)
                 {
                     return BadRequest(400);
                 }

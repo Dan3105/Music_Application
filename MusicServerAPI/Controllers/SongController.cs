@@ -109,6 +109,7 @@ namespace MusicServerAPI.Controllers
 
                 UserRequest userRequest = new UserRequest()
                 {
+                    Id = user.Id,
                     UserEmail = emailClaim,
                     Roles = user.UserRoles.Select(r => r.Role).Select(role => role.RoleName).ToArray(),
                     Favorites = user.FavoriteSongs.Select(fs=>fs.SongId).ToArray()
