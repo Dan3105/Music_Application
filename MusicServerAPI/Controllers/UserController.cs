@@ -30,7 +30,7 @@ namespace MusicServerAPI.Controllers
         }
 
         [HttpPatch]
-        [Authorize]
+        [Authorize(Policy="CanCustomAny")]
         public async Task<IActionResult> PatchUsers([FromBody] UsersDTO aUser)
         {
             User userFromDB = await _userRepository.GetUser(aUser.Id);

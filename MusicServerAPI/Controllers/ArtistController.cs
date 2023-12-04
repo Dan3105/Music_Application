@@ -59,7 +59,7 @@ namespace MusicServerAPI.Controllers
             return Ok(new ArtisteDTO(artist));
         }
 
-        [Authorize]
+        [Authorize(Policy= "CanCustomArtist")]
         [HttpPatch]
         public async Task<IActionResult> UpdateArtist([FromBody] ArtisteDTO artistDTO)
         {
@@ -96,7 +96,7 @@ namespace MusicServerAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy="CanCustomArtist")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArtist(int id)
         {
@@ -117,7 +117,7 @@ namespace MusicServerAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "CanCustomArtist")]
         [HttpPost]
         public async Task<IActionResult> CreateArtist([FromBody] ArtisteDTO artisteDTO)
         {

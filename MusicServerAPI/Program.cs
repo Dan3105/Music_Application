@@ -6,6 +6,8 @@ using MusicServerAPI.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MusicServerAPI.Repository;
+using MusicServerAPI.Authorize;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,23 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+//build Policy for service
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanCustomMusic", policy =>
+    {
+        policy.Requirements.Add(new RequireFollwingRoles("superadmin", "admin_can_custom_musics"));
+    });
+    options.AddPolicy("CanCustomArtist", policy =>
+    {
+        policy.Requirements.Add(new RequireFollwingRoles("superadmin", "admin_can_custom_artists"));
+    });
+    options.AddPolicy("CanCustomAny", policy =>
+    {
+        policy.Requirements.Add(new RequireFollwingRoles("superadmin"));
+    });
+});
+builder.Services.AddSingleton<IAuthorizationHandler, RequireFollowingRolesHandler>();
 // Add services to the container.
 
 builder.Services.AddControllers();

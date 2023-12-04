@@ -78,7 +78,7 @@ namespace MusicServerAPI.Controllers
             return songList;
         }
 
-        [Authorize]
+        [Authorize(Policy = "CanCustomMusic")]
         [HttpPatch("like/{id}")]
         public async Task<IActionResult> PatchLikeMusic(int id)
         {
@@ -125,7 +125,7 @@ namespace MusicServerAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "CanCustomMusic")]
         [HttpPatch("update")]
         public async Task<IActionResult> UpdateMusic([FromBody] SongDTO songDTO)
         {
@@ -165,7 +165,7 @@ namespace MusicServerAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "CanCustomMusic")]
         [HttpDelete("del/{id}")]
         public async Task<IActionResult> DeleteSong(int id)
         {
@@ -181,7 +181,7 @@ namespace MusicServerAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "CanCustomMusic")]
         [HttpPost("add")]
         public async Task<IActionResult> AddSong([FromBody] SongDTO song)
         {
