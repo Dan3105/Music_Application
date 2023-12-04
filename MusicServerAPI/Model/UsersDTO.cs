@@ -40,11 +40,12 @@ namespace MusicServerAPI.Model
             Email = user.Email;
             CreatedDate = user.Created;
             IsActive = user.Is_activate;
-            if(user.Roles  != null)
+            if(user.UserRoles != null)
             {
                 roleDTOs = new List<RoleDTO>();
-                foreach(Role role in user.Roles)
+                foreach(var usr in user.UserRoles)
                 {
+                    var role = usr.Role;
                     roleDTOs.Add(new RoleDTO(role));
                 }
             }

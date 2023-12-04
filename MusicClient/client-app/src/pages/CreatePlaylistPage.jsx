@@ -20,7 +20,6 @@ import PlaylistSong from "../components/PlaylistSong";
 import { setUser } from "../redux/slices/userSlice";
 import { AiOutlineLoading } from "react-icons/ai";
 import { client } from "../api";
-import { favorites_db, song_db } from "../data/data";
 const CreatePlaylistPage = () => {
 	const [favorites, setFavorites] = useState([]);
 	const [favoritesLoading, setFavoritesLoading] = useState(false);
@@ -39,26 +38,6 @@ const CreatePlaylistPage = () => {
 
 	const { user, token } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
-
-    //const fetchFavorites = () => {};
-	// const fetchFavorites = async () => {
-	// 	setFavoritesLoading(true);
-	// 	setError({ ...error, favorites: false });
-	// 	await client
-	// 		.get("/users/favorites", {
-	// 			headers: {
-	// 				Authorization: `Bearer ${token}`,
-	// 			},
-	// 		})
-	// 		.then((res) => {
-	// 			setFavoritesLoading(false);
-	// 			setFavorites(res.data);
-	// 		})
-	// 		.catch(() => {
-	// 			setFavoritesLoading(false);
-	// 			setError({ ...error, favorites: true });
-	// 		});
-	// };
 
 	const fetchFavorites = async () => {
 		setFavoritesLoading(true);
@@ -115,7 +94,7 @@ const CreatePlaylistPage = () => {
 				});
 				navigate("/home");
 				dispatch(
-					// setUser({ ...user, playlists: [...user?.playlists, res.data?._id] })
+					setUser({ ...user, playlists: [...user?.playlists, res.data?.id] })
 				);
 			})
 			.catch(() => {
@@ -274,10 +253,10 @@ const CreatePlaylistPage = () => {
 								mt={2}>
 								{favorites?.map((song) => (
 									<PlaylistSong
-										key={song?._id}
+										key={song?.id}
 										song={song}
-										onToggleAdd={() => toggleAddSong(song?._id)}
-										isAdded={songIsInPlaylist(song?._id)}
+										onToggleAdd={() => toggleAddSong(song?.id)}
+										isAdded={songIsInPlaylist(song?.id)}
 									/>
 								))}
 							</SimpleGrid>
@@ -322,10 +301,10 @@ const CreatePlaylistPage = () => {
 								mt={2}>
 								{otherSongs?.map((song) => (
 									<PlaylistSong
-										key={song?._id}
+										key={song?.id}
 										song={song}
-										isAdded={songIsInPlaylist(song?._id)}
-										onToggleAdd={() => toggleAddSong(song?._id)}
+										isAdded={songIsInPlaylist(song?.id)}
+										onToggleAdd={() => toggleAddSong(song?.id)}
 									/>
 								))}
 							</SimpleGrid>

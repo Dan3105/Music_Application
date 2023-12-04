@@ -1,0 +1,21 @@
+version: '0.3'
+
+services:
+  webapi:
+    image: 'webapi-image:latest'
+    build: 
+      context: ./MusicServerAPI
+    ports: 
+      - "5070:80"
+    environment:
+      - ASPNETCORE_URLS=http://+80
+
+  webclient:
+    image: 'webclient-image:latest'
+    build:
+      context: ./MusicClient/client-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - webapi
+  

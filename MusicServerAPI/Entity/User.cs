@@ -42,9 +42,7 @@ namespace MusicServerAPI.Entity
         
 
         public virtual ICollection<UserRole>? UserRoles { set; get; }
-        public virtual ICollection<Role>? Roles { set; get; }
 
         public virtual ICollection<FavoriteSongs>? FavoriteSongs { set; get; }
-        public virtual ICollection<Song>? Songs { set; get; }
     }
 }

@@ -90,14 +90,14 @@ const EditPlaylistPage = () => {
     })
 
 	const songIsInPlaylist = (song) => {
-		const songExists = playlistSongs.find((s) => song._id === s._id);
+		const songExists = playlistSongs.find((s) => song.id === s.id);
 		return songExists ? true : false;
 	};
 
 	const toggleAddSong = (song) => {
 		if (songIsInPlaylist(song)) {
 			setPlaylistSongs(
-				playlistSongs.filter((currentSong) => currentSong._id !== song._id)
+				playlistSongs.filter((currentSong) => currentSong.id !== song.id)
 			);
 		} else {
 			setPlaylistSongs([...playlistSongs, song]);
@@ -131,7 +131,7 @@ const EditPlaylistPage = () => {
 
 	const editPlaylist = async () => {
 		setEditLoading(true);
-		const songIds = playlistSongs.map((song) => song._id);
+		const songIds = playlistSongs.map((song) => song.id);
 		const playlistDetails = {
 			title: inputs.playlistName,
 			description: inputs.playlistDesc,
@@ -304,7 +304,7 @@ const EditPlaylistPage = () => {
 						mt={2}>
 						{otherSongs?.data?.map((song) => (
 							<PlaylistSong
-								key={song?._id}
+								key={song?.id}
 								song={song}
 								isAdded={songIsInPlaylist(song)}
 								onToggleAdd={() => toggleAddSong(song)}

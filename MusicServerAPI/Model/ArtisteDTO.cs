@@ -11,7 +11,7 @@ namespace MusicServerAPI.Model
         public string? image { set; get; }
         public string type { set; get; } = "Artiste";
 
-        public ICollection<SongDTO> Songs { set; get; }
+        public ICollection<SongDTO>? Songs { set; get; }
 
         public ArtisteDTO() { }
 
@@ -32,10 +32,10 @@ namespace MusicServerAPI.Model
             image = artist.Image;
             type = "Artiste";
 
-            if(artist.Songs != null)
+            if(artist.ArtistSongs != null)
             {
                 Songs = new List<SongDTO>();
-                foreach(var song in artist.Songs)
+                foreach(var song in artist.ArtistSongs.Select(p => p.Song))
                 {
                     SongDTO customSong = new SongDTO
                     (

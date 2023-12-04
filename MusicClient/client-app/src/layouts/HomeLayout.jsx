@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import { Outlet, useLocation } from "react-router-dom";
 import { Grid, GridItem } from "@chakra-ui/react";
-// import { MusicPlayer } from "../components/MusicPlayer/index.jsx";
+import { MusicPlayer } from "../components/MusicPlayer/index.jsx";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -27,7 +27,7 @@ const HomeLayout = () => {
 				<GridItem colSpan={8} minH={{ base: "97vh", md: "100vh" }}>
 					<Outlet />
 				</GridItem>
-				{/* {currentTrack && <MusicPlayer />} */}
+				{currentTrack && <MusicPlayer />}
 			</Grid>
 		</>
 	);

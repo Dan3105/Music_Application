@@ -1,0 +1,54 @@
+﻿<UserControl xmlns:hc="https://handyorg.github.io/handycontrol"  x:Class="MusicManager.View.MusicPlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MusicManager.View"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:viewModel="clr-namespace:MusicManager.ViewModel"
+             xmlns:fa ="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             mc:Ignorable="d"
+             x:Name="_this"
+             d:DesignHeight="80" d:DesignWidth="1300">
+    <Border Background="#03bf69"
+            CornerRadius="20,20,0,0">
+        <StackPanel Orientation="Horizontal">
+            <Ellipse Width="50" Height="50"
+                     Margin="30,0,0,0">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="pack://application:,,,/Image/favicon.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <StackPanel VerticalAlignment="Center" Margin="20,0,30,0">
+                <TextBlock x:Name="txbMusicname" Text="NameMusic" FontSize="22"
+                           Foreground="White" FontWeight="Bold"/>
+                <TextBlock x:Name="txbActorname" Text="Actorname" FontSize="18"
+                           Foreground="#9ae5c3" FontWeight="SemiBold"/>
+            </StackPanel>
+
+            <Button x:Name="btnPlay" Click="btnPlay_Click">
+                <ui:SymbolIcon
+                    x:Name="symbolPlay"
+                    Symbol="Play12"
+                    FontSize="25"/>
+            </Button>
+            <Slider
+                x:Name="sliderMusic"
+                Width="500" VerticalAlignment="Center"
+                Margin="10,0,0,0"
+                Value="4"
+                Height="20"
+                Style="{StaticResource SliderStyle}"
+                IsSelectionRangeEnabled="True" ValueChanged="sliderMusic_ValueChanged"
+                >
+            </Slider>
+            <Button x:Name="btnMute"
+                    Margin="10,0,0,0" Click="btnMute_Click">
+                <ui:SymbolIcon x:Name="symbolMute" Symbol="Speaker220"
+                               FontSize="25"/>
+            </Button>
+        </StackPanel>
+
+    </Border>
+</UserControl>

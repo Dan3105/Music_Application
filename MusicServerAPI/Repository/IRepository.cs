@@ -2,8 +2,8 @@
 {
     public interface IRepository<T> 
     {
-        public void Update(T entity);
-        public void Delete(T entity);
-
+        public bool Update(T entity);
+        public bool Delete(T entity);
+        public bool SaveChanges();
     }
 }

@@ -45,7 +45,7 @@ const HorizontalMusicCard = ({ song, onPlay }) => {
 							fontSize={{ base: "sm", md: "md" }}
 							fontWeight={500}
 							color={
-								currentTrack?._id == song?.id ? "accent.light" : "zinc.200"
+								currentTrack?.id == song?.id ? "accent.light" : "zinc.200"
 							}
 							noOfLines={1}>
 							{song?.title}

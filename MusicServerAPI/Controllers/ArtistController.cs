@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicServerAPI.Data;
 using MusicServerAPI.Entity;
 using MusicServerAPI.Model;
 using MusicServerAPI.Repository;
 using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
 
 namespace MusicServerAPI.Controllers
 {
@@ -11,13 +14,14 @@ namespace MusicServerAPI.Controllers
     [ApiController]
     public class ArtistController : Controller
     {
-        public MusicServerAPIContext _dbContext;
         public IArtistRepository _artistRepository;
+        public ISongRepository _songRepository;
 
-        public ArtistController(MusicServerAPIContext dbContext, IArtistRepository artistRepository)
+        public ArtistController(IArtistRepository artistRepository,
+            ISongRepository songRepository)
         {
-            _dbContext = dbContext;
             _artistRepository = artistRepository;
+            _songRepository = songRepository;
         }
 
         [HttpGet]
@@ -53,6 +57,94 @@ namespace MusicServerAPI.Controllers
         {
             Artist artist = await _artistRepository.GetArtist(id);
             return Ok(new ArtisteDTO(artist));
+        }
+
+        [Authorize]
+        [HttpPatch]
+        public async Task<IActionResult> UpdateArtist([FromBody] ArtisteDTO artistDTO)
+        {
+            try
+            {
+                var songsList = await _songRepository.GetSongsByListId(artistDTO.Songs.Select(s => s.id));
+                Artist artist = await _artistRepository.GetArtistFetchSong(artistDTO.id);
+                //artist.Songs = new HashSet<Song>(songsList);
+                artist.Name = artistDTO.name;
+                artist.Image = artistDTO.image;
+                artist.Biography = artistDTO.bio;
+                var existingSong = artist.ArtistSongs != null ? artist.ArtistSongs.Select(p => p.SongId).ToList()
+                    : new List<int>();
+                var selectedSong = artistDTO.Songs.Select(s => s.id).ToList();
+
+                var toAdd = selectedSong.Except(existingSong).ToList();
+                var toRemove = existingSong.Except(selectedSong).ToList();
+
+                artist.ArtistSongs = artist.ArtistSongs.Where(x => !toRemove.Contains(x.SongId)).ToList();
+                foreach(var songId in toAdd)
+                {
+                    artist.ArtistSongs.Add(new ArtistSong()
+                    {
+                        SongId = songId
+                    });
+                }
+                _artistRepository.Update(artist);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteArtist(int id)
+        {
+            try
+            {
+                Artist artist = await _artistRepository.GetArtist(id);
+                if (artist != null)
+                {
+                    _artistRepository.Delete(artist);
+                }
+                return Ok();
+            }
+
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateArtist([FromBody] ArtisteDTO artisteDTO)
+        {
+            try
+            {
+                var songsFromArtist = (await _songRepository.GetSongsByListId(artisteDTO.Songs.Select(p => p.id))).Select(sr => sr.Id);
+                Artist artist = new Artist();
+                artist.Biography = artisteDTO.bio;
+                artist.Name = artisteDTO.name;
+                artist.Image = artisteDTO.image;
+                artist.ArtistSongs = new List<ArtistSong>();
+                foreach(var songId in songsFromArtist)
+                {
+                    artist.ArtistSongs.Add(new ArtistSong()
+                    {
+                        SongId = songId
+                    });
+                }
+                _artistRepository.CreateArtist(artist);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest();
+            }
         }
     }
 }

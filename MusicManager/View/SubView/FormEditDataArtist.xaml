@@ -1,0 +1,177 @@
+﻿<Window x:Class="MusicManager.View.SubView.FormEditDataArtist"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusicManager.View.SubView"
+        mc:Ignorable="d"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        x:Name="_this"
+        WindowStyle="None"
+        Title="FormEditDataArtist" Height="600" Width="1000">
+    <Grid>
+        <Border Background="#FF9B9771"/>
+        <StackPanel Orientation="Vertical" Margin="10">
+            <Border
+                MouseLeftButtonDown="Border_MouseLeftButtonDown"
+                VerticalAlignment="Center">
+                <Button x:Name="BtnClose"
+                        Background="Transparent"
+                        Foreground="Red"
+                        Style="{StaticResource ButtonCloseStyle}"
+                        Cursor="Hand"
+                        Click="BtnClose_Click"
+                        Margin="0"
+                        />
+            </Border>
+
+            <TextBlock Text="Form Artist Custom"
+                       FontSize="16"
+                       FontWeight="DemiBold"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <StackPanel
+                        Margin="0,20,0,0"
+                        Orientation="Vertical">
+                        <TextBlock Text="Artist Name" FontSize="16"/>
+                        <TextBox x:Name="txbArtistName" Margin="0,5,0,0"
+                                 Style="{StaticResource TextBoxInputSongStyle}" Width="380"
+                                 />
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,20,0,0"
+                        Orientation="Vertical">
+                        <TextBlock Text="Biography" FontSize="16"/>
+                        <TextBox x:Name="tbBio" Height="85"/>
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0,20,0,0"
+                        Orientation="Vertical">
+                        <TextBlock Text="Music Collection" FontSize="16"/>
+                        <Grid Margin="0,10,0,0">
+                            <TextBox x:Name="TBoxSearch"
+                                     Background="Transparent"
+                                     Style="{StaticResource TextBoxSearchStyle}" TextChanged="TBoxSearch_TextChanged"/>
+                            <ui:SymbolIcon Symbol="Search16"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"
+                                           Style="{StaticResource IconSymbolSearch}" Height="36" Margin="12,0,0,0"/>
+                        </Grid>
+                        <StackPanel Margin="0,5,0,0">
+                            <WrapPanel Height="100">
+                                <DataGrid Name="DGSong"
+                                          ScrollViewer.CanContentScroll="True"
+                                          IsReadOnly="True"
+                                          AutoGenerateColumns="False"
+                                          Foreground="Black"
+                                          Height="111">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Song name"
+                                                            Width="2*"
+                                                            Binding="{Binding Title}"/>
+                                        <DataGridTemplateColumn Header="Image" Width="1*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Image
+                                                        Width="30"
+                                                        Height="30"
+                                                        Stretch="UniformToFill"
+                                                        Source="{Binding CoverImage}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Operations"
+                                                                IsReadOnly="True"
+                                                                Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button x:Name="BtnDelete"
+                                                                Cursor="Hand"
+                                                                Click="BtnDelete_Click"
+                                                                Background="Transparent"
+                                                                Style="{StaticResource ButtonDeleteDGStyle}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </WrapPanel>
+                            <Grid
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Stretch">
+                                <Button Name="btnAddSong"
+                                        Cursor="Hand"
+                                        HorizontalAlignment="Center"
+                                        Click="btnAddSong_Click"
+                                        Background="Transparent"
+                                        BorderBrush="Green"
+                                        BorderThickness="1"
+                                        Content="Add Songs" Width="188"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel
+                    Margin="15,0,0,0"
+                    Grid.Column="1">
+                    <TextBlock Text="Image"
+                               FontSize="16"/>
+                    <Border BorderThickness="1"
+                            Margin="0,10,0,0"
+                            Width="250"
+                            Height="250"
+                            BorderBrush="Black"
+                            HorizontalAlignment="Left">
+                        <Image
+                            Stretch="Fill"
+                            x:Name="imgArtist"
+                            Height="250" Width="250"
+                            />
+                    </Border>
+                    <ProgressBar
+                        Margin="0,10,0,0"
+                        x:Name="pbUploadBar"
+                        Height="10" Width="250"
+                        HorizontalAlignment="Left"
+                        />
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Margin="0,10,0,0"
+                            x:Name="btnBrowseImage"
+                            Foreground="Black"
+                            BorderThickness="1"
+                            Content="Browse ..." Click="btnBrowseImage_Click"/>
+
+                        <Button
+                            Margin="20,10,0,0"
+                            x:Name="btnRefreshImage"
+                            Foreground="Black"
+                            BorderThickness="1"
+                            Content="Refresh" Click="btnRefreshImage_Click"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Margin="0,20,0,0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button x:Name="btnSubmit"
+                        Content="Submit"
+                        Cursor="Hand"
+                        Click="btnSubmit_Click"
+                        Style="{StaticResource RBStyle}"/>
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

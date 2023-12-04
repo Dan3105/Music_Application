@@ -36,7 +36,7 @@ namespace MusicServerAPI.Services
                 return await Task.FromResult(new AuthResponse { IsSuccess = false, Reason = "Invalid Request" });
             }
 
-            AccessToken accessToken = GenerateAccessToken(user.Email, user.Roles?.Select(role => role.RoleName).ToArray());
+            AccessToken accessToken = GenerateAccessToken(user.Email, user.UserRoles?.Select(role => role.Role.RoleName).ToArray());
             RefreshToken refreshToken = GenerateRefreshToken();
             
             var authResponse = await UpdateToken(user.Email, accessToken, refreshToken);
@@ -55,7 +55,7 @@ namespace MusicServerAPI.Services
             user.CreatedTokenDate = refreshToken.Created;
             user.ExpirationTokenDate = refreshToken.Expired;
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return new AuthResponse { AccessToken = accessToken, RefreshToken = refreshToken };
         }

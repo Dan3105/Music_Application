@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicServerAPI.Data;
 using MusicServerAPI.Entity;
+using System.Transactions;
 
 namespace MusicServerAPI.Repository
 {
@@ -14,22 +15,45 @@ namespace MusicServerAPI.Repository
             _dbContext = dbContext;
         }
 
-        public void AddPlaylist(Playlist entity)
+        public bool AddPlaylist(Playlist entity)
         {
-            try
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                _dbContext.Playlists.Add(entity);
-            }
-            catch(Exception e) 
-            { 
-                Console.WriteLine(e.ToString());
+                try
+                {
+                    _dbContext.Playlists.Add(entity);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
             }
             
         }
 
-        public void Delete(Playlist entity)
+        public bool Delete(Playlist entity)
         {
-            _dbContext.Remove(entity);
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbContext.Remove(entity);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+            }
         }
 
         //Has include: User, PlaylistsSong, Song
@@ -38,25 +62,53 @@ namespace MusicServerAPI.Repository
             
             return await _dbContext.Playlists
                 .Include(p => p.user)
-                .Include(p => p.Songs)
+                .Include(p => p.PlaylistSongs)
+                    .ThenInclude(p => p.Song)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<ICollection<Playlist>> GetPlaylists(int idUser)
+        public async Task<ICollection<Playlist>> GetPlaylists()
         {
-            var user = await _dbContext.Users.Include(u => u.Playlists)
-                .FirstOrDefaultAsync(u => u.Id == idUser);
-            return user.Playlists?.ToList();
+            //var user = await _dbContext.Users.Include(u => u.Playlists)
+            //    .FirstOrDefaultAsync(u => u.Id == idUser);
+
+            var playlists = await _dbContext.Playlists.Where(p => p.isPrivate == true).ToListAsync();
+            return playlists;
         }
 
-        public void SaveChanges()
+        public bool SaveChanges()
         {
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
-        public void Update(Playlist entity)
+        public bool Update(Playlist entity)
         {
-            _dbContext.Playlists.Update(entity);
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    _dbContext.Playlists.Update(entity);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+            }
         }
     }
 }

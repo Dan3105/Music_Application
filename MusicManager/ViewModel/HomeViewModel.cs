@@ -1,4 +1,5 @@
-﻿using MusicManager.Model;
+﻿using CommunityToolkit.Mvvm.Input;
+using MusicManager.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,10 +42,20 @@ namespace MusicManager.ViewModel
 
         public ICommand GetListArtistCommand;
         public ICommand GetReleasesSongsCommand;
+        public ICommand PlayASong;
         public HomeViewModel()
         {
             GetListArtistCommand = new ViewModelCommand(GetListArtists);
             GetReleasesSongsCommand = new ViewModelCommand(GetReleasesSongs);
+            PlayASong = new RelayCommand<object>(AssignSongToPlay);
+        }
+
+        private void AssignSongToPlay(object? obj)
+        {
+            if(obj is Song song)
+            {
+                App.InvokePlayMusic?.Invoke(song);
+            }
         }
 
         private async void GetReleasesSongs(object obj)

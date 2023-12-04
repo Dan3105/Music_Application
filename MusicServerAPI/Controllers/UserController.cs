@@ -39,12 +39,23 @@ namespace MusicServerAPI.Controllers
                 return BadRequest();
             }
             userFromDB.Is_activate = aUser.IsActive;
-            var listIdRoles = aUser.roleDTOs.Select(p => p.Id);
-            var roles = await _roleRepository.GetSubRoles(listIdRoles);
 
-            userFromDB.Roles = roles;
+            var existingRole = userFromDB.UserRoles.Select(p => p.RoleId);
+            var selectedRoles = aUser.roleDTOs.Select(p => p.Id);
+
+            var toRemove = existingRole.Except(selectedRoles).ToList();
+            var toAddd = selectedRoles.Except(existingRole).ToList();
+
+            userFromDB.UserRoles = userFromDB.UserRoles.Where(x => !toRemove.Contains(x.RoleId)).ToList();
+            foreach(var role in toAddd)
+            {
+                userFromDB.UserRoles.Add(new UserRole()
+                {
+                    RoleId = role,
+                });
+            }
+
             _userRepository.Update(userFromDB);
-            _userRepository.SaveChanges();
             return Ok("Update User Successfully");
         }
     }

@@ -61,7 +61,7 @@ const PlaylistPage = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const cancelRef = useRef()
 	const onSongPlay = (song) => {
-		const index = data?.songs.findIndex((s) => s._id == song._id);
+		const index = data?.songs.findIndex((s) => s.id == song.id);
 
 		dispatch(setTrackList({ list: data?.songs, index }));
 		dispatch(playTrack(song));
@@ -220,7 +220,7 @@ const PlaylistPage = () => {
 					<Flex direction="column" gap={4}>
 						{data?.songs?.map((song) => (
 							<ArtisteSong
-								key={song?._id}
+								key={song?.id}
 								song={song}
 								handlePlay={onSongPlay}
 							/>

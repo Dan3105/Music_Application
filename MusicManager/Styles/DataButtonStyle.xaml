@@ -57,6 +57,34 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region Play  Button-->
+
+    <Style x:Key="ButtonPlayDGStyle" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 0 2 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid x:Name="border" Background="{TemplateBinding Background}">
+                        <ui:SymbolIcon FontSize="25" Symbol="Play32" Foreground="{TemplateBinding Foreground}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#FF54E3EE"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#FF24EBCE"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
     <!--#region Delete Button-->
     <Style x:Key="ButtonDeleteDGStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="25"/>
@@ -153,7 +181,6 @@
     <Style x:Key="RBStyle" TargetType="{x:Type Button}">
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="120"/>
-        <Setter Property="Margin" Value="0 50 20 0"/>
         <Setter Property="Foreground" Value="Beige"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="FontFamily" Value="Roboto"/>

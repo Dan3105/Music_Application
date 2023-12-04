@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using MusicServerAPI.Entity;
 
 namespace MusicServerAPI.Data
@@ -9,6 +10,7 @@ namespace MusicServerAPI.Data
             : base(options)
         {
         }
+
 
         public DbSet<Artist>? Artists { get; set; } = default;
         public DbSet<UserRole>? UserRoles { get; set; } = default;
@@ -23,6 +25,7 @@ namespace MusicServerAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            /*
             modelBuilder.Entity<Artist>()
                 .HasMany(e => e.Songs)
                 .WithMany(e => e.Artists)
@@ -77,6 +80,7 @@ namespace MusicServerAPI.Data
                         .HasForeignKey(p => p.UserId)
                         .OnDelete(DeleteBehavior.Cascade)
                 );
+             */
         }
     }
 }

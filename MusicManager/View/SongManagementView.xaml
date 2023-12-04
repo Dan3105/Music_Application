@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="MusicManager.View.SongManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MusicManager.View"
+             mc:Ignorable="d"
+             xmlns:viewModel="clr-namespace:MusicManager.ViewModel"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="UserControl_Loaded"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <UserControl.DataContext>
+        <viewModel:SongManagementViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Border CornerRadius="20"
+                BorderThickness="4"
+                BorderBrush="#2596BE"
+                Opacity="0.95">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#313437" Offset="0.0"/>
+                    <GradientStop Color="#516473" Offset="1.5"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Grid Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Music Managements"
+                               FontSize="20"
+                               Foreground="Wheat"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"/>
+                    <Button Grid.Column="1"
+                            x:Name="btnAdd"
+                            Content="+ Add New Song"
+                            Click="btnAdd_Click"
+                            HorizontalAlignment="Right"
+                            Background="#ff4545"
+                            >
+                    </Button>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <TextBox x:Name="TBoxSearch"
+                             Style="{StaticResource TextBoxSearchStyle}" TextChanged="TBoxSearch_TextChanged"/>
+                    <ui:SymbolIcon Symbol="Search16"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   Style="{StaticResource IconSymbolSearch}" Height="36" Margin="12,0,0,0"/>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <DataGrid x:Name="DGMusics"
+                          x:FieldModifier="public"
+                          IsReadOnly="True"
+                          ItemsSource="{Binding SongLists, IsAsync=True}"
+                          Style="{DynamicResource DataGridStyle1}"
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                          CellStyle="{DynamicResource DataGridCellStyle1}"
+                          RowStyle="{DynamicResource DataGridRowStyle1}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Image" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image
+                                        Width="30"
+                                        Height="30"
+                                        Stretch="UniformToFill"
+                                        Source="{Binding CoverImage}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Song name"
+                                            Width="*"
+                                            Binding="{Binding Title}"/>
+                        <DataGridTextColumn Header="Artist"
+                                            Width="*"
+                                            Binding="{Binding Artists[0].Name}"/>
+                        <DataGridTextColumn Header="Likes"
+                                            Width="*"
+                                            Binding="{Binding Likes}"/>
+                        <DataGridTextColumn Header="Release Date"
+                                            Width="*"
+                                            Binding="{Binding ReleaseDate}"/>
+                        <DataGridTemplateColumn Header="Operations"
+                                                IsReadOnly="True"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="BtnEdit"
+                                                Cursor="Hand"
+                                                Click="BtnEdit_Click"
+                                                Style="{StaticResource ButtonEditDGStyle}"/>
+                                        <Button x:Name="BtnPlay"
+                                                Cursor="Hand"
+                                                Click="BtnPlay_Click"
+                                                Style="{StaticResource ButtonPlayDGStyle}"/>
+                                        <Button x:Name="BtnDelete"
+                                                Cursor="Hand"
+                                                Click="BtnDelete_Click"
+                                                Style="{StaticResource ButtonDeleteDGStyle}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

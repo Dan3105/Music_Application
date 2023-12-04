@@ -23,18 +23,17 @@ namespace MusicServerAPI.Repository
             try
             {
                 _dbContext.Users.Add(user);
+                SaveChanges();
             }
             catch (Exception e)
             {
-                //if (Utlity.Utility.IsInDebugMode())
-                //    Console.WriteLine(e);
+                Console.WriteLine(e);
                 return false;
             }
-            await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public void Delete(User entity)
+        public bool Delete(User entity)
         {
             throw new NotImplementedException();
         }
@@ -42,29 +41,33 @@ namespace MusicServerAPI.Repository
         public async Task<ICollection<User>> GetAll()
         {
             return await _dbContext.Users
-                .Include(p => p.Roles)
+                .Include(u => u.UserRoles)
+                .ThenInclude(userRoles => userRoles.Role)
                 .ToListAsync();
         }
 
-        public User GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            return _dbContext.Users?
-                .Include(u => u.Roles)
-                .Include(u => u.Songs)
-                .FirstOrDefault(x => x.Id == id);
+            return await _dbContext.Users?
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                .Include(u => u.FavoriteSongs)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public User GetUser(string email)
+        public async Task<User> GetUser(string email)
         {
-            return _dbContext.Users?
-                .Include(u => u.Roles)
-                .Include(u => u.Songs)
-                .FirstOrDefault(x => x.Email == email);
+            return await _dbContext.Users?
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                .Include(u => u.FavoriteSongs)
+                    .ThenInclude(fv => fv.Song)
+                .FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public User GetUserByLogin(string emailUser, string password)
+        public async Task<User> GetUserByLogin(string emailUser, string password)
         {
-            var user = GetUser(emailUser);
+            var user = await GetUser(emailUser);
             if (user != null)
             {
                 if (BCrypt.Net.BCrypt.Verify(password, user.password))
@@ -73,6 +76,11 @@ namespace MusicServerAPI.Repository
                 }
             }
             return null;
+        }
+
+        public Task<User> GetUserByToken(string token)
+        {
+            return _dbContext.Users.FirstOrDefaultAsync(p => p.RefreshToken == token);
         }
 
         public bool SaveChanges()
@@ -84,15 +92,16 @@ namespace MusicServerAPI.Repository
             }
             catch (Exception e)
             {
-                //if (Utlity.Utility.IsInDebugMode())
-                //    Console.WriteLine(e);
+                Console.WriteLine(e);
                 return false;
             }
         }
 
-        public void Update(User entity)
+        public bool Update(User entity)
         {
             _dbContext.Users.Update(entity);
+            SaveChanges();
+            return true;
         }
     }
 }

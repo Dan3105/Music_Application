@@ -5,11 +5,13 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using MusicManager.Client;
 using MusicManager.Model;
 using MusicManager.Repsitory;
 using MusicManager.View;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -19,8 +21,11 @@ namespace MusicManager
     public partial class App : Application
     {
         public static AuthenticateModel AuthenticateModel { get; set; }
-
+        public static Window currentWindow;
         public static RepositoryManager RepositoryManager ;
+        public static Action<Song> InvokePlayMusic;
+        public static Action DiscloseMediaPlayer;
+
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             RepositoryManager = new RepositoryManager();
@@ -28,8 +33,20 @@ namespace MusicManager
             //var mainView = new MainView();
             //mainView.Show();
             var loginView = new LoginView();
-            loginView.Show();
+            currentWindow = loginView;
+            currentWindow.Show();
 
+        }
+
+        public static void Signout()
+        {
+            AuthenticateModel = null;
+            DiscloseMediaPlayer?.Invoke();
+
+            Axios.Client.DefaultRequestHeaders.Clear();
+            currentWindow.Close();
+            currentWindow = new LoginView();
+            currentWindow.Show();
         }
     }
 }

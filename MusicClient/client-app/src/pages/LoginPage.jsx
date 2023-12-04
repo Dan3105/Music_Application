@@ -50,7 +50,7 @@ const LoginPage = () => {
 				.then((res) => {
 					dispatch(resetPlayer());
 					dispatch(loginUser(res.data));
-					dispatch(setUser(res.data))
+					dispatch(setUser(res.data.userRequest))
 					setLoading(false);
 					navigate('/home');
 				})

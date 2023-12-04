@@ -24,6 +24,12 @@
         <DataTemplate DataType="{x:Type viewModel:UserManageViewModel}">
             <local:UserManageView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:SongManagementViewModel}">
+            <local:SongManagementView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ArtistManagementViewModel}">
+            <local:ArtistManagementView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Border CornerRadius="15"
@@ -47,7 +53,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -106,7 +112,8 @@
                         </RadioButton>
 
                         <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color3}">
+                                     Tag="{StaticResource color3}"
+                                     Command="{Binding ShowSongManagementViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <!--<fa:IconImage Icon="FileAudio" Style="{StaticResource menuButtonIcon}"/>-->
                                 <ui:SymbolIcon Symbol="MusicNote124"
@@ -116,7 +123,9 @@
                         </RadioButton>
 
                         <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color4}">
+                                     Tag="{StaticResource color4}"
+                                     Command="{Binding ShowArtistManagementViewCommand}"
+                                     >
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon
                                     Symbol="SlideMicrophone24"
@@ -147,8 +156,10 @@
                             </StackPanel>
                         </RadioButton>
 
-                        <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color6}">
+                        <RadioButton
+                            x:Name="radioSignout"
+                            Style="{StaticResource menuButton}"
+                            Tag="{StaticResource color6}" Checked="radioSignout_Checked">
                             <StackPanel Orientation="Horizontal">
                                 <!--<fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>-->
 
@@ -252,6 +263,9 @@
                     </Grid>
                 </Border>
             </Grid>
+            <Border Grid.Row="1">
+                <local:MusicPlayerView/>
+            </Border>
         </Grid>
     </Border>
 </Window>

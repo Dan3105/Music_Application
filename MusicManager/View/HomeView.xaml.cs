@@ -48,5 +48,17 @@ namespace MusicManager.View
                 homeViewModel.GetListArtistCommand.Execute(null);
             }
         }
+
+        private void listSongs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is HomeViewModel homeViewModel)
+            {
+                Song song = listSongs.SelectedItem as Song;
+                if (song != null)
+                {
+                    homeViewModel.PlayASong.Execute(song);
+                }
+            }
+        }
     }
 }

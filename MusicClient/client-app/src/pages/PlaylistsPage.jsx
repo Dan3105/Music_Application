@@ -18,7 +18,7 @@ const PlaylistsPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Playlist/user`, {withCredentials: true})
+			.get(`/Playlist`)
 			.then((res) => {
 				setLoading(false);
 				setPlaylists(res.data);

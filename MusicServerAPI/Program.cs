@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
     policy =>
     {
-        policy.WithOrigins("https://localhost:5173", "http://localhost:5070")
+        policy.WithOrigins("https://localhost:5173", "http://localhost:5070", "http://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
@@ -32,7 +32,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 #region Add Jwt Auth
 builder.Services.AddTransient<IJwtService, JwtService>();
 var jwtKey = builder.Configuration.GetValue<string>("JwtSetting:Key");
@@ -84,6 +83,8 @@ builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 #endregion
 
+
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -95,7 +96,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseCors(myAllowSpecificOrigins);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

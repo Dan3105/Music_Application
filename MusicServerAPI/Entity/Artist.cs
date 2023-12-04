@@ -8,6 +8,7 @@ namespace MusicServerAPI.Entity
     public class Artist
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -21,7 +22,6 @@ namespace MusicServerAPI.Entity
         [DataType(DataType.Url)]
         public string? Image { get; set; }
 
-        public virtual ICollection<ArtistSong>? ArtistSongs { get; }
-        public virtual ICollection<Song>? Songs { get;  }
+        public virtual ICollection<ArtistSong>? ArtistSongs { get; set; }
     }
 }

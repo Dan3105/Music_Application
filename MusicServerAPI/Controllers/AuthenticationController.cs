@@ -17,15 +17,13 @@ namespace MusicServerAPI.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IJwtService _jwtService;
-        private readonly MusicServerAPIContext _context;
         private readonly IUserRepository _userRepository;
         private readonly ISongRepository _songRepository;
 
-        public AuthenticationController(IJwtService IJwtService, MusicServerAPIContext MusicServerAPIContext, 
+        public AuthenticationController(IJwtService IJwtService,
             IUserRepository IUserRepository, ISongRepository songRepository)
         {
             _jwtService = IJwtService;
-            _context = MusicServerAPIContext;
             _userRepository = IUserRepository;
             _songRepository = songRepository;
         }
@@ -34,11 +32,6 @@ namespace MusicServerAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> PostUser(RegisterDTO registerForm)
         {
-            if (_context.Users == null)
-            {
-                return Problem("Entity set 'MusicAPIContext.User'  is null.");
-            }
-
             // Validate the user input.
             if (!ModelState.IsValid)
             {
@@ -47,7 +40,7 @@ namespace MusicServerAPI.Controllers
             }
 
             // Check if the user already exists in the database.
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == registerForm.Email);
+            var existingUser = _userRepository.GetUser(registerForm.Email);
             if (existingUser != null)
             {
                 // The user already exists. Return a BadRequestObjectResult with an error message.
@@ -90,7 +83,10 @@ namespace MusicServerAPI.Controllers
             }
 
             var tokenForm = GenerateUserRequest(user);
-
+            if(tokenForm==null)
+            {
+                return BadRequest();
+            }
             var authResponse = await _jwtService.GetTokenAsync(tokenForm);
             if (authResponse == null)
                 return Unauthorized();
@@ -102,19 +98,27 @@ namespace MusicServerAPI.Controllers
 
         private UserRequest GenerateUserRequest(User user)
         {
-            
-            var roles = user.UserRoles
-                ?.Where(u => u.UserId == user.Id)
-                ?.Select(rt => rt.Role)
-                ?.Select(r => r.RoleName)
-                ?.ToArray();
-            UserRequest userRequest = new UserRequest
+            try
             {
-                UserEmail = user.Email,
-                Roles = user.Roles?.Select(r => r.RoleName)?.ToArray(),
-                Favorites = user?.FavoriteSongs?.Select(p => p.SongId).ToArray()
-            };
-            return userRequest;
+                var roles = user.UserRoles
+                    ?.Where(u => u.UserId == user.Id)
+                    ?.Select(rt => rt.Role)
+                    ?.Select(r => r.RoleName)
+                    ?.ToArray();
+                UserRequest userRequest = new UserRequest
+                {
+                    UserEmail = user.Email,
+                    Roles = user.UserRoles.Select(usr => usr.Role).Select(r => r.RoleName).ToArray(),
+                    Favorites = user?.FavoriteSongs?.Select(p => p.SongId).ToArray()
+                };
+                return userRequest;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
 
         }
 
@@ -133,8 +137,8 @@ namespace MusicServerAPI.Controllers
             if (expiredToken != null)
                 token = GetJwtToken(expiredToken);
 
-            var user = _context.Users.FirstOrDefault(x => x.RefreshToken == refreshToken);
-
+            //var user = _context.Users.FirstOrDefault(x => x.RefreshToken == refreshToken);
+            var user = await _userRepository.GetUserByToken(refreshToken);
             AuthResponse response = ValidateDetails(user, token);
             if (!response.IsSuccess)
             {

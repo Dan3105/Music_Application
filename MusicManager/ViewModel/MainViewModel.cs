@@ -58,20 +58,38 @@ namespace MusicManager.ViewModel
 
         public ICommand ShowHomeViewCommand { get; set; }
         public ICommand ShowUserManagementViewCommand { get; set; }
+        public ICommand ShowSongManagementViewCommand { get; set; }
+        public ICommand ShowArtistManagementViewCommand { get; set; }
 
         public MainViewModel()
         {
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
-            ShowUserManagementViewCommand = new ViewModelCommand(ExecuteManagementViewCommand);
+            ShowUserManagementViewCommand = new ViewModelCommand(ExecuteUserManagementViewCommand);
+            ShowSongManagementViewCommand = new ViewModelCommand(ExecuteSongManagementViewCommand);
+            ShowArtistManagementViewCommand = new ViewModelCommand(ExecuteArtistManagementViewCommand);
             ExecuteShowHomeViewCommand(null);
         }
 
-        private void ExecuteManagementViewCommand(object obj)
+        private void ExecuteArtistManagementViewCommand(object obj)
+        {
+            CurrentView = new ArtistManagementViewModel();
+            CurrentBreadCrumb = "Artist Management";
+            SymbolIcon = "SlideMicrophone24";
+        }
+
+        private void ExecuteUserManagementViewCommand(object obj)
         {
             
             CurrentView = new UserManageViewModel();
             CurrentBreadCrumb = "User Management";
             SymbolIcon = "PeopleList20";
+        }
+
+        private void ExecuteSongManagementViewCommand(object obj)
+        {
+            CurrentView = new SongManagementViewModel();
+            CurrentBreadCrumb = "Music Management";
+            SymbolIcon = "MusicNote124";
         }
 
         private void ExecuteShowHomeViewCommand(object obj)

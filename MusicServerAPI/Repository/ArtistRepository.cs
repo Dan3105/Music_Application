@@ -12,9 +12,44 @@ namespace MusicServerAPI.Repository
             _dbContext = dbContext;
         }
 
-        public void Delete(Artist entity)
+        public bool CreateArtist(Artist artist)
         {
-            throw new NotImplementedException();
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbContext.Add(artist);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        public bool Delete(Artist entity)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbContext.Artists.Remove(entity);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+
+            }
         }
 
         public async Task<Artist> GetArtist(int id)
@@ -25,7 +60,8 @@ namespace MusicServerAPI.Repository
         public async Task<Artist> GetArtistFetchSong(int id)
         {
             return await _dbContext.Artists
-                .Include(a => a.Songs)
+                .Include(a => a.ArtistSongs)
+                .ThenInclude(ar => ar.Song)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -35,9 +71,45 @@ namespace MusicServerAPI.Repository
             return artists;
         }
 
-        public void Update(Artist entity)
+        public async Task<IEnumerable<Artist>> GetSubArtists(IEnumerable<int> ids)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Artists.Where(p => ids.Contains(p.Id))
+                .ToListAsync();
+        }
+
+        public bool SaveChanges()
+        {
+            try
+            {
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
+
+        public bool Update(Artist entity)
+        {
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbContext.Update(entity);
+                    SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    transaction.Rollback();
+                    return false;
+                }
+
+            }
         }
     }
 }

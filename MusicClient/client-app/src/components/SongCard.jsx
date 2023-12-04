@@ -57,7 +57,7 @@ const SongCard = ({ song }) => {
 			});
 	};
 
-	const isCurrentTrack = false;// currentTrack?._id === song?._id;
+	const isCurrentTrack = currentTrack?.id === song?.id;
 	const isFavorite = user?.favorites?.includes(song.id);
 
 	return (
@@ -125,7 +125,7 @@ const SongCard = ({ song }) => {
 						fontWeight={500}>
 						{song?.title}
 					</Heading>
-					<Link to={`/Artist/${song?.artists?.at(0).id}`}>
+					<Link to={`/Artist/${song?.artists?.at(0)?.id}`}>
 						<Text
 							fontSize={{ base: "xs", md: "sm" }}
 							color="zinc.400"

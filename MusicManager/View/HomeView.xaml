@@ -125,6 +125,7 @@
                                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
                                  ItemTemplate="{StaticResource SongCard}"
                                  ItemsSource="{Binding SongReleases}"
+                                 SelectionChanged="listSongs_SelectionChanged"
                                  d:ItemsSource="{d:SampleData ItemCount=5}"
                                  >
                             <ListBox.ItemsPanel>

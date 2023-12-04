@@ -10,7 +10,8 @@ namespace MusicServerAPI.Model
         public int likes { get; set; }
         public string? coverImage { get; set; }
         public string? songURL { get; set; }
-        public ICollection<ArtisteDTO> artists { get; set; } = default;
+        public DateTime? releaseDate { get; set; }
+        public ICollection<ArtisteDTO>? artists { get; set; }
 
         public SongDTO() {}
         
@@ -31,11 +32,13 @@ namespace MusicServerAPI.Model
             this.duration = song.Duration;
             this.likes = song.Likes;
             this.coverImage = song.CoverImage;
+            this.releaseDate = song.ReleaseDate;
             this.songURL = song.SongURL;
-            if (song.Artists != null)
+            if (song.ArtistSongs != null)
             {
-                foreach (var artist in song?.Artists)
+                foreach (var ars in song?.ArtistSongs)
                 {
+                    var artist = ars.Artist;
                     this.artists.Add(new ArtisteDTO(
                         artist.Id, artist.Name, artist.Biography, artist.Image, "Artiste"
                         ));

@@ -92,8 +92,9 @@ namespace MusicManager.ViewModel
             App.AuthenticateModel = AuthModel;
             Axios.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {App.AuthenticateModel.AccessToken.Token}");
             IsViewVisible = false;
-            MainView mainWindow = new MainView();
-            mainWindow.Show();
+
+            App.currentWindow = new MainView();
+            App.currentWindow.Show();
         }
     }
 }

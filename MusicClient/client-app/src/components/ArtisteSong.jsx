@@ -26,7 +26,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
   const modalRef = useRef();
   const toast = useToast();
 
-  const isCurrentTrack = currentTrack?._id === song?.id;
+  const isCurrentTrack = currentTrack?.id === song?.id;
 
   const playSong = () => {
     handlePlay(song);
@@ -34,7 +34,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
 
   const likeSong = async () => {
     await client
-      .patch(`/Song/like/${song?.id}`, null,{withCredentials: true})
+      .patch(`/Song/like/${song?.id}`, null, { withCredentials: true })
       .then((res) => {
         dispatch(setUser(res.data));
         toast({
@@ -51,7 +51,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
   };
 
   const handleLike = () => {
-    if (!token) {
+    if (!user) {
       dispatch(
         setModalMessage("Please login to save songs to your favorites.")
       );

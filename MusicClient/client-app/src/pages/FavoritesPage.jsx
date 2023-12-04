@@ -31,6 +31,7 @@ const FavoritesPage = () => {
 
 	useEffect(() => {
 		fetchFavorites();
+		console.log(user);
 	}, []);
 
 	const onPlay = (song) => {

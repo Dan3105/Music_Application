@@ -14,28 +14,23 @@ namespace MusicServerAPI.Controllers
     [ApiController]
     public class PlaylistController : Controller
     {
-        private readonly MusicServerAPIContext _context;
         private readonly IPlaylistRepository _playlistRepository;
-        
-        public PlaylistController(MusicServerAPIContext context, IPlaylistRepository playlistRepository)
+        private readonly IUserRepository _userRepository;
+        private readonly ISongRepository _songRepository;
+
+        public PlaylistController(IPlaylistRepository playlistRepository, IUserRepository userRepository, ISongRepository songRepository)
         {
-            _context = context;
             _playlistRepository = playlistRepository;
+            _userRepository = userRepository;
+            _songRepository = songRepository;
         }
 
-        [HttpGet("user")]
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> GetPlaylistsByUserId()
         {
-            var emailClaim = HttpContext.User.FindFirstValue(ClaimTypes.Email);// User.FindFirst(ClaimTypes.Email);
-            
-            if (emailClaim == null)
-            {
-                return BadRequest(400);
-            }
-            try
-            {
-                int id = _context.Users.FirstOrDefault(x => x.Email == emailClaim).Id;
-                var playlists = await _playlistRepository.GetPlaylists(id);
+            try { 
+                var playlists = await _playlistRepository.GetPlaylists();
                 ICollection<PlaylistDTO> playlistDTOs = new List<PlaylistDTO>();
                 foreach (var playlist in playlists)
                 {
@@ -67,8 +62,7 @@ namespace MusicServerAPI.Controllers
                 {
                     return BadRequest("Fail Authorize");
                 }
-                var currentUserId = _context.Users
-                            .FirstOrDefault(x => x.Email == email).Id;
+                var currentUserId = (await _userRepository.GetUser(email)).Id;
                 var playlist = await _playlistRepository.GetPlaylist(id);
 
                 if(playlist != null)
@@ -101,8 +95,7 @@ namespace MusicServerAPI.Controllers
                 {
                     return BadRequest(400);
                 }
-                var currentUser = _context.Users
-                            .FirstOrDefault(x => x.Email == emailClaim);
+                var currentUser = (await _userRepository.GetUser(emailClaim));
 
                 Playlist playlist = new Playlist()
                 {
@@ -113,21 +106,21 @@ namespace MusicServerAPI.Controllers
                     PlaylistSongs = new List<PlaylistSong>()
                 };
 
-                var Songs = _context.Songs
-                    .Where(s => form.SongIds.Contains(s.Id))
-                    .ToList();
+                var Songs = (await _songRepository.GetSongsByListId(form.SongIds.ToList())).Select(p => p.Id);
+                    
+                    //_context.Songs
+                    //.Where(s => form.SongIds.Contains(s.Id))
+                    //.ToList();
 
 
                 foreach(var song in Songs)
                 {
                     playlist.PlaylistSongs.Add(new PlaylistSong()
                     {
-                        Playlist = playlist,
-                        Song = song
+                        SongId = song
                     });
                 }
                 _playlistRepository.AddPlaylist(playlist);
-                _playlistRepository.SaveChanges();
                 return Ok(playlist);
             }
             catch(Exception e) {
@@ -147,8 +140,7 @@ namespace MusicServerAPI.Controllers
                     return BadRequest(400);
                 }
 
-                var currentUser = _context.Users
-                            .FirstOrDefault(x => x.Email == emailClaim);
+                var currentUser = (await _userRepository.GetUser(emailClaim));
 
 
                 Playlist playlist = await _playlistRepository.GetPlaylist(id);
@@ -165,11 +157,11 @@ namespace MusicServerAPI.Controllers
                 playlist.Description = form.Description;
                 playlist.isPrivate = form.IsPrivate;
 
-                var Songs = _context.Songs
-                        .Where(s => form.SongIds.Contains(s.Id))
-                        .ToList();
+                //var Songs = _context.Songs
+                //        .Where(s => form.SongIds.Contains(s.Id))
+                //        .ToList();
 
-                playlist.Songs = Songs;
+                //playlist.PlaylistSongs.Select(ps => ps.Song) = Songs;
 
                 _playlistRepository.Update(playlist);
                 _playlistRepository.SaveChanges();
@@ -195,8 +187,7 @@ namespace MusicServerAPI.Controllers
                     return BadRequest(400);
                 }
 
-                var currentUser = _context.Users
-                            .FirstOrDefault(x => x.Email == emailClaim);
+                var currentUser = (await _userRepository.GetUser(emailClaim));
 
 
                 Playlist playlist = await _playlistRepository.GetPlaylist(id);
@@ -211,7 +202,6 @@ namespace MusicServerAPI.Controllers
 
                 
                 _playlistRepository.Delete(playlist);
-                _playlistRepository.SaveChanges();
 
                 return Ok();
             }
@@ -224,11 +214,3 @@ namespace MusicServerAPI.Controllers
         }
     }
 }
-
-/*
- if (currentUser != null
-                    && currentUser.Playlists.FirstOrDefault(p => p.Id == playlist.Id) != null)
-                {
-                }
-                return BadRequest("This Playlist not accessible for you");
- */

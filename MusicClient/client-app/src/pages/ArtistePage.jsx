@@ -50,7 +50,7 @@ const ArtistePage = () => {
 	};
 
 	const onSongPlay = (song) => {
-		const index = artiste?.songs.findIndex((s) => s._id == song._id);
+		const index = artiste?.songs.findIndex((s) => s.id == song.id);
 
 		dispatch(setTrackList({ list: artiste?.songs, index }));
 		dispatch(playTrack(song));
@@ -137,7 +137,7 @@ const ArtistePage = () => {
 					<Flex direction="column" gap={4}>
 						{artiste?.songs?.map((song) => (
 							<ArtisteSong
-								key={song?._id}
+								key={song?.id}
 								song={song}
 								handlePlay={onSongPlay}
 							/>

@@ -9,6 +9,10 @@ namespace MusicManager.Repsitory
 {
     public interface IRepoArtistes
     {
-        Task<IEnumerable<Artist>> GetArtistsAsync();
+        public Task<IEnumerable<Artist>> GetArtistsAsync();
+        public Task<Artist> GetArtistWithSongsAsync(Artist artist);
+        public Task AddArtist(Artist artist);
+        public Task UpdateArtist(Artist artist);
+        public Task DeleteArtist(Artist artist);
     }
 }

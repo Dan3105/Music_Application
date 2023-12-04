@@ -6,11 +6,10 @@ namespace MusicServerAPI.Repository
     public interface IUserRepository : IRepository<User>
     {
         public Task<bool> Create(RegisterDTO registerDTO);
-        public User GetUser(int id);
-        public User GetUser(string email);
-        public User GetUserByLogin(string emailUser, string password);
+        public Task<User> GetUser(int id);
+        public Task<User> GetUser(string email);
+        public Task<User> GetUserByToken(string token);
+        public Task<User> GetUserByLogin(string emailUser, string password);
         public Task<ICollection<User>> GetAll();
-        public void Update(User entity);
-        public bool SaveChanges();
     }
 }

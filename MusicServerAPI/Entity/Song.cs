@@ -30,12 +30,9 @@ namespace MusicServerAPI.Entity
         [Required]
         public string? SongURL { get; set; } = "";
 
-        public virtual ICollection<ArtistSong>? ArtistSongs { get; }
-        public virtual ICollection<Artist>? Artists { get; }
-        public virtual ICollection<PlaylistSong>? PlaylistSongs { get; }
-        public virtual ICollection<Playlist>? Playlists { get; }
+        public virtual ICollection<ArtistSong>? ArtistSongs { get; set; }
+        public virtual ICollection<PlaylistSong>? PlaylistSongs { get; set; }
     
-        public virtual ICollection<FavoriteSongs>? FavoriteSongs { get; }
-        public virtual ICollection<User>? Users { get; }
+        public virtual ICollection<FavoriteSongs>? FavoriteSongs { get; set; }
     }
 }

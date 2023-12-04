@@ -16,12 +16,12 @@ const CreatePlaylistCard = () => {
 
     //handle authentication
 	const handleCreatePlaylist = () => {
-		// if (user) {
+		if (user) {
 			navigate("/playlists/create");
-		// } else {
-		// 	dispatch(setModalMessage("Please login to create a playlist."));
-		// 	onOpen();
-		// }
+		} else {
+			dispatch(setModalMessage("Please login to create a playlist."));
+			onOpen();
+		}
 	};
 
 	return (

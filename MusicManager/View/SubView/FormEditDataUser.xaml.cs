@@ -10,11 +10,10 @@ namespace MusicManager.View.SubView
     /// </summary>
     public partial class FormEditDataUser : Window
     {
-        private ICommand _actionSubmit;
         public ICommand ActionSubmit
         {
-            get { return _actionSubmit; }
-            set { _actionSubmit = value; }
+            get;
+            set;
         }
 
         private User _refUser;
@@ -40,6 +39,11 @@ namespace MusicManager.View.SubView
             InitializeComponent();
             _refUser = user;
             RoleList = new ObservableCollection<Role>(roles);
+            BindingDataToUI(user, eventSubmit);
+        }
+
+        private void BindingDataToUI(User user, ICommand eventSubmit)
+        {
             this.txbEmail.Text = user.Email;
             this.txbCreated.Text = user.CreatedDate.ToString();
             this.chbActive.IsChecked = user.IsActive;
@@ -99,8 +103,6 @@ namespace MusicManager.View.SubView
                     roleCurrentSelected = role;
                     currentUserRoles[index] = roleCurrentSelected;
                 }
-                //this.DGRole.ItemsSource= roles;
-
             }
             catch (Exception e)
             {
@@ -110,7 +112,6 @@ namespace MusicManager.View.SubView
 
         private void BtnAddRole_Click(object sender, RoutedEventArgs e)
         {
-
             RoleListSelect roleListSelect = new RoleListSelect(RoleList, AddUserRoleAction);
             roleListSelect.Show();
         }

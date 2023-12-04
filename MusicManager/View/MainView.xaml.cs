@@ -59,5 +59,10 @@ namespace MusicManager.View
         {
             this.WindowState = WindowState.Minimized;
         }
+
+        private void radioSignout_Checked(object sender, RoutedEventArgs e)
+        {
+            App.Signout();
+        }
     }
 }

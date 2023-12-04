@@ -20,11 +20,12 @@ namespace MusicServerAPI.Model
             Description = playlist.Description;
             IsPrivate = playlist.isPrivate;
             UserId = playlist.user.Id;
-            if (playlist.Songs != null)
+            if (playlist.PlaylistSongs != null)
             {
                 Songs = new List<SongDTO>();
-                foreach (var song in playlist?.Songs)
+                foreach (var plSong in playlist?.PlaylistSongs)
                 {
+                    var song = plSong.Song;
                     Songs.Add(new SongDTO(song));
                 }
 

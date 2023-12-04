@@ -11,7 +11,7 @@ namespace MusicServerAPI.Repository
         {
             _dbContext = dbContext;
         }
-        public void Delete(Role entity)
+        public bool Delete(Role entity)
         {
             throw new NotImplementedException();
         }
@@ -26,7 +26,12 @@ namespace MusicServerAPI.Repository
             return await _dbContext.Roles.Where(r => ids.Contains(r.Id)).ToListAsync();
         }
 
-        public void Update(Role entity)
+        public bool SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Role entity)
         {
             throw new NotImplementedException();
         }

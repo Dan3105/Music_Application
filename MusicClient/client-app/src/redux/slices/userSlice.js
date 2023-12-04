@@ -22,7 +22,8 @@ export const userSlice = createSlice({
 			// state.token = null;
 		},
 		setUser: (state, action) => {
-			state.user = action.payload.userRequest;
+			console.log(action.payload);
+			state.user = action.payload;
 		},
 	},
 });

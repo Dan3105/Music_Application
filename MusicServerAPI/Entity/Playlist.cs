@@ -24,7 +24,6 @@ namespace MusicServerAPI.Entity
         public User? user { get; set; }
 
         public virtual ICollection<PlaylistSong>? PlaylistSongs { get; set; }
-        public virtual ICollection<Song>? Songs { get; set; }
 
     }
 }
