@@ -134,15 +134,15 @@ namespace MusicManager.Repsitory
             {
                 if (image is string imageSourceLink)
                 {
-                    image = imageSourceLink;
+                    newImageUri = imageSourceLink;
                 }
                 else if (image is ImageSource imgSource)
                 {
                     string fileImageName = $"{artist.Name.ToLower().Replace(" ", "")}";
                     newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
                 }
-                
 
+                artist.Type = "Artiste";
                 artist.Image = newImageUri;
                 await AddArtist(artist);
 

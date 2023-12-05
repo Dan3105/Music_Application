@@ -161,7 +161,15 @@ namespace MusicManager.View.SubView
         }
         private void TBoxSearch_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-
+            try
+            {
+                var result = _currentSongContains.Where(s => s.Title.Contains(TBoxSearch.Text)).ToList();
+                DGSong.ItemsSource = result;
+            }
+            catch
+            {
+                DGSong.ItemsSource = _currentSongContains;
+            }
         }
         #endregion
 
@@ -220,6 +228,11 @@ namespace MusicManager.View.SubView
         {
             WindowInteropHelper hepler = new WindowInteropHelper(this);
             SendMessage(hepler.Handle, 161, 2, 0);
+        }
+
+        private void txbArtistName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
         }
     }
 }

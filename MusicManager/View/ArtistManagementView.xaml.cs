@@ -30,7 +30,19 @@ namespace MusicManager.View
 
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            if (DataContext is ArtistManagementViewModel viewModel)
+            {
+                try
+                {
+                    var result = viewModel.Artists.Where(x => x.Name.Contains(TBoxSearch.Text) ||
+                                                            x.Bio.Contains(TBoxSearch.Text));
+                    DGArtist.ItemsSource = result;
+                }
+                catch
+                {
+                    DGArtist.ItemsSource = viewModel.Artists;
+                }
+            }
         }
 
         private async void btnAdd_Click(object sender, RoutedEventArgs e)

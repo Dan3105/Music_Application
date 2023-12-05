@@ -332,7 +332,7 @@ namespace MusicManager.View.SubView
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Title = "Select Image";
-            dlg.Filter = "Image Files(*.jpg, *.png) | *.jpg; *.png";
+            dlg.Filter = "Image Files(*.jpg, *.png, *.jpeg) | *.jpg; *.png; *.jpeg";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //Bitmap bitmap = new Bitmap(dlg.FileName);

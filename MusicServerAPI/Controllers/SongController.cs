@@ -108,18 +108,21 @@ namespace MusicServerAPI.Controllers
 
                 if (user.FavoriteSongs.Select(p => p.SongId).Contains(id))
                 {
+                    Song song = await _songRepository.GetSong(id);
+                    song.Likes -= 1;
                     user.FavoriteSongs = user.FavoriteSongs.Where(p => p.SongId != id).ToList();
                     _userRepository.Update(user);
+                    _songRepository.Update(song);
                 }
                 else
                 {
                     Song song = await _songRepository.GetSong(id);
-
+                    song.Likes += 1;
                     user.FavoriteSongs.Add(new FavoriteSongs() { 
                         SongId = song.Id
                     });
                     _userRepository.Update(user);
-
+                    _songRepository.Update(song);
                 }
 
                 UserRequest userRequest = new UserRequest()
@@ -168,7 +171,6 @@ namespace MusicServerAPI.Controllers
                         ArtistId = artistId,
                     });
                 }
-                Console.WriteLine($"This shit have {song.ArtistSongs.Count} Artist");
 
                 _songRepository.Update(song);
                 return Ok();
