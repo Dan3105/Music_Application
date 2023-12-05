@@ -17,6 +17,7 @@ namespace MusicManager.Repsitory
     class RepoSongs : IRepoSongs
     {
         private readonly string api_get_songs = "api/Song";
+        private readonly string api_get_song = "api/Song";
         private readonly string api_add_song = "api/Song/add";
         private readonly string api_delete_song = "api/Song/del";
         private readonly string api_update_song = "api/Song/update";
@@ -94,6 +95,26 @@ namespace MusicManager.Repsitory
             {
                 MessageBox.Show(ex.Message);
                 return;
+            }
+        }
+
+        public async Task<Song> GetSong(int id)
+        {
+            try
+            {
+                HttpResponseMessage responseMessage = await Axios.Client.GetAsync($"{api_get_song}/{id}");
+                responseMessage.EnsureSuccessStatusCode();
+                string jsonResponse = await responseMessage.Content.ReadAsStringAsync();
+                Song song = await System.Text.Json.JsonSerializer.DeserializeAsync<Song>
+                    (new MemoryStream(Encoding.UTF8.GetBytes(jsonResponse)),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    );
+                return song;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new Song();
             }
         }
     }

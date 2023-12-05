@@ -170,6 +170,14 @@ namespace MusicManager.View.SubView
                 isPlaying = value;
                 if (isPlaying)
                 {
+                    if(_MediaPlayer.Source == null)
+                    {
+                        try
+                        {
+                            _MediaPlayer.Open(new Uri(txbSongUrl.Text));
+                        }
+                        catch { }
+                    }
                     _MediaPlayer?.Play();
                     symbolPlay.Symbol = Wpf.Ui.Common.SymbolRegular.Pause16;
                 }
@@ -245,7 +253,6 @@ namespace MusicManager.View.SubView
                 _MediaPlayer = new MediaPlayer();
                 _MediaPlayer.MediaOpened += TrackingMusic;
                 _MediaPlayer.Open(new Uri(txbSongUrl.Text));
-                //RefreshSong();
             }
             catch (Exception ex)
             {

@@ -26,7 +26,7 @@ namespace MusicServerAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<SongDTO>> GetSongs()
+        public async Task<IActionResult> GetSongs()
         {
             ICollection<Song> songs = await _songRepository.GetSongs();
             List<SongDTO> songList = new List<SongDTO>();
@@ -34,11 +34,11 @@ namespace MusicServerAPI.Controllers
             {
                 songList.Add(new SongDTO(song));
             }
-            return songList;
+            return Ok(songList);
         }
 
         [HttpGet("by-artist-{id}")]
-        public async Task<ICollection<SongDTO>> GetSongsByArtist(int id)
+        public async Task<IActionResult> GetSongsByArtist(int id)
         {
             ICollection<Song> songs = await _songRepository.GetSongsByArtistId(id);
             List<SongDTO> songList = new List<SongDTO>();
@@ -48,11 +48,26 @@ namespace MusicServerAPI.Controllers
                 songList.Add(new SongDTO(song));
             }
 
-            return songList;
+            return Ok(songList);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSong(int id)
+        {
+            try
+            {
+                var song = await _songRepository.GetSong(id);
+                return Ok(new SongDTO(song));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
         }
 
         [HttpGet("most-liked")]
-        public async Task<ICollection<SongDTO>> GetMostLikeSong()
+        public async Task<IActionResult> GetMostLikeSong()
         {
             ICollection<Song> songs = await _songRepository.GetSongsOrderLikes();
             List<SongDTO> songList = new List<SongDTO>();
@@ -62,11 +77,11 @@ namespace MusicServerAPI.Controllers
                 songList.Add(new SongDTO(song));
             }
 
-            return songList;
+            return Ok(songList);
         }
 
         [HttpGet("latest")]
-        public async Task<ICollection<SongDTO>> GetLatestSong()
+        public async Task<IActionResult> GetLatestSong()
         {
             ICollection<Song> songs = await _songRepository.GetSongsOrderDateRealease();
             List<SongDTO> songList = new List<SongDTO>();
@@ -75,7 +90,7 @@ namespace MusicServerAPI.Controllers
             {
                 songList.Add(new SongDTO(song));
             }
-            return songList;
+            return Ok(songList);
         }
 
         [Authorize(Policy = "CanCustomMusic")]

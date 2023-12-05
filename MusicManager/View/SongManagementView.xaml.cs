@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-
+using MessageBox = System.Windows.MessageBox;
 namespace MusicManager.View
 {
     /// <summary>
@@ -39,19 +39,27 @@ namespace MusicManager.View
 
         private async void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is SongManagementViewModel viewModel)
+            try
             {
-                var song = this.DGMusics.SelectedItem as Song;
-                if (song != null)
+                if (DataContext is SongManagementViewModel viewModel)
                 {
-                    var artists = await App.RepositoryManager.RepoArtistes.GetArtistsAsync();
-                    FormEditDataSong formSongEdit = new FormEditDataSong(artists, viewModel.SubmitEditSongCommand, song);
-                    formSongEdit.ShowDialog();
+                    var song = this.DGMusics.SelectedItem as Song;
+                    if (song != null)
+                    {
+                        var songFromDB = await App.RepositoryManager.RepoSongs.GetSong(song.Id);
+                        var artists = await App.RepositoryManager.RepoArtistes.GetArtistsAsync();
+                        FormEditDataSong formSongEdit = new FormEditDataSong(artists, viewModel.SubmitEditSongCommand, songFromDB);
+                        formSongEdit.ShowDialog();
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("song is null");
+                    }
                 }
-                else
-                {
-                    System.Windows.MessageBox.Show("song is null");
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

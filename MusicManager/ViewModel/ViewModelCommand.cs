@@ -12,7 +12,6 @@ namespace MusicManager.ViewModel
         //Fields
         private readonly Action<object> _executeAction;
         private readonly Predicate<object> _canExecuteAction;
-        private ICommand? getReleasesSongs;
 
         public ViewModelCommand(Action<object> executeAction, Predicate<object> canExecuteAction)
         {
