@@ -16,7 +16,7 @@
         <Grid Background="{StaticResource panelColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="0*"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -33,10 +33,10 @@
                                  Background="Transparent"
                                  FontWeight="Medium"
                                  FontFamily="Montserrat"
-                                 Foreground="{StaticResource plainTextColor3}"
-                                 CaretBrush="{StaticResource plainTextColor3}"
+                                 Foreground="White"
+                                 CaretBrush="White"
                                  BorderBrush="{StaticResource plainTextColor3}"
-                                 BorderThickness="0.25"
+                                 BorderThickness="0.35"
                                  VerticalContentAlignment="Center"
                                  Margin="10,5,10,0"></TextBox>
 
@@ -80,13 +80,17 @@
                     </Border>
 
                     <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="479*"/>
+                            <ColumnDefinition Width="307*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="230"/>
                         </Grid.RowDefinitions>
 
-                        <Border HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center">
+                        <Border
+                                VerticalAlignment="Center" Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -96,7 +100,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
                                     <TextBlock Text="New Releases"
-                                               FontSize="8"
+                                               FontSize="16"
                                                Margin="5,0,5,0"
                                                FontWeight="SemiBold"
                                                Foreground="White"
@@ -109,7 +113,7 @@
                                 <Button Grid.Column="1"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        FontSize="8"
+                                        FontSize="12"
                                         Padding="0"
                                         Content="See more"
                                         Background="Transparent"
@@ -126,7 +130,7 @@
                                  ItemTemplate="{StaticResource SongCard}"
                                  ItemsSource="{Binding SongReleases}"
                                  SelectionChanged="listSongs_SelectionChanged"
-                                 d:ItemsSource="{d:SampleData ItemCount=5}"
+                                 d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2"
                                  >
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -140,7 +144,7 @@
                     <Grid Margin="0,20,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"/>
-                            <RowDefinition Height="130"/>
+                            <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <Border HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center">
@@ -153,7 +157,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center">
                                     <TextBlock Text="You May Like"
-                                               FontSize="8"
+                                               FontSize="16"
                                                Margin="5,0,5,0"
                                                FontWeight="SemiBold"
                                                Foreground="White"
@@ -164,7 +168,7 @@
                                 <Button Grid.Column="1"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        FontSize="8"
+                                        FontSize="12"
                                         Padding="0"
                                         Content="See more"
                                         Background="Transparent"
@@ -191,12 +195,6 @@
 
                         </ListBox>
                     </Grid>
-
-                    <Button
-                        Name="Debug"
-                        Content="Click to test"
-                        Margin="10"
-                        Click="Debug_Click"/>
                 </StackPanel>
 
             </Grid>

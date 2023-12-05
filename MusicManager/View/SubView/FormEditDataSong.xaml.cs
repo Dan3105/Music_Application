@@ -24,7 +24,7 @@ namespace MusicManager.View.SubView
         public ObservableCollection<Artist> _artists { get; set; }
         private ObservableCollection<Artist> _currentSongArtits { get; set; }
         private Song _currentSong { get; set; }
-
+        private double TotalSecondsTracking;
         public FormEditDataSong()
         {
             InitializeComponent();
@@ -68,9 +68,9 @@ namespace MusicManager.View.SubView
             cbArtists.ItemsSource = _artists;
             txbSongUrl.Text = currentSong.SongURL;
             InitImage();
+            InitTimerDispatch();
             InitSong();
             RefreshSong();
-            InitTimerDispatch();
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
@@ -113,23 +113,40 @@ namespace MusicManager.View.SubView
             }
         }
 
-        private async void Submit_Click(object sender, RoutedEventArgs e)
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            DiscloseMediaPlayer();
-            var imageUrl = await UploadImageHandler();
-            if (imageUrl == string.Empty)
-                return;
-
-            var songUrl = await UploadSongHandler();
-            if (songUrl == string.Empty)
-                return;
-            txbSongUrl.Text = songUrl;
-            _currentSong.SongURL = songUrl;
-            _currentSong.CoverImage = imageUrl;
-
-            if (BindingToSongModel())
+            if (MessageBox.Show("Are you sure to submit?", "Submit Song", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                ActionSubmit?.Execute(_currentSong);
+                try
+                {
+                    if (BindingToSongModel())
+                    {
+                        string uriSource = _MediaPlayer.Source.ToString();
+                        DiscloseMediaPlayer();
+                        if (currentImageSourceType == ImageSourceType.File)
+                        {
+                            object param = new Tuple<object, string, Song>(imgSong.Source, uriSource, _currentSong);
+                            ActionSubmit?.Execute(param);
+                        }
+                        else if (currentImageSourceType == ImageSourceType.Url)
+                        {
+                            object param = new Tuple<object, string, Song>(_currentSong.CoverImage, uriSource, _currentSong);
+                            ActionSubmit?.Execute(param);
+                        }
+                    }
+                    this.Close();
+                }
+                catch(Exception ex) {
+                    //MessageBox.Show(ex.Message);
+                    if(MessageBox.Show($"Continue to edit?\nError Cause{ex.Message}", "Failed in Submit", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
             }
         }
 
@@ -147,6 +164,8 @@ namespace MusicManager.View.SubView
                 _currentSong.Title = txbSongName.Text;
                 _currentSong.Artists = _currentSongArtits.ToList();
                 _currentSong.ReleaseDate = DateTime.Parse(dpDateRealease.Text);
+                _currentSong.Duration = (int)TotalSecondsTracking;
+
                 return true;
             }
             catch (Exception ex)
@@ -170,14 +189,7 @@ namespace MusicManager.View.SubView
                 isPlaying = value;
                 if (isPlaying)
                 {
-                    if(_MediaPlayer.Source == null)
-                    {
-                        try
-                        {
-                            _MediaPlayer.Open(new Uri(txbSongUrl.Text));
-                        }
-                        catch { }
-                    }
+                    
                     _MediaPlayer?.Play();
                     symbolPlay.Symbol = Wpf.Ui.Common.SymbolRegular.Pause16;
                 }
@@ -194,7 +206,10 @@ namespace MusicManager.View.SubView
         private MediaPlayer _MediaPlayer
         {
             set { _mediaPlayer = value; }
-            get { return _mediaPlayer; }
+            get
+            {
+                return _mediaPlayer;
+            }
         }
 
 
@@ -256,7 +271,7 @@ namespace MusicManager.View.SubView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
             }
         }
 
@@ -293,69 +308,11 @@ namespace MusicManager.View.SubView
             if (_MediaPlayer.NaturalDuration.HasTimeSpan)
             {
                 sliderMusic.Maximum = _MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                TotalSecondsTracking = _MediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
                 dispatcherTimer.Start();
                 sliderMusic.Value = 0;
             }
         }
-
-
-        private async Task<string> UploadSongHandler()
-        {
-            try
-            {
-                var urlLoaded = await UploadSongToFirebase();
-                if (urlLoaded != string.Empty)
-                {
-                    return urlLoaded;
-                }
-                return string.Empty;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return string.Empty;
-            }
-        }
-
-        private async Task<string> UploadSongToFirebase()
-        {
-            return await App.FirebaseService.UpdateDataSongToCloud(txbSongUrl.Text, txbSongName.Text, FIREBASE_SONG_MP3_FOLDER);
-        }
-
-
-        private async Task<string> UploadImageHandler()
-        {
-            try
-            {
-                if (currentImageSourceType == ImageSourceType.File)
-                {
-                    var urlUploaded = await UpdateImageToFirebase();
-                    if (urlUploaded != string.Empty)
-                    {
-                        return urlUploaded;
-                    }
-                    return string.Empty;
-                }
-                else if(currentImageSourceType == ImageSourceType.Url)
-                {
-                    return _currentSong.SongURL;
-                }
-                return string.Empty;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return string.Empty;
-            }
-        }
-
-        private async Task<string> UpdateImageToFirebase()
-        {
-            return await App.FirebaseService.UpdateDataImageToCloud(imgSong.Source, txbSongName.Text, FIREBASE_SONG_IMG_FOLDER);
-        }
-
 
         private void btnRefreshSong_Click(object sender, RoutedEventArgs e)
         {
@@ -424,6 +381,16 @@ namespace MusicManager.View.SubView
         {
             WindowInteropHelper hepler = new WindowInteropHelper(this);
             SendMessage(hepler.Handle, 161, 2, 0);
+        }
+
+        private void txbSongUrl_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try
+            {
+                InitSong();
+            }
+            catch { 
+            }
         }
     }
 }

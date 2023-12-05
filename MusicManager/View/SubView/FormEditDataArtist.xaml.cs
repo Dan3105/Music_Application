@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static MusicManager.Config.Config;
 using MessageBox = System.Windows.MessageBox;
@@ -66,26 +67,23 @@ namespace MusicManager.View.SubView
         {
             try
             {
-                
-                if (!ValidateBeforeSubmit())
+                if (BindingToModelArtist())
                 {
-                    return;
-                }
-                if (currentImageSourceType == ImageSourceType.File)
-                {
-                    var urlUploaded = await UpdateImageToFirebase();
-                    if (urlUploaded == string.Empty)
+                    if (currentImageSourceType == ImageSourceType.File)
                     {
-                        return;
+                        object param = new Tuple<object, Artist>(imgArtist.Source, _artist);
+                        SubmitCommand?.Execute(param);
                     }
-                    _artist.Image = urlUploaded;
+                    else if (currentImageSourceType == ImageSourceType.Url)
+                    {
+                        object param = new Tuple<object, Artist>(_artist.Image, _artist);
+                        SubmitCommand?.Execute(param);
+
+                    }
+
+                    ActionBeforeClose();
+                    this.Close();
                 }
-                _artist.Name = txbArtistName.Text;
-                _artist.Bio = tbBio.Text;
-                _artist.Songs = _currentSongContains.ToList();
-                SubmitCommand?.Execute(_artist);
-                ActionBeforeClose();
-                this.Close();
             }
             catch (Exception ex)
             {
@@ -94,6 +92,26 @@ namespace MusicManager.View.SubView
                     ActionBeforeClose();
                     this.Close();
                 }
+            }
+        }
+
+        private bool BindingToModelArtist()
+        {
+            try
+            {
+
+                if (!ValidateBeforeSubmit())
+                {
+                    return false;
+                }
+                _artist.Name = txbArtistName.Text;
+                _artist.Bio = tbBio.Text;
+                _artist.Songs = _currentSongContains.ToList();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

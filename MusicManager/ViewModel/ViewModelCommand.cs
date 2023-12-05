@@ -24,12 +24,6 @@ namespace MusicManager.ViewModel
             _executeAction = executeAction;
             _canExecuteAction = null;
         }
-
-        public ViewModelCommand(ICommand? getReleasesSongs)
-        {
-            this.getReleasesSongs = getReleasesSongs;
-        }
-
         public event EventHandler? CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }

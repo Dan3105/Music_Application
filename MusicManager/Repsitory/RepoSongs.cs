@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MusicManager.Repsitory
 {
@@ -46,7 +47,8 @@ namespace MusicManager.Repsitory
             }
         }
 
-        public async Task AddSong(Song song)
+
+        private async Task AddSong(Song song)
         {
             try
             {
@@ -64,7 +66,7 @@ namespace MusicManager.Repsitory
             }
         }
 
-        public async Task UpdateSong(Song song)
+        private async Task UpdateSong(Song song)
         {
             try
             {
@@ -115,6 +117,85 @@ namespace MusicManager.Repsitory
             {
                 Console.WriteLine(ex);
                 return new Song();
+            }
+        }
+
+        public async Task AddSong(object imageSource, string media, Song song)
+        {
+            string newImageUri = string.Empty;
+            string newSongUri = string.Empty;
+            try
+            {
+                if(imageSource is string imageSourceLink)
+                {
+                    newImageUri = imageSourceLink;
+                }
+                else if(imageSource is ImageSource imgSource)
+                {
+                    string fileImageName = $"{song.Title.ToLower().Replace(" ", "")}";
+                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                }
+                else
+                {
+                    newImageUri = song.CoverImage;
+                }
+
+                Uri mediaUri = new Uri(media);
+                if (mediaUri.IsFile)
+                {
+                    string fileSongName = $"{song.Title.ToLower().Replace(" ", "")}";
+                    string uriSong = media;
+                    newSongUri = await App.FirebaseService.UpdateDataSongToCloud(uriSong, fileSongName, Config.Config.FIREBASE_SONG_MP3_FOLDER);
+                }
+
+                song.CoverImage = newImageUri;
+                song.SongURL = newSongUri;
+                song.Likes = 0;
+                await AddSong(song);
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public async Task UpdateSong(object imageSource, string media, Song song)
+        {
+            string newImageUri = string.Empty;
+            string newSongUri = media;
+            try
+            {
+                if (imageSource is string imageSourceLink)
+                {
+                    newImageUri = imageSourceLink;
+                }
+                else if (imageSource is ImageSource imgSource)
+                {
+                    string fileImageName = $"{song.Title.ToLower().Replace(" ", "")}";
+                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                }
+                else
+                {
+                    newImageUri = song.CoverImage;
+                }
+
+                Uri mediaUri = new Uri(media);
+                if (mediaUri.IsFile)
+                {
+                    string fileSongName = $"{song.Title.ToLower().Replace(" ", "")}";
+                    string uriSong = media;
+                    newSongUri = await App.FirebaseService.UpdateDataSongToCloud(uriSong, fileSongName, Config.Config.FIREBASE_SONG_MP3_FOLDER);
+                }
+
+                song.CoverImage = newImageUri;
+                song.SongURL = newSongUri;
+                await UpdateSong(song);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

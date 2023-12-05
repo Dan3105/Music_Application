@@ -8,6 +8,11 @@ namespace MusicManager.Services
 {
     public class FirebaseService : IFirebaseService
     {
+        private readonly FirebaseStorage _storage;
+        public FirebaseService()
+        {
+            _storage = new FirebaseStorage(Config.Config.FIREBASE_STORAGE);
+        }
         public async Task<string> UpdateDataImageToCloud(ImageSource imageSource, string fileName, string folderFileConfig)
         {
             try
@@ -24,7 +29,7 @@ namespace MusicManager.Services
 
                         ms.Seek(0, SeekOrigin.Begin);
 
-                        var urlUpload = await new FirebaseStorage(Config.Config.FIREBASE_STORAGE)
+                        var urlUpload = await _storage
                         .Child($"{Config.Config.FIREBASE_ARTIST_IMG_FOLDER}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.png")
                         .PutAsync(ms);
 
@@ -53,8 +58,7 @@ namespace MusicManager.Services
                 {
                     using (var stream = File.Open(validateUri.LocalPath, FileMode.Open))
                     {
-                        var firebaseStorage = new FirebaseStorage(Config.Config.FIREBASE_STORAGE);
-                        urlLoad = await firebaseStorage
+                        urlLoad = await _storage
                             .Child($"{Config.Config.FIREBASE_SONG_MP3_FOLDER}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.mp3")
                             .PutAsync(stream);
 
@@ -72,5 +76,6 @@ namespace MusicManager.Services
                 return urlLoad;
             }
         }
+
     }
 }

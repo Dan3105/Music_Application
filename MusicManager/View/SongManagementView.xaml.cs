@@ -14,7 +14,6 @@ namespace MusicManager.View
     /// </summary>
     public partial class SongManagementView : UserControl
     {
-
         public SongManagementView()
         {
             InitializeComponent();

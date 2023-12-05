@@ -10,8 +10,12 @@
              mc:Ignorable="d"
              x:Name="_this"
              d:DesignHeight="80" d:DesignWidth="1300">
-    <Border Background="#03bf69"
-            CornerRadius="20,20,0,0">
+    <Grid>
+
+        <Border Background="Transparent"
+                CornerRadius="20,20,0,0"
+                Opacity="0.8">
+        </Border>
         <StackPanel Orientation="Horizontal">
             <Ellipse Width="50" Height="50"
                      Margin="30,0,0,0">
@@ -50,5 +54,5 @@
             </Button>
         </StackPanel>
 
-    </Border>
+    </Grid>
 </UserControl>

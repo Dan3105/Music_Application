@@ -7,17 +7,17 @@
                     Background="#18181b"
                     >
             <Image Source="{Binding Path=CoverImage}"
-                   Stretch="UniformToFill"
+                   Stretch="Fill"
                    Height="100"
                    Width="100"
                    />
             <TextBlock Text="{Binding Path=Title}"
                        Margin="5,10,0,0"
-                       FontSize="12"
+                       FontSize="14"
                        Foreground="White"
                        FontWeight="SemiBold"
                        Padding="0"/>
-            <TextBlock Text="{Binding Path=Artist.Name}" FontSize="8"
+            <TextBlock Text="{Binding Path=Artist.Name}" FontSize="12"
                        Foreground="White"
                        FontWeight="Light"
                        Margin="5,0,0,0"

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MusicManager.ViewModel
 {
@@ -27,8 +28,20 @@ namespace MusicManager.ViewModel
         public SongManagementViewModel()
         {
             SongRetrieveCommand = new ViewModelCommand(PreRetrieveSongFromServer);
-            SubmitEditSongCommand = new ViewModelCommand(PreSubmitSongToServer);
-            SubmitAddSongCommand = new ViewModelCommand(PreAddSongToServer);
+            SubmitEditSongCommand = new ViewModelCommand(parameter =>
+            {
+                if (parameter is (object image, string mediaPlayer, Song song))
+                {
+                    PreSubmitSongToServer(image, mediaPlayer, song);
+                };
+            });
+            SubmitAddSongCommand = new ViewModelCommand(parameter =>
+            {
+                if (parameter is (object image, string mediaPlayer, Song song))
+                {
+                    PreAddSongToServer(image, mediaPlayer, song);
+                };
+            });
             DeleteSongCommand = new ViewModelCommand(PreDeleteSongFromServer);
             PlaySongCommand = new ViewModelCommand(PlaySong);
         }
@@ -59,47 +72,68 @@ namespace MusicManager.ViewModel
         private async void DeleteSongFromServer(Song song)
         {
             await App.RepositoryManager.RepoSongs.DeleteSong(song);
+            SongRetrieveCommand?.Execute(null);
         }
 
-        private void PreAddSongToServer(object obj)
+        private void PreAddSongToServer(object image, string media, Song song)
         {
-            if (obj is Song song)
+            if (image == null)
             {
-                song.Duration = 230;
-                song.Likes = 69969;
-                PostSongToServer(song);
+                MessageBox.Show("Image is null");
+                return;
             }
-            else
+            if (media == null)
+            {
+                MessageBox.Show("Media is null");
+                return;
+            }
+            if (song == null)
             {
                 MessageBox.Show("Song is null");
+                return;
             }
+
+            PostSongToServer(image, media, song);
+
         }
 
-        private async void PostSongToServer(Song song)
+        private async void PostSongToServer(object image, string media, Song song)
         {
             if(song.Artists.Count < 1)
             {
                 MessageBox.Show("Artist is empty", "Can't resolve", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            await App.RepositoryManager.RepoSongs.AddSong(song);
+            await App.RepositoryManager.RepoSongs.AddSong(image, media, song);
+            SongRetrieveCommand?.Execute(null);
+
         }
 
-        private void PreSubmitSongToServer(object obj)
+        private void PreSubmitSongToServer(object image, string media, Song song)
         {
-            if(obj is Song song)
+            if (image == null)
             {
-                PutSongToServer(song);
+                MessageBox.Show("Image is null");
+                return;
             }
-            else
+            if (media == null)
+            {
+                MessageBox.Show("Media is null");
+                return;
+            }
+            if (song == null)
             {
                 MessageBox.Show("Song is null");
+                return;
             }
+            PutSongToServer(image, media, song);
+
         }
 
-        private async void PutSongToServer(Song song)
+        private async void PutSongToServer(object image, string media, Song song)
         {
-            await App.RepositoryManager.RepoSongs.UpdateSong(song);
+            await App.RepositoryManager.RepoSongs.UpdateSong(image, media, song);
+            SongRetrieveCommand?.Execute(null);
         }
 
         private void PreRetrieveSongFromServer(object obj)

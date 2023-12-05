@@ -7,7 +7,7 @@
              xmlns:viewModel="clr-namespace:MusicManager.ViewModel"
              mc:Ignorable="d"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             Height="450" Width="1000"
+             Height="450" Width="800"
              Loaded="UserControl_Loaded">
     <UserControl.DataContext>
         <viewModel:UserManageViewModel/>
@@ -20,8 +20,8 @@
                 Opacity="0.95">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#313437" Offset="0.0"/>
-                    <GradientStop Color="#516473" Offset="1.5"/>
+                    <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0.0"/>
+                    <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1.5"/>
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
@@ -95,15 +95,15 @@
 
                 </DataGrid>
             </StackPanel>
-            <StackPanel Grid.Row="2"
-                        Grid.Column="1"
-                        VerticalAlignment="Center">
-                <Button x:Name="BtnAdd"
-                        Cursor="Hand"
-                        Background="Transparent"
-                        Click="BtnAdd_Click"
-                        Style="{StaticResource ButtonAddDGStyle}"/>
-            </StackPanel>
+            <!--<StackPanel Grid.Row="2"
+            Grid.Column="1"
+            VerticalAlignment="Center">
+            <Button x:Name="BtnAdd"
+            Cursor="Hand"
+            Background="Transparent"
+            Click="BtnAdd_Click"
+            Style="{StaticResource ButtonAddDGStyle}"/>
+            </StackPanel>-->
         </Grid>
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MusicManager.ViewModel
 {
@@ -20,32 +21,31 @@ namespace MusicManager.ViewModel
                 OnPropertyChanged(nameof(Artists));
             }
         }
-        //private ObservableCollection<Song> _songs;
-        //public ObservableCollection<Song> Songs
-        //{
-        //    get
-        //    {
-        //        return _songs;
-        //    }
-        //    set
-        //    {
-        //        _songs = value;
-        //        OnPropertyChanged(nameof(Song));
-        //    }
-        //}
 
         public ICommand LoadArtistFromServerCommand { set; get; }
-        //public ICommand LoadSongFromServerCommand { set; get; }
         public ICommand CreateArtistCommand { set; get; }    
         public ICommand UpdateArtistCommand { set; get; }
         public ICommand DeleteArtistCommand { set; get; }
-    
+
         public ArtistManagementViewModel()
         {
             LoadArtistFromServerCommand = new ViewModelCommand(PreLoadArtistFromServer);
-            //LoadSongFromServerCommand = new ViewModelCommand(PreLoadSongFromServerCommand);
-            CreateArtistCommand = new ViewModelCommand(PreCreateArtistCommand);
-            UpdateArtistCommand = new ViewModelCommand(PreUpdateArtistCommand);
+            CreateArtistCommand = new ViewModelCommand(parameter =>
+            {
+                if (parameter is (object image, Artist artist))
+                {
+                    PreCreateArtistCommand(image, artist);
+                };
+            });
+
+            UpdateArtistCommand = new ViewModelCommand(parameter =>
+            {
+                if (parameter is (object image, Artist artist))
+                {
+                    PreUpdateArtistCommand(image, artist);
+                };
+            });
+
             DeleteArtistCommand = new ViewModelCommand(PreDeleteArtistCommand);
         }
 
@@ -58,7 +58,6 @@ namespace MusicManager.ViewModel
                 {
                     DeleteSongFromServer(artist);
                 }
-                DeleteSongFromServer(artist);
             }
             else
             {
@@ -66,35 +65,39 @@ namespace MusicManager.ViewModel
             }
         }
 
-        private void PreUpdateArtistCommand(object obj)
+        private void PreUpdateArtistCommand(object image, Artist artist)
         {
-            if(obj is Artist artist)
+            if (image == null)
             {
-                UpdateArtist(artist);
+                MessageBox.Show("Image is not selected");
+                return;
             }
-            else
+
+            if (artist == null)
             {
                 MessageBox.Show("Artist is not selected");
+                return;
             }
+            UpdateArtist(image, artist);
+
         }
 
-        private void PreCreateArtistCommand(object obj)
+        private void PreCreateArtistCommand(object image, Artist artist)
         {
-            if(obj is Artist artist)
+            if (image == null)
             {
-                artist.Image = "https://m.media-amazon.com/images/I/51WHgHxF5YL._AC_UF1000,1000_QL80_.jpg";
-                artist.Type = "Artist";
-                CreateArtist(artist);
+                MessageBox.Show("Image is not selected");
+                return;
             }
-            else
+
+            if (artist == null)
             {
                 MessageBox.Show("Artist is not selected");
+                return;
             }
+            CreateArtist(image, artist);
+
         }
-        //private void PreLoadSongFromServerCommand(object obj)
-        //{
-        //    LoadSongFromServer();
-        //}
 
 
         private void PreLoadArtistFromServer(object obj)
@@ -108,56 +111,48 @@ namespace MusicManager.ViewModel
             {
                 Artists = new ObservableCollection<Artist>(await App.RepositoryManager.RepoArtistes.GetArtistsAsync());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
 
-        //private async void LoadSongFromServer()
-        //{
-        //    try
-        //    {
-        //        _songs =  new ObservableCollection<Song>(await App.RepositoryManager.RepoSongs.GetSongs());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message);
-        //    }
-        //}
-
-        private void CreateArtist(Artist artist)
+        private async void CreateArtist(object image, Artist artist)
         {
             try
             {
-                App.RepositoryManager.RepoArtistes.AddArtist(artist);
-            }   
-            catch(Exception e)
+                await App.RepositoryManager.RepoArtistes.AddArtist(image, artist);
+                LoadArtistFromServerCommand?.Execute(null);
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
 
 
-        private void DeleteSongFromServer(Artist artist)
+        private async void DeleteSongFromServer(Artist artist)
         {
             try
             {
-                App.RepositoryManager.RepoArtistes.DeleteArtist(artist);
+                await App.RepositoryManager.RepoArtistes.DeleteArtist(artist);
+                LoadArtistFromServerCommand?.Execute(null);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
 
-        private void UpdateArtist(Artist artist)
+        private async void UpdateArtist(object image, Artist artist)
         {
             try
             {
-                App.RepositoryManager.RepoArtistes.UpdateArtist(artist);
+                await App.RepositoryManager.RepoArtistes.UpdateArtist(image, artist);
+                LoadArtistFromServerCommand?.Execute(null);
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }

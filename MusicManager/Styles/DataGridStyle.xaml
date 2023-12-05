@@ -4,8 +4,8 @@
 
     <LinearGradientBrush x:Key="BrushStyle" StartPoint="0,0"
                          EndPoint="0,1" Opacity="0.75">
-        <GradientStop Color="#516473" Offset="0.0"/>
-        <GradientStop Color="#879BAA" Offset="1.5"/>
+        <GradientStop Color="#18181b" Offset="0.0"/>
+        <GradientStop Color="#010000" Offset="1.5"/>
     </LinearGradientBrush>
 
     <!--#region DataGridCustomer Style-->
@@ -108,7 +108,7 @@
     </Style>
     <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#D1DBE4"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Margin" Value="15 0"/>
@@ -139,7 +139,7 @@
     <Style x:Key="DataGridColumnHeaderStyle1" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#E2D7AC"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="Margin" Value="15 10 15 10"/>
         <Setter Property="Template">
             <Setter.Value>

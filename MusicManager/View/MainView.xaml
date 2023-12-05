@@ -66,8 +66,8 @@
                         Grid.Column="0">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
-                            <GradientStop Color="{StaticResource secondaryBackColor1}"/>
-                            <GradientStop Color="{StaticResource secondaryBackColor2}"/>
+                            <GradientStop Color="#18181b"/>
+                            <GradientStop Color="#18181b"/>
                         </LinearGradientBrush>
                     </Border.Background>
 
@@ -144,17 +144,6 @@
                             HorizontalAlignment="Center"
                             Foreground="Wheat"
                             FontWeight="Medium"/>
-                        <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color5}">
-                            <StackPanel Orientation="Horizontal">
-                                <!--<fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}"/>-->
-
-                                <ui:SymbolIcon
-                                    Style="{StaticResource menuButtonIcon}"
-                                    Symbol="ContentSettings24"
-                                    /><TextBlock Text="Setting" Style="{StaticResource menuButtonText}"/>
-                            </StackPanel>
-                        </RadioButton>
 
                         <RadioButton
                             x:Name="radioSignout"
@@ -175,8 +164,8 @@
                 <Border CornerRadius="0,15,0,10" Grid.Column="1">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="{StaticResource primaryBackColor1}"/>
-                            <GradientStop Color="{StaticResource primaryBackColor2}"/>
+                            <GradientStop Color="#101010"/>
+                            <GradientStop Color="#000000"/>
                         </LinearGradientBrush>
                     </Border.Background>
 

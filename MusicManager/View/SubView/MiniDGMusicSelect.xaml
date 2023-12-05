@@ -11,7 +11,7 @@
         WindowStyle="None"
         x:Name="_this">
     <Grid>
-        <Border Background="#FF516473"/>
+        <Border Background="#18181b"/>
 
         <Grid Margin="20">
             <Grid.RowDefinitions>
@@ -77,6 +77,7 @@
                     HorizontalAlignment="Center">
                 <Button x:Name="btnSubmit"
                         Content="Submit"
+                        Background="#1fdf63"
                         Click="btnSubmit_Click"
                         BorderBrush="Green"/>
             </Border>

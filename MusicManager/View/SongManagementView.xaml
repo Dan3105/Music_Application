@@ -19,8 +19,8 @@
                 Opacity="0.95">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#313437" Offset="0.0"/>
-                    <GradientStop Color="#516473" Offset="1.5"/>
+                    <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0.0"/>
+                    <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1.5"/>
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
@@ -40,9 +40,9 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Music Managements"
+                    <TextBlock Text="Music Database"
                                FontSize="20"
-                               Foreground="Wheat"
+                               Foreground="White"
                                FontWeight="Medium"
                                VerticalAlignment="Center"/>
                     <Button Grid.Column="1"
@@ -56,7 +56,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <TextBox x:Name="TBoxSearch"
-                             Style="{StaticResource TextBoxSearchStyle}" TextChanged="TBoxSearch_TextChanged"/>
+                             Style="{StaticResource TextBoxSearchStyle}" TextChanged="TBoxSearch_TextChanged" Width="291"/>
                     <ui:SymbolIcon Symbol="Search16"
                                    VerticalAlignment="Center"
                                    Foreground="White"

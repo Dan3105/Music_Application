@@ -9,8 +9,8 @@
         <Setter Property="Width" Value="175"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Background" Value="#40596F"/>
-        <Setter Property="Foreground" Value="#D1DBE4"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource mainColorText}"/>
         <Setter Property="BorderThickness" Value="0 0 0 1"/>
         <Setter Property="Padding" Value="15 8 0 0"/>
         <Setter Property="Template">

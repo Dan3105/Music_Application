@@ -13,7 +13,7 @@
         Background="Transparent"
         x:Name="_this">
     <Grid>
-        <Border Background="#FF9B9771"/>
+        <Border Background="{StaticResource panelColor}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -43,11 +43,12 @@
 
                         <TextBlock Text="Form Song Custom"
                                    FontSize="16"
+                                   Foreground="{StaticResource mainColorText}"
                                    FontWeight="DemiBold"/>
                         <StackPanel
                             Margin="0,20,0,0"
                             Orientation="Vertical">
-                            <TextBlock Text="Song Name" FontSize="16"/>
+                            <TextBlock Text="Song Name" Foreground="{StaticResource subColorText}" FontSize="16"/>
                             <TextBox x:Name="txbSongName" Margin="0,5,0,0"
                                      Style="{StaticResource TextBoxInputSongStyle}" Width="380"
                                      />
@@ -56,14 +57,14 @@
                         <StackPanel
                             Margin="0,20,0,0"
                             Orientation="Vertical">
-                            <TextBlock Text="Actor Name" FontSize="16"/>
+                            <TextBlock Text="Actor Name" Foreground="{StaticResource subColorText}" FontSize="16"/>
                             <StackPanel>
                                 <WrapPanel Height="100">
                                     <DataGrid Name="DGActor"
                                               ScrollViewer.CanContentScroll="True"
                                               IsReadOnly="True"
                                               AutoGenerateColumns="False"
-                                              Foreground="Black"
+                                              Foreground="{StaticResource mainColorText}"
                                               Height="111">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Actor name"
@@ -97,7 +98,7 @@
                                     <ComboBox Name="cbArtists" Margin="0,0,16,0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Name}" />
+                                                <TextBlock Foreground="{StaticResource mainColorText}" Text="{Binding Name}" />
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
@@ -106,7 +107,7 @@
                                             Cursor="Hand"
                                             HorizontalAlignment="Right"
                                             Click="btnAddArtist_Click"
-                                            Background="Transparent"
+                                            Background="#1fdf63"
                                             BorderBrush="Green"
                                             BorderThickness="1"
                                             Content="Add Artist"/>
@@ -117,11 +118,11 @@
                         <StackPanel
                             Margin="0,20,0,0"
                             Orientation="Vertical">
-                            <TextBlock Text="Release Date"/>
+                            <TextBlock Text="Release Date" Foreground="{StaticResource subColorText}"/>
                             <DatePicker
                                 x:Name="dpDateRealease"
                                 BorderBrush="#d8d9d9"
-                                Foreground="Black"
+                                Foreground="{StaticResource mainColorText}"
                                 />
                         </StackPanel>
 
@@ -133,12 +134,14 @@
                             Margin="15,0,0,0"
                             Grid.Column="1">
                             <TextBlock Text="Image"
+                                       Foreground="{StaticResource subColorText}"
                                        FontSize="16"/>
-                            <Border BorderThickness="1"
+                            <Border BorderThickness="2.5"
+                                    CornerRadius="10"
                                     Margin="0,10,0,0"
                                     Width="200"
                                     Height="200"
-                                    BorderBrush="Black"
+                                    BorderBrush="#2f2f33"
                                     HorizontalAlignment="Left">
                                 <Image
                                     Stretch="Fill"
@@ -157,14 +160,14 @@
                                 <Button
                                     Margin="0,10,0,0"
                                     x:Name="btnBrowseImage"
-                                    Foreground="Black"
+                                    Foreground="{StaticResource mainColorText}"
                                     BorderThickness="1"
                                     Content="Browse ..." Click="btnBrowseImage_Click"/>
 
                                 <Button
                                     Margin="20,10,0,0"
                                     x:Name="btnRefreshImage"
-                                    Foreground="Black"
+                                    Foreground="{StaticResource mainColorText}"
                                     BorderThickness="1"
                                     Content="Refresh" Click="btnRefreshImage_Click"/>
                             </StackPanel>
@@ -173,18 +176,18 @@
 
                         <StackPanel Orientation="Vertical"
                                     Margin="15,10,0,0">
-                            <TextBlock Text="Song File"/>
+                            <TextBlock Text="Song File" Foreground="{StaticResource subColorText}"/>
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Name="btnBrowseSong"
                                         Margin="0,10,0,0"
                                         Content="Browse ..."
-                                        Foreground="Black" Click="btnBrowseSong_Click"/>
+                                        Foreground="{StaticResource mainColorText}" Click="btnBrowseSong_Click"/>
                                 <Button x:Name="btnRefreshSong"
                                         Margin="20,10,0,0"
                                         Content="Refresh"
-                                        Foreground="Black" Click="btnRefreshSong_Click"/>
+                                        Foreground="{StaticResource mainColorText}" Click="btnRefreshSong_Click"/>
                             </StackPanel>
-                            <TextBox x:Name="txbSongUrl" Margin="0,5,0,0"/>
+                            <TextBox x:Name="txbSongUrl" Foreground="{StaticResource mainColorText}" Margin="0,5,0,0" TextChanged="txbSongUrl_TextChanged"/>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <Button x:Name="btnPlay" Click="btnPlay_Click">
                                     <ui:SymbolIcon

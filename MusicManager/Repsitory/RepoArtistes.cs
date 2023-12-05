@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using MusicManager.Client;
 using MusicManager.Model;
 using Newtonsoft.Json;
@@ -47,7 +48,7 @@ namespace MusicManager.Repsitory
             }
         }
 
-        public async Task AddArtist(Artist artist)
+        private async Task AddArtist(Artist artist)
         {
             try
             {
@@ -88,7 +89,7 @@ namespace MusicManager.Repsitory
             }
         }
 
-        public async Task UpdateArtist(Artist artist)
+        private async Task UpdateArtist(Artist artist)
         {
             try
             {
@@ -123,6 +124,58 @@ namespace MusicManager.Repsitory
             {
                 MessageBox.Show(ex.Message);
                 return new Artist();
+            }
+        }
+
+        public async Task AddArtist(object image, Artist artist)
+        {
+            string newImageUri = string.Empty;
+            try
+            {
+                if (image is string imageSourceLink)
+                {
+                    image = imageSourceLink;
+                }
+                else if (image is ImageSource imgSource)
+                {
+                    string fileImageName = $"{artist.Name.ToLower().Replace(" ", "")}";
+                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                }
+                
+
+                artist.Image = newImageUri;
+                await AddArtist(artist);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public async Task UpdateArtist(object image, Artist artist)
+        {
+            string newImageUri = artist.Image;
+            try
+            {
+                if (image is string imageSourceLink)
+                {
+                    newImageUri = imageSourceLink;
+                }
+                else if (image is ImageSource imgSource)
+                {
+                    string fileImageName = $"{artist.Name.ToLower().Replace(" ", "")}";
+                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                }
+
+                artist.Image = newImageUri;
+                artist.Type = "Artiste";
+                await UpdateArtist(artist);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }
