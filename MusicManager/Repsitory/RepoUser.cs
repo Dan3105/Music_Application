@@ -15,10 +15,39 @@ namespace MusicManager.Repsitory
     public class RepoUser : IRepoUser
     {
         private readonly string api_get_users = "api/User";
+        private readonly string api_get_user = "api/User";
         private readonly string api_patch_user = "api/User";
         private readonly string api_get_roles = "api/Role";
         public RepoUser()
         {
+        }
+
+        public async Task<User> GetUser(int id)
+        {
+            if (App.AuthenticateModel == null)
+            {
+                MessageBox.Show("Cannot find authentication");
+                return null;
+            }
+
+            try
+            {
+                HttpResponseMessage responseMessage = await Axios.Client.GetAsync($"{api_get_user}/{id}");
+                responseMessage.EnsureSuccessStatusCode();
+
+                string jsonResponse = await responseMessage.Content.ReadAsStringAsync();
+                User user = await System.Text.Json.JsonSerializer.DeserializeAsync<User>
+                    (new MemoryStream(Encoding.UTF8.GetBytes(jsonResponse)),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    );
+                return user;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+
         }
 
         public async Task<IEnumerable<Role>> GetRoles()

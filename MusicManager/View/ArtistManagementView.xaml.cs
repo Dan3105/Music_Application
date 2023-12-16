@@ -93,9 +93,16 @@ namespace MusicManager.View
         {
             try
             {
-                
+                if (DataContext is ArtistManagementViewModel viewModel)
+                {
+                    var currentArtist = DGArtist.CurrentItem as Artist;
+                    if (currentArtist != null)
+                    {
+                        viewModel.DeleteArtistCommand?.Execute(currentArtist);
+                    }
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

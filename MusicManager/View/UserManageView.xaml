@@ -84,9 +84,7 @@
                                                 Click="BtnEdit_Click"
                                                 Cursor="Hand"
                                                 Style="{StaticResource ButtonEditDGStyle}"/>
-                                        <Button x:Name="BtnDelete"
-                                                Cursor="Hand"
-                                                Style="{StaticResource ButtonDeleteDGStyle}"/>
+
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

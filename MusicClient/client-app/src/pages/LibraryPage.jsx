@@ -3,12 +3,13 @@ import SongCard from "../components/SongCard";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import { client } from "../api";
+import { useParams } from "react-router-dom";
 
 const LibraryPage = () => {
+	const { textsearch } = useParams();
 	const [songs, setSongs] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
-
 	const fetchSongs = async () => {
 		setLoading(true);
 		setError(false);
@@ -24,8 +25,30 @@ const LibraryPage = () => {
 			});
 	};
 
+	const fetchSongsWithSearch = async () => {
+		setLoading(true);
+		setError(false);
+		await client
+			.get(`/Song/search/${textsearch}`)
+			.then((res) => {
+				setSongs(res.data);
+				setLoading(false);
+			})
+			.catch(() => {
+				setError(true);
+				setLoading(false);
+			});
+	};
+
 	useEffect(() => {
-		fetchSongs();
+		if(textsearch?.length > 0)
+		{
+			fetchSongsWithSearch();
+		}
+		else{
+			fetchSongs();
+
+		}
 	}, []);
 
 	return (

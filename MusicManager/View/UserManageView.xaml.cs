@@ -25,12 +25,6 @@ namespace MusicManager.View
             InitializeComponent();
         }
 
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is UserManageViewModel userManageViewModel)
@@ -60,8 +54,9 @@ namespace MusicManager.View
                 if (DataContext is UserManageViewModel userManageViewModel)
                 {
                     var refUser = (User)DGridCustomer.CurrentItem;
+                    var userFromDatabase = await App.RepositoryManager.RepoUsers.GetUser(refUser.Id);
                     var roleList = await App.RepositoryManager.RepoUsers.GetRoles();
-                    FormEditDataUser editUser = new FormEditDataUser(refUser, roleList, userManageViewModel.SubmitEditFormCommand);
+                    FormEditDataUser editUser = new FormEditDataUser(userFromDatabase, roleList, userManageViewModel.SubmitEditFormCommand);
                     editUser.ShowDialog();
 
                 }

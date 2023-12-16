@@ -1,4 +1,5 @@
-﻿using MusicManager.Model;
+﻿using Firebase.Storage;
+using MusicManager.Model;
 using MusicManager.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,25 @@ namespace MusicManager.View
                 {
                     homeViewModel.PlayASong.Execute(song);
                 }
+            }
+        }
+
+        private async void test_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string url = "https://firebasestorage.googleapis.com/v0/b/musicproject-2737f.appspot.com/o/mp3-song%2Fworldsmallestviolin20231206165237.mp3?alt=media&token=4fb1f740-a119-45e5-95d5-255fe89ffc61";
+                Uri newUri = new Uri(url);
+                string path = newUri.LocalPath;
+                path = Uri.UnescapeDataString(path);
+                int indexOfLastSlash = path.LastIndexOf('/');
+                string desiredPath = path.Substring(indexOfLastSlash + 1);
+                MessageBox.Show(desiredPath);
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

@@ -30,7 +30,7 @@ namespace MusicManager.Services
                         ms.Seek(0, SeekOrigin.Begin);
 
                         var urlUpload = await _storage
-                        .Child($"{Config.Config.FIREBASE_ARTIST_IMG_FOLDER}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.png")
+                        .Child($"{folderFileConfig}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.png")
                         .PutAsync(ms);
 
                         Console.WriteLine(urlUpload);
@@ -59,7 +59,7 @@ namespace MusicManager.Services
                     using (var stream = File.Open(validateUri.LocalPath, FileMode.Open))
                     {
                         urlLoad = await _storage
-                            .Child($"{Config.Config.FIREBASE_SONG_MP3_FOLDER}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.mp3")
+                            .Child($"{folderFileConfig}/{fileName}{DateTime.Now.ToString("yyyyMMddHHmmss")}.mp3")
                             .PutAsync(stream);
 
                         return urlLoad;
@@ -77,5 +77,24 @@ namespace MusicManager.Services
             }
         }
 
+        public async Task DeleteFileFromCloud(string url, string folderFileConfig)
+        {
+            try
+            {
+                Uri newUri = new Uri(url);
+                string path = newUri.LocalPath;
+                path = Uri.UnescapeDataString(path);
+
+                int indexOfLastSlash = path.LastIndexOf('/');
+                string desiredPath = path.Substring(indexOfLastSlash + 1);
+               
+                await _storage.Child(folderFileConfig).Child(desiredPath).DeleteAsync();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

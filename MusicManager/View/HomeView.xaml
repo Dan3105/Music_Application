@@ -90,7 +90,7 @@
                         </Grid.RowDefinitions>
 
                         <Border
-                                VerticalAlignment="Center" Grid.ColumnSpan="2">
+                            VerticalAlignment="Center" Grid.ColumnSpan="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -195,9 +195,13 @@
 
                         </ListBox>
                     </Grid>
+                    <d:Button x:Name="test" Content="Testt"
+                              Foreground="Black"
+                              Background="AliceBlue" Click="test_Click"/>
                 </StackPanel>
 
             </Grid>
+
         </Grid>
     </ScrollViewer>
 </UserControl>

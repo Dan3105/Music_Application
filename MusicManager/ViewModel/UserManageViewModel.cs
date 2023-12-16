@@ -82,6 +82,7 @@ namespace MusicManager.ViewModel
                 if(await App.RepositoryManager.RepoUsers.PatchUser(user))
                 {
                     MessageBox.Show("Update user successfully");
+                    LoadDataFromServerCommand?.Execute(null);
                 }
             }
             catch(Exception ex)

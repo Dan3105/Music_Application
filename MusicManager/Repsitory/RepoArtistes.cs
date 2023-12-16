@@ -71,14 +71,9 @@ namespace MusicManager.Repsitory
         {
             try
             {
-                if(artist.Songs.Count > 0)
-                {
-                    MessageBox.Show("Cannot delete this artist since they have songs in DB", "Failed Removed", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
                 HttpResponseMessage responseMessage = await Axios.Client.DeleteAsync(api_delete_artist + $"/{artist.Id}");
                 responseMessage.EnsureSuccessStatusCode();
+                await App.FirebaseService.DeleteFileFromCloud(artist.Image, Config.Config.FIREBASE_ARTIST_IMG_FOLDER);
                 MessageBox.Show("Delete artist successfully");
                 return;
             }
@@ -156,6 +151,7 @@ namespace MusicManager.Repsitory
         public async Task UpdateArtist(object image, Artist artist)
         {
             string newImageUri = artist.Image;
+            string oldImageUri = artist.Image;
             try
             {
                 if (image is string imageSourceLink)
@@ -171,7 +167,10 @@ namespace MusicManager.Repsitory
                 artist.Image = newImageUri;
                 artist.Type = "Artiste";
                 await UpdateArtist(artist);
-
+                if(oldImageUri != newImageUri)
+                {
+                    await App.FirebaseService.DeleteFileFromCloud(artist.Image, Config.Config.FIREBASE_ARTIST_IMG_FOLDER);
+                }
             }
             catch (Exception ex)
             {

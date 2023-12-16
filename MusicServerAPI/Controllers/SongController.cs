@@ -80,6 +80,20 @@ namespace MusicServerAPI.Controllers
             return Ok(songList);
         }
 
+        [HttpGet("search/{text}")]
+        public async Task<IActionResult> GetMostLikeSong(string text)
+        {
+            ICollection<Song> songs = await _songRepository.GetSongsBySearch(text);
+            List<SongDTO> songList = new List<SongDTO>();
+
+            foreach (var song in songs)
+            {
+                songList.Add(new SongDTO(song));
+            }
+
+            return Ok(songList);
+        }
+
         [HttpGet("latest")]
         public async Task<IActionResult> GetLatestSong()
         {

@@ -32,6 +32,10 @@ export const router = createBrowserRouter([
 				element: <LibraryPage />,
 			},
 			{
+				path: "library/:textsearch",
+				element: <LibraryPage />,
+			},
+			{
 				path: "playlists",
 				element: <PlaylistsPage />,
 			},

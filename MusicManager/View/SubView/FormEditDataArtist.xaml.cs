@@ -137,7 +137,7 @@ namespace MusicManager.View.SubView
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Title = "Select Image";
-            dlg.Filter = "Image Files(*.jpg, *.png) | *.jpg; *.png";
+            dlg.Filter = "Image Files(*.jpg, *.png, *.jpeg) | *.jpg; *.png; *.jpeg";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //Bitmap bitmap = new Bitmap(dlg.FileName);
@@ -197,7 +197,6 @@ namespace MusicManager.View.SubView
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
             }
         }
 
@@ -216,23 +215,12 @@ namespace MusicManager.View.SubView
             return true;
         }
 
-        private async Task<string> UpdateImageToFirebase()
-        {
-            return await App.FirebaseService.UpdateDataImageToCloud(imgArtist.Source, txbArtistName.Text, FIREBASE_ARTIST_IMG_FOLDER);
-        }
-
-
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             WindowInteropHelper hepler = new WindowInteropHelper(this);
             SendMessage(hepler.Handle, 161, 2, 0);
-        }
-
-        private void txbArtistName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
         }
     }
 }

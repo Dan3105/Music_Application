@@ -50,7 +50,7 @@ namespace MusicServerAPI.Repository
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Song>> GetSongsByArtistId(int artistId, int length = 10)
+        public async Task<ICollection<Song>> GetSongsByArtistId(int artistId, int length = 20)
         {
             var artist = await _dbContext.Artists
                 .Include(s => s.ArtistSongs)
@@ -60,8 +60,7 @@ namespace MusicServerAPI.Repository
             return artist.ArtistSongs.Select(p => p.Song).ToList();
         }
 
-
-        public async Task<ICollection<Song>> GetSongsOrderDateRealease(int length=10)
+        public async Task<ICollection<Song>> GetSongsOrderDateRealease(int length=20)
         {
             return await _dbContext.Songs
                 .Include(s => s.ArtistSongs)
@@ -71,12 +70,16 @@ namespace MusicServerAPI.Repository
                 .ToListAsync();
         }
 
-        public Task<ICollection<Song>> GetSongsBySearch(string search, int length = 10)
+        public async Task<ICollection<Song>> GetSongsBySearch(string search, int length = 20)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Songs
+               .Include(s => s.ArtistSongs)
+                   .ThenInclude(ars => ars.Artist)
+               .Where(s => s.Title.ToLower().Contains(search.ToLower()))
+               .ToListAsync();
         }
 
-        public async Task<ICollection<Song>> GetSongsOrderLikes(int length=10)
+        public async Task<ICollection<Song>> GetSongsOrderLikes(int length=20)
         {
             return await _dbContext.Songs
                 .Include(s => s.ArtistSongs)

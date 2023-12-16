@@ -11,5 +11,6 @@ namespace MusicManager.Services
     {
         Task<string> UpdateDataSongToCloud(string filePath, string fileName, string folderFileConfig);
         Task<string> UpdateDataImageToCloud(ImageSource imageSource, string fileName, string folderFileConfig);
+        Task DeleteFileFromCloud(string url, string folderFileConfig);
     }
 }

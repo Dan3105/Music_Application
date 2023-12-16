@@ -23,10 +23,6 @@ namespace MusicServerAPI.Entity
         [DataType(DataType.DateTime)]
         public DateTime Created { get; set; } = DateTime.Now;
 
-        public bool Is_staff { get; set; } = false;
-
-        public bool Is_superuser { get; set; } = false;
-
         public bool Is_activate { get; set; } = true;
 
         [AllowNull]

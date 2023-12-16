@@ -76,6 +76,7 @@ const SongCard = ({ song }) => {
 				onClick={playSong}
 				cursor="pointer"
 				h={{ base: "8rem", md: "10rem" }}
+				w={{ base: "8rem", md: "10rem" }}
 				mb={4}
 				overflow="hidden"
 				position="relative">
@@ -125,7 +126,7 @@ const SongCard = ({ song }) => {
 						fontWeight={500}>
 						{song?.title}
 					</Heading>
-					<Link to={`/Artist/${song?.artists?.at(0)?.id}`}>
+					<Link to={`/artiste/${song?.artists?.at(0)?.id}`}>
 						<Text
 							fontSize={{ base: "xs", md: "sm" }}
 							color="zinc.400"

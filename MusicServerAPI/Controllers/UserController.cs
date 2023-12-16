@@ -12,7 +12,7 @@ namespace MusicServerAPI.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
-        public UserController(IUserRepository userRepository, IRoleRepository roleRepository) { 
+        public UserController(IUserRepository userRepository, IRoleRepository roleRepository) {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
         }
@@ -21,12 +21,24 @@ namespace MusicServerAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetUsers() {
             List<User> users = (await _userRepository.GetAll()).ToList();
-            List<UsersDTO> usersDTOs  = new List<UsersDTO>();
+            List<UsersDTO> usersDTOs = new List<UsersDTO>();
             foreach (var user in users)
             {
                 usersDTOs.Add(new UsersDTO(user));
             }
             return Ok(usersDTOs);
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            User user = await _userRepository.GetUser(id);
+            if(user != null)
+            {
+                return Ok(new UsersDTO(user));
+            }
+            return BadRequest();
         }
 
         [HttpPatch]

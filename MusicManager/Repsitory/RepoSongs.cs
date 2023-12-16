@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -88,8 +89,11 @@ namespace MusicManager.Repsitory
         {
             try
             {
+                string oldFilePath = song.SongURL;
                 HttpResponseMessage responseMessage = await Axios.Client.DeleteAsync(api_delete_song + $"/{song.Id}"); ;
                 responseMessage.EnsureSuccessStatusCode();
+                await App.FirebaseService.DeleteFileFromCloud(song.SongURL, Config.Config.FIREBASE_SONG_MP3_FOLDER);
+                await App.FirebaseService.DeleteFileFromCloud(song.CoverImage, Config.Config.FIREBASE_SONG_IMG_FOLDER);
                 MessageBox.Show("Delete song successfully");
                 return;
             }
@@ -126,6 +130,7 @@ namespace MusicManager.Repsitory
             string newSongUri = string.Empty;
             try
             {
+                //Handle update to firebase
                 if(imageSource is string imageSourceLink)
                 {
                     newImageUri = imageSourceLink;
@@ -148,6 +153,7 @@ namespace MusicManager.Repsitory
                     newSongUri = await App.FirebaseService.UpdateDataSongToCloud(uriSong, fileSongName, Config.Config.FIREBASE_SONG_MP3_FOLDER);
                 }
 
+                //Handle update to mydb
                 song.CoverImage = newImageUri;
                 song.SongURL = newSongUri;
                 song.Likes = 0;
@@ -162,8 +168,10 @@ namespace MusicManager.Repsitory
 
         public async Task UpdateSong(object imageSource, string media, Song song)
         {
-            string newImageUri = string.Empty;
-            string newSongUri = media;
+            string newImageUri = song.CoverImage;
+            string oldImageUri = song.CoverImage;
+            string newSongUri = song.SongURL;
+            string oldSongUri = song.SongURL;
             try
             {
                 if (imageSource is string imageSourceLink)
@@ -174,10 +182,6 @@ namespace MusicManager.Repsitory
                 {
                     string fileImageName = $"{song.Title.ToLower().Replace(" ", "")}";
                     newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
-                }
-                else
-                {
-                    newImageUri = song.CoverImage;
                 }
 
                 Uri mediaUri = new Uri(media);
@@ -191,6 +195,15 @@ namespace MusicManager.Repsitory
                 song.CoverImage = newImageUri;
                 song.SongURL = newSongUri;
                 await UpdateSong(song);
+
+                if(oldImageUri != newImageUri)
+                {
+                    await App.FirebaseService.DeleteFileFromCloud(oldImageUri, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                }
+                if (oldSongUri != newSongUri)
+                {
+                    await App.FirebaseService.DeleteFileFromCloud(oldSongUri, Config.Config.FIREBASE_SONG_MP3_FOLDER);
+                }
 
             }
             catch (Exception ex)
