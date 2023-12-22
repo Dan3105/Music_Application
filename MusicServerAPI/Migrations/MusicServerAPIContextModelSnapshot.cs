@@ -22,6 +22,34 @@ namespace MusicServerAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("MusicServerAPI.Entity.Album", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.ToTable("Albums");
+                });
+
             modelBuilder.Entity("MusicServerAPI.Entity.Artist", b =>
                 {
                     b.Property<int>("Id")
@@ -153,6 +181,9 @@ namespace MusicServerAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AlbumId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CoverImage")
                         .HasColumnType("text");
 
@@ -175,6 +206,8 @@ namespace MusicServerAPI.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
 
                     b.ToTable("Songs");
                 });
@@ -203,12 +236,6 @@ namespace MusicServerAPI.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Is_activate")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Is_staff")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Is_superuser")
                         .HasColumnType("boolean");
 
                     b.Property<string>("RefreshToken")
@@ -240,6 +267,17 @@ namespace MusicServerAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("MusicServerAPI.Entity.Album", b =>
+                {
+                    b.HasOne("MusicServerAPI.Entity.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("MusicServerAPI.Entity.ArtistSong", b =>
@@ -310,6 +348,15 @@ namespace MusicServerAPI.Migrations
                     b.Navigation("Song");
                 });
 
+            modelBuilder.Entity("MusicServerAPI.Entity.Song", b =>
+                {
+                    b.HasOne("MusicServerAPI.Entity.Album", "Album")
+                        .WithMany("Songs")
+                        .HasForeignKey("AlbumId");
+
+                    b.Navigation("Album");
+                });
+
             modelBuilder.Entity("MusicServerAPI.Entity.UserRole", b =>
                 {
                     b.HasOne("MusicServerAPI.Entity.Role", "Role")
@@ -327,6 +374,11 @@ namespace MusicServerAPI.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MusicServerAPI.Entity.Album", b =>
+                {
+                    b.Navigation("Songs");
                 });
 
             modelBuilder.Entity("MusicServerAPI.Entity.Artist", b =>

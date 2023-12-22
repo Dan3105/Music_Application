@@ -4,6 +4,7 @@ import { BsHeadphones } from "react-icons/bs";
 import { TiTimes } from "react-icons/ti";
 import { HiOutlineUserCircle, HiViewGrid } from "react-icons/hi";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { LuAlbum } from "react-icons/lu";
 import {
 	Box,
 	Button,
@@ -144,6 +145,26 @@ const NavContent = () => {
 							px={4}>
 							<HiViewGrid size={20} />
 							<span>Browse</span>
+						</Button>
+					)}
+				</NavLink>
+				<NavLink to="/album">
+					{({ isActive }) => (
+						<Button
+							bg={isActive ? "accent.main" : "transparent"}
+							_hover={
+								isActive ? { opacity: 0.8 } : { bg: "accent.transparent" }
+							}
+							rounded="base"
+							display="inline-flex"
+							alignItems="center"
+							justifyContent="flex-start"
+							gap={6}
+							w="full"
+							py={6}
+							px={4}>
+							<LuAlbum size={20} />
+							<span>Album</span>
 						</Button>
 					)}
 				</NavLink>

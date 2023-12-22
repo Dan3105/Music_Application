@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MusicServerAPI.Data;
 using MusicServerAPI.Entity;
 using MusicServerAPI.Model;
 using MusicServerAPI.Repository;
-using System.Collections;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
+
 
 namespace MusicServerAPI.Controllers
 {

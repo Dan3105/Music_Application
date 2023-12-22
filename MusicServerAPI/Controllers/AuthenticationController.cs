@@ -40,7 +40,7 @@ namespace MusicServerAPI.Controllers
             }
 
             // Check if the user already exists in the database.
-            var existingUser = _userRepository.GetUser(registerForm.Email);
+            var existingUser = await _userRepository.GetUser(registerForm.Email);
             if (existingUser != null)
             {
                 // The user already exists. Return a BadRequestObjectResult with an error message.

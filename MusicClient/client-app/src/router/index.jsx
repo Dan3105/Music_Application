@@ -14,6 +14,7 @@ import FavoritesPage from "../pages/FavoritesPage";
 import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import AlbumsPage from "../pages/AlbumsPage";
 
 
 export const router = createBrowserRouter([
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
 			{
 				path: "playlists",
 				element: <PlaylistsPage />,
+			},
+			{
+				path: "album",
+				element: <AlbumsPage />,
 			},
 			{
 				path: "playlists/:id",
