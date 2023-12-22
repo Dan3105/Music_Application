@@ -13,6 +13,9 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\AlbumManagementView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\HomeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -22,7 +25,7 @@
     <Compile Update="View\MainView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\SubView\FormAddDataUser.xaml.cs">
+    <Compile Update="View\SubView\FormEditDataAlbum.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\SubView\RoleListSelect.xaml.cs">
@@ -66,6 +69,9 @@
     <Page Update="Styles\UIColors.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="View\AlbumManagementView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\HomeView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -75,10 +81,10 @@
     <Page Update="View\MainView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\SubView\FormEditDataUser.xaml">
+    <Page Update="View\SubView\FormEditDataAlbum.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="View\SubView\FormAddDataUser.xaml">
+    <Page Update="View\SubView\FormEditDataUser.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\SubView\RoleListSelect.xaml">

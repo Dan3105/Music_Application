@@ -56,7 +56,7 @@ namespace MusicManager.ViewModel
                 if (MessageBox.Show("Are you sure to delete this Artist, you can't revert it if you click Yes",
                   "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    DeleteSongFromServer(artist);
+                    DeleteArtistFromServer(artist);
                 }
             }
             else
@@ -131,7 +131,7 @@ namespace MusicManager.ViewModel
         }
 
 
-        private async void DeleteSongFromServer(Artist artist)
+        private async void DeleteArtistFromServer(Artist artist)
         {
             try
             {

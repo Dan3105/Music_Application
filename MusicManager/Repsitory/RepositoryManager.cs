@@ -68,5 +68,19 @@ namespace MusicManager.Repsitory
                 return repoUsers;
             }
         }
+
+
+        private IRepoAlbums repoAlbums;
+        public IRepoAlbums RepoAlbums
+        {
+            get
+            {
+                if (repoAlbums == null)
+                {
+                    repoAlbums = new RepoAlbums();
+                }
+                return repoAlbums;
+            }
+        }
     }
 }

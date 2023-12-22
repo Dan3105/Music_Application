@@ -60,6 +60,7 @@ namespace MusicManager.ViewModel
         public ICommand ShowUserManagementViewCommand { get; set; }
         public ICommand ShowSongManagementViewCommand { get; set; }
         public ICommand ShowArtistManagementViewCommand { get; set; }
+        public ICommand ShowAlbumManagementViewCommand { get; set; }
 
         public MainViewModel()
         {
@@ -67,7 +68,15 @@ namespace MusicManager.ViewModel
             ShowUserManagementViewCommand = new ViewModelCommand(ExecuteUserManagementViewCommand);
             ShowSongManagementViewCommand = new ViewModelCommand(ExecuteSongManagementViewCommand);
             ShowArtistManagementViewCommand = new ViewModelCommand(ExecuteArtistManagementViewCommand);
+            ShowAlbumManagementViewCommand = new ViewModelCommand(ExecuteAlbumManagementViewCommand);
             ExecuteShowHomeViewCommand(null);
+        }
+
+        private void ExecuteAlbumManagementViewCommand(object obj)
+        {
+            CurrentView = new AlbumManagementViewModel();
+            CurrentBreadCrumb = "Album Management";
+            SymbolIcon = "Album24";
         }
 
         private void ExecuteArtistManagementViewCommand(object obj)

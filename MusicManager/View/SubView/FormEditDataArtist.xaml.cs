@@ -63,7 +63,7 @@ namespace MusicManager.View.SubView
         }
 
         #region Handler Button Action UI
-        private async void btnSubmit_Click(object sender, RoutedEventArgs e)
+        private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             try
             {

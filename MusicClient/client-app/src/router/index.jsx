@@ -15,6 +15,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import AlbumsPage from "../pages/AlbumsPage";
+import AlbumPage from "../pages/AlbumPage";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
 			{
 				path: "album",
 				element: <AlbumsPage />,
+			},
+			{
+				path: "album/:id",
+				element: <AlbumPage />,
 			},
 			{
 				path: "playlists/:id",

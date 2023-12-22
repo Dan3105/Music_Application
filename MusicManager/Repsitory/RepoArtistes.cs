@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using MusicManager.Client;
@@ -42,8 +36,7 @@ namespace MusicManager.Repsitory
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
-
+                MessageBox.Show(ex.Message);
                 return Enumerable.Empty<Artist>();
             }
         }

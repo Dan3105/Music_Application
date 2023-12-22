@@ -36,7 +36,7 @@ namespace MusicManager.View.SubView
             foreach(var asong in  songs)
             {
                 bool _isSelected = false;
-                if (songCurrentlySelected.FirstOrDefault(p => p.Id == asong.Id) != null)
+                if (songCurrentlySelected?.FirstOrDefault(p => p.Id == asong.Id) != null)
                     _isSelected = true;
 
                 _selectorList.Add(new SongSelectors
