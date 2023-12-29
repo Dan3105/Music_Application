@@ -17,9 +17,9 @@ const HomePage = () => {
 			<GridItem colSpan={5} p={4}>
 				<Search />
 				<HomeHero />
-				<SmallSection title="New Releases" endpoint="/Song/latest" />
+				<SmallSection title="New Releases" endpoint="/MusicService/Song/latest" />
 				<Artistes />
-				<SmallSection title="Popular Around You" endpoint="/Song/most-liked" />
+				<SmallSection title="Popular Around You" endpoint="/MusicService/Song/most-liked" />
 			</GridItem>
 			<GridItem colSpan={3} p={4}>
 				<TopCharts />

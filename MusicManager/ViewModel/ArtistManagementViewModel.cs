@@ -53,6 +53,11 @@ namespace MusicManager.ViewModel
         {
             if(obj is Artist artist)
             {
+                if(artist.Songs != null && artist.Songs.Count > 0)
+                {
+                    MessageBox.Show("Cannot delete artists because they have music in database");
+                    return;
+                }
                 if (MessageBox.Show("Are you sure to delete this Artist, you can't revert it if you click Yes",
                   "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {

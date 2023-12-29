@@ -24,25 +24,36 @@ import {
 import { Link } from "react-router-dom";
 import { client } from "../api";
 import { setUser } from "../redux/slices/userSlice";
-
+import { setFavorite } from "../redux/slices/favoriteSlice";
 const SongCard = ({ song }) => {
 	const dispatch = useDispatch();
 	const { currentTrack, isPlaying } = useSelector((state) => state.player);
 	const { user } = useSelector((state) => state.user);
+	const { favorites } = useSelector((state) => state.favorites)
 
 	const toast = useToast();
 
 	const playSong = () => {
-		// dispatch(setCurrentTrack(song));
-		// dispatch(setTrackList({ list: [song] }));
-		// dispatch(setPlaying(true));
+		dispatch(setCurrentTrack(song));
+		dispatch(setTrackList({ list: [song] }));
+		dispatch(setPlaying(true));
 	};
+
+	const updateFavorites = async () => {
+		await client.get(`/MusicService/FavoriteSongs/user/${user.id}`, { withCredentials: true })
+			.then((ress) => {
+				dispatch(setFavorite(ress.data));
+			})
+			.catch((ex) => { console.log(ex) });
+	}
+
 	//const handleLike = () => {}
 	const handleLike = async () => {
 		await client
-			.patch(`/Song/like/${song?.id}`, null,  {withCredentials: true})
+			.patch(`/MusicService/Song/like/${song?.id}`, null, { withCredentials: true })
 			.then((res) => {
-				dispatch(setUser(res.data));
+				//dispatch(setUser(res.data));
+				updateFavorites();
 				toast({
 					description: "Your favorites have been updated",
 					status: "success",
@@ -58,7 +69,7 @@ const SongCard = ({ song }) => {
 	};
 
 	const isCurrentTrack = currentTrack?.id === song?.id;
-	const isFavorite = user?.favorites?.includes(song.id);
+	const isFavorite = favorites?.map(obj => obj.id)?.includes(song.id);
 
 	return (
 		<Box
@@ -81,7 +92,7 @@ const SongCard = ({ song }) => {
 				overflow="hidden"
 				position="relative">
 				<Image
-					src={song?.coverImage ||  "https://wallpaperset.com/w/full/0/3/f/466996.jpg"}
+					src={song?.coverImage || "https://wallpaperset.com/w/full/0/3/f/466996.jpg"}
 					alt={song?.title}
 					w="full"
 					roundedTop="base"

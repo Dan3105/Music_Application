@@ -14,7 +14,7 @@ namespace MusicManager.Repsitory
 {
     public class RepoAuthentication : IRepoAuthentication
     {
-        private readonly string api_login = "api/Auth/login";
+        private readonly string api_login = "api/UserService/Auth/login";
         public RepoAuthentication()
         {
         }

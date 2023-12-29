@@ -35,7 +35,7 @@ const PlaylistPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Playlist/${id}`, { withCredentials: true })
+			.get(`/MusicService/Playlist/${id}`, { withCredentials: true })
 			.then((res) => {
 				setData(res.data);
 				setLoading(false);
@@ -65,7 +65,7 @@ const PlaylistPage = () => {
 	};
 
 	const onDeletePlaylist = async () => {
-		await client.delete(`/Playlist/${id}`, { withCredentials: true })
+		await client.delete(`/MusicService/Playlist/${id}`, { withCredentials: true })
 				.then((res) => {
 				if (res.status === 200) {
 					toast({

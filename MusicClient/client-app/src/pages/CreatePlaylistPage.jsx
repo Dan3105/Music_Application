@@ -43,7 +43,7 @@ const CreatePlaylistPage = () => {
 		setFavoritesLoading(true);
 		setError({ ...error, favorites: false });
 		await client
-			.get("/Song/latest")
+			.get("/MusicService/Song/latest")
 			.then((res) => {
 				setFavoritesLoading(false);
 				setFavorites(res.data);
@@ -58,7 +58,7 @@ const CreatePlaylistPage = () => {
 		setError({ ...error, otherSongs: false });
 		setOtherSongsLoading(true);
 		await client
-			.get("/Song/most-liked")
+			.get("/MusicService/Song/most-liked")
 			.then((res) => {
 				setOtherSongs(res.data);
 				setOtherSongsLoading(false);
@@ -85,7 +85,7 @@ const CreatePlaylistPage = () => {
 		};
 		setCreatePlLoading(true);
 		await client
-			.post("/Playlist/create", playlistDetails,{withCredentials: true})
+			.post("/MusicService/Playlist/create", playlistDetails,{withCredentials: true})
 			.then((res) => {
 				setCreatePlLoading(false);
 				toast({

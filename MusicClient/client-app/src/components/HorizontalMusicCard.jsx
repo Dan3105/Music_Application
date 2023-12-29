@@ -10,12 +10,43 @@ import {
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { fadeInUp } from "../theme/motionVariants";
-import { useSelector } from "react-redux";
 import "util";
 import { convertToMins } from "../utils";
+import { client } from "../api";
+import {useToast}  from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFavorite } from "../redux/slices/favoriteSlice";
 const HorizontalMusicCard = ({ song, onPlay }) => {
 	const { currentTrack } = useSelector((state) => state.player);
+	const { favorites } = useSelector((state) => state.favorites);
 	const { user } = useSelector((state) => state.user);
+	const toast = useToast();
+	const dispatch = useDispatch();
+	const likeSong = async () => {
+		await client
+			.patch(`/MusicService/Song/like/${song?.id}`, null, { withCredentials: true })
+			.then((res) => {
+				update();
+
+				toast({
+					description: "Your favorites have been updated",
+					status: "success",
+				});
+			})
+			.catch(() => {
+				toast({
+					description: "An error occured",
+					status: "error",
+				});
+			});
+	};
+
+	const update = async () => {
+		await client.get(`/MusicService/FavoriteSongs/user/${user.id}`, { withCredentials: true })
+			.then((ress) => {
+				dispatch(setFavorite(ress.data));
+			})
+	};
 
 	return (
 		<Box
@@ -62,10 +93,10 @@ const HorizontalMusicCard = ({ song, onPlay }) => {
 							{convertToMins(song?.duration)}
 						</Text>
 					</Hide>
-					<Button variant="unstyled" minW={5} color="zinc.300">
-						{user?.favorites?.includes(song.id) ? (
+					<Button variant="unstyled" minW={5} color="zinc.300" onClick={likeSong}>
+						{favorites?.map(obj => obj.id)?.includes(song.id) ? (
 							<AiFillHeart color="inherit" />
-						) : (	
+						) : (
 							<AiOutlineHeart color="#ddd" />
 						)}
 					</Button>

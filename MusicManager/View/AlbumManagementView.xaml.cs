@@ -32,8 +32,7 @@ namespace MusicManager.View
                 if (DataContext is AlbumManagementViewModel viewModel)
                 {
                     var artists = await App.RepositoryManager.RepoArtistes.GetArtistsAsync();
-                    var songs = await App.RepositoryManager.RepoSongs.GetSongs();
-                    FormEditDataAlbum formEditDataAlbum = new FormEditDataAlbum(songs, artists, viewModel.CreateAlbumCommand);
+                    FormEditDataAlbum formEditDataAlbum = new FormEditDataAlbum(artists, viewModel.CreateAlbumCommand);
                     formEditDataAlbum.ShowDialog();
                 }
             }
@@ -70,8 +69,7 @@ namespace MusicManager.View
                     if (currentAlbum != null)
                     {
                         var artists = await App.RepositoryManager.RepoArtistes.GetArtistsAsync();
-                        var songs = await App.RepositoryManager.RepoSongs.GetSongs();
-                        FormEditDataAlbum formEditDataAlbum = new FormEditDataAlbum(currentAlbum, songs, artists, viewModel.UpdateAlbumCommand);
+                        FormEditDataAlbum formEditDataAlbum = new FormEditDataAlbum(currentAlbum, artists, viewModel.UpdateAlbumCommand);
                         formEditDataAlbum.ShowDialog();
                     }
                     else
@@ -92,7 +90,7 @@ namespace MusicManager.View
             {
                 if (DataContext is AlbumManagementViewModel viewModel)
                 {
-                    var currentArtist = DGAlbum.CurrentItem as Artist;
+                    var currentArtist = DGAlbum.CurrentItem as Album;
                     if (currentArtist != null)
                     {
                         viewModel.DeleteAlbumCommand?.Execute(currentArtist);

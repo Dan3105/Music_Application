@@ -60,19 +60,23 @@ namespace MusicManager.View.SubView
 
         private void BtnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if(_refUser != null && ActionSubmit != null)
+            if (MessageBox.Show("Are you sure to submit?", "Submit", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                _refUser.IsActive = this.chbActive.IsChecked ?? false;
-                _refUser.RoleDTOs = this.currentUserRoles.ToList();
-                ActionSubmit.Execute(_refUser);
+                if (_refUser != null && ActionSubmit != null)
+                {
+                    _refUser.IsActive = this.chbActive.IsChecked ?? false;
+                    _refUser.RoleDTOs = this.currentUserRoles.ToList();
+                    ActionSubmit.Execute(_refUser);
+
+                }
+                else
+                {
+                    MessageBox.Show("Binding data is null");
+                }
+                ActionSubmit = null;
+                this.Close();
+            }
                 
-            }
-            else
-            {
-                MessageBox.Show("Binding data is null");
-            }
-            ActionSubmit = null;
-            this.Close();
         }
 
         private void AddUserRoleAction(Role role)

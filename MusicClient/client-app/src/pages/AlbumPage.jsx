@@ -35,7 +35,7 @@ const AlbumPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Album/${id}`)
+			.get(`/MusicService/Album/${id}`)
 			.then((res) => {
 				setData(res.data);
 				setLoading(false);

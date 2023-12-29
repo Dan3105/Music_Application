@@ -7,6 +7,7 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MusicManager.ViewModel
@@ -85,6 +86,16 @@ namespace MusicManager.ViewModel
             if(AuthModel == null)
             {
                 ErrorMessage = "Error in Logging check password and email";
+                return;
+            }
+            if(AuthModel.UserRequest == null)
+            {
+                ErrorMessage = "Error in request";
+                return;
+            }
+            if(AuthModel.UserRequest.Roles.Count == 0)
+            {
+                MessageBox.Show("This User is not allowed to login this game");
                 return;
             }
 

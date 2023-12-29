@@ -10,6 +10,7 @@ import {
 	InputRightElement,
 	Spinner,
 	Text,
+	useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -19,7 +20,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { client } from "../api";
 import { loginUser, setUser } from "../redux/slices/userSlice";
 import { resetPlayer } from "../redux/slices/playerSlice";
-
+import { setFavorite } from "../redux/slices/favoriteSlice";
+import { useSelector } from "react-redux";
 const LoginPage = () => {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ const LoginPage = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	const toast = useToast();
 	const validateFields = () => {
 		if (email == "" || password == "") {
 			setError("All fields are required!");
@@ -39,11 +41,29 @@ const LoginPage = () => {
 		}
 	};
 
+	
+	
+	const fetchFavorites = async (userId) => {
+		if (userId !== null)
+		{
+			await client
+				.get(`/MusicService/FavoriteSongs/user/${userId}`, {withCredentials: true})
+				.then((res) => {
+					setLoading(false);
+					dispatch(setFavorite(res.data));
+				})
+				.catch(() => {
+					setLoading(false);
+					setError(true);
+				});
+		}
+	};
+
 	const handleLogin = async () => {
 		if (validateFields()) {
 			setLoading(true);
 			await client
-				.post("/Auth/login", {
+				.post("/UserService/Auth/login", {
 					email,
 					password,
 				}, {withCredentials: true})
@@ -53,14 +73,20 @@ const LoginPage = () => {
 					dispatch(setUser(res.data.userRequest))
 					setLoading(false);
 					navigate('/home');
+					fetchFavorites(res.data.userRequest.id);
 				})
 				.catch((err) => {
 					console.log(err);
 					setError(err?.response?.data?.message);
+					toast({
+						description: "Login Failed",
+						status: "error",
+					});
 					setLoading(false);
 				});
 		}
 	};
+
 
 	return (
 		<Box minH="calc(100vh - 5rem)" maxW="2xl" mx="auto" p={6}>

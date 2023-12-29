@@ -12,11 +12,11 @@ namespace MusicManager.Repsitory
 {
     class RepoArtistes : IRepoArtistes
     {
-        private readonly string api_get_artists = "api/Artist";
-        private readonly string api_add_artist = "api/Artist";
-        private readonly string api_update_artist = "api/Artist";
-        private readonly string api_delete_artist = "api/Artist";
-        private readonly string api_get_artist_with_songs = "api/Artist/with-songs";
+        private readonly string api_get_artists = "api/MusicService/Artist";
+        private readonly string api_add_artist = "api/MusicService/Artist";
+        private readonly string api_update_artist = "api/MusicService/Artist";
+        private readonly string api_delete_artist = "api/MusicService/Artist";
+        private readonly string api_get_artist_with_songs = "api/MusicService/Artist/with-songs";
         public RepoArtistes() { 
             
         }
@@ -127,7 +127,7 @@ namespace MusicManager.Repsitory
                 else if (image is ImageSource imgSource)
                 {
                     string fileImageName = $"{artist.Name.ToLower().Replace(" ", "")}";
-                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_SONG_IMG_FOLDER);
+                    newImageUri = await App.FirebaseService.UpdateDataImageToCloud(imgSource, fileImageName, Config.Config.FIREBASE_ARTIST_IMG_FOLDER);
                 }
 
                 artist.Type = "Artiste";

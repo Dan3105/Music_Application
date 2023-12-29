@@ -13,7 +13,7 @@ const ArtistesPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get("/Artist")
+			.get("/MusicService/Artist")
 			.then((res) => {
 				setArtistes(res.data);
 				setLoading(false);

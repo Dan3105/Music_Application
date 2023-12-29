@@ -12,11 +12,11 @@ namespace MusicManager.Repsitory
 {
     internal class RepoAlbums : IRepoAlbums
     {
-        private readonly string api_get_albums = "api/Album";
-        private readonly string api_get_album = "api/Album";
-        private readonly string api_post_album = "api/Album";
-        private readonly string api_patch_album = "api/Album";
-        private readonly string api_delete_album = "api/Album";
+        private readonly string api_get_albums = "api/MusicService/Album";
+        private readonly string api_get_album = "api/MusicService/Album";
+        private readonly string api_post_album = "api/MusicService/Album";
+        private readonly string api_patch_album = "api/MusicService/Album";
+        private readonly string api_delete_album = "api/MusicService/Album";
         
         private async Task AddAlbum(Album album)
         {
@@ -27,7 +27,7 @@ namespace MusicManager.Repsitory
                 var stringContent = new StringContent(jsonSerialize, UnicodeEncoding.UTF8, "application/json-patch+json");
                 HttpResponseMessage responseMessage = await Axios.Client.PostAsync(api_post_album, stringContent);
                 responseMessage.EnsureSuccessStatusCode();
-                MessageBox.Show("Add artist successfully");
+                MessageBox.Show("Add album successfully");
                 return;
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace MusicManager.Repsitory
                 var stringContent = new StringContent(jsonSerialize, UnicodeEncoding.UTF8, "application/json-patch+json");
                 HttpResponseMessage responseMessage = await Axios.Client.PatchAsync(api_patch_album, stringContent);
                 responseMessage.EnsureSuccessStatusCode();
-                MessageBox.Show("Update artist successfully");
+                MessageBox.Show("Update album successfully");
                 return;
             }
             catch (Exception ex)
@@ -87,7 +87,7 @@ namespace MusicManager.Repsitory
                 HttpResponseMessage responseMessage = await Axios.Client.DeleteAsync(api_delete_album + $"/{album.Id}");
                 responseMessage.EnsureSuccessStatusCode();
                 await App.FirebaseService.DeleteFileFromCloud(album.ImageUrl, Config.Config.FIREBASE_ALBUM_IMG_FOLDER);
-                MessageBox.Show("Delete artist successfully");
+                MessageBox.Show("Delete album successfully");
                 return;
             }
             catch (Exception ex)

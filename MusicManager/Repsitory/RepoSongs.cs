@@ -18,14 +18,36 @@ namespace MusicManager.Repsitory
 {
     class RepoSongs : IRepoSongs
     {
-        private readonly string api_get_songs = "api/Song";
-        private readonly string api_get_song = "api/Song";
-        private readonly string api_add_song = "api/Song/add";
-        private readonly string api_delete_song = "api/Song/del";
-        private readonly string api_update_song = "api/Song/update";
+        private readonly string api_get_songs = "api/MusicService/Song";
+        private readonly string api_get_song = "api/MusicService/Song";
+        private readonly string api_add_song = "api/MusicService/Song/add";
+        private readonly string api_get_songs_by_artist = "api/MusicService/Song/by-artist-";
+        private readonly string api_delete_song = "api/MusicService/Song/del";
+        private readonly string api_update_song = "api/MusicService/Song/update";
 
         public RepoSongs()
         {
+        }
+
+
+        public async Task<IEnumerable<Song>> GetSongsByArtist(int id)
+        {
+            try
+            {
+                HttpResponseMessage responseMessage = await Axios.Client.GetAsync(api_get_songs_by_artist+$"{id}");
+                responseMessage.EnsureSuccessStatusCode();
+                string jsonResponse = await responseMessage.Content.ReadAsStringAsync();
+                List<Song> songs = await System.Text.Json.JsonSerializer.DeserializeAsync<List<Song>>
+                    (new MemoryStream(Encoding.UTF8.GetBytes(jsonResponse)),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    );
+                return songs;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return Enumerable.Empty<Song>();
+            }
         }
 
         public async Task<IEnumerable<Song>> GetSongs()
@@ -211,5 +233,6 @@ namespace MusicManager.Repsitory
                 MessageBox.Show(ex.Message);
             }
         }
+
     }
 }

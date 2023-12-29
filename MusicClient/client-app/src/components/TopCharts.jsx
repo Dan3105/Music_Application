@@ -18,7 +18,7 @@ const TopCharts = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get("/Song/most-liked")
+			.get("/MusicService/Song/most-liked")
 			.then((res) => {
 				setData(res.data);
 				setLoading(false);

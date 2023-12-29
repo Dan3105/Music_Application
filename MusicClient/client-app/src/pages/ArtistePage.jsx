@@ -29,7 +29,7 @@ const ArtistePage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Artist/with-songs/${id}`)
+			.get(`/MusicService/Artist/with-songs/${id}`)
 			.then((res) => {
 				setArtiste(res.data);
 				setLoading(false);

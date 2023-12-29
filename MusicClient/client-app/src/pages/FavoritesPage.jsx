@@ -18,7 +18,7 @@ const FavoritesPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get("/Auth/favorites", {withCredentials: true})
+			.get(`/MusicService/FavoriteSongs/user/${user.id}`, {withCredentials: true})
 			.then((res) => {
 				setLoading(false);
 				setFavorites(res.data);
@@ -31,7 +31,6 @@ const FavoritesPage = () => {
 
 	useEffect(() => {
 		fetchFavorites();
-		console.log(user);
 	}, []);
 
 	const onPlay = (song) => {

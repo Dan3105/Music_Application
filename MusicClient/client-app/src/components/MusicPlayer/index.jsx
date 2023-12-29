@@ -22,7 +22,7 @@ import PlayControls from "./PlayControls";
 import LoginModal from "../LoginModal";
 import PlayingBar from "./PlayingBar";
 import { setModalMessage } from "../../redux/slices/modalSlice";
-
+import { setFavorite } from "../../redux/slices/favoriteSlice";
 const MusicPlayer = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const modalRef = useRef();
@@ -32,7 +32,7 @@ const MusicPlayer = () => {
 		useSelector((state) => state.player);
 	const { user, token } = useSelector((state) => state.user);
 	const audioRef = useRef();
-
+	const { favorites } = useSelector((state) => state.favorites)
 	const isEndOfTracklist = currentIndex === trackList.length - 1;
 
 	const [songDetails, setSongDetails] = useState(null);
@@ -98,24 +98,24 @@ const MusicPlayer = () => {
 	const handlePlayPause = () => {
 		console.log(audioRef)
 		if (audioRef.current.readyState >= 2) { // Check if audio is loaded
-		  if (isPlaying) {
-			audioRef.current.pause();
-			setAudioPlaying(false);
-		  } else {
-			const playPromise = audioRef.current.play();
-			if (playPromise !== undefined) {
-			  playPromise
-				.then(() => {
-				  setAudioPlaying(true);
-				})
-				.catch((error) => {
-				  console.error("Play promise error:", error);
-				  setAudioPlaying(false);
-				});
+			if (isPlaying) {
+				audioRef.current.pause();
+				setAudioPlaying(false);
+			} else {
+				const playPromise = audioRef.current.play();
+				if (playPromise !== undefined) {
+					playPromise
+						.then(() => {
+							setAudioPlaying(true);
+						})
+						.catch((error) => {
+							console.error("Play promise error:", error);
+							setAudioPlaying(false);
+						});
+				}
 			}
-		  }
 		}
-	  };
+	};
 
 	const volumeToggle = () => {
 		if (songDetails?.volume > 0) {
@@ -180,15 +180,23 @@ const MusicPlayer = () => {
 		}
 	};
 
+	const update = async () => {
+		const ress = await client.get(`/MusicService/FavoriteSongs/user/${user.id}`, {withCredentials:true})
+		dispatch(setFavorite(ress.data));
+	  }
+
 	const likeSong = async () => {
 		await client
-			.patch(`/Song/like/${currentTrack?.id}`, null,  {withCredentials: true})
+			.patch(`/MusicService/Song/like/${currentTrack?.id}`, null, { withCredentials: true })
 			.then((res) => {
-				dispatch(setUser(res.data));
+				//dispatch(setUser(res.data));
+				update();
 				toast({
 					description: "Your favorites have been updated",
 					status: "success",
 				});
+
+				updateSong();
 			})
 			.catch(() => {
 				toast({
@@ -196,7 +204,16 @@ const MusicPlayer = () => {
 					status: "error",
 				});
 			});
+
 	};
+
+	const updateSong = async () => {
+		await client.get(`/MusicService/FavoriteSongs/user/${user.id}`, {withCredentials: true})
+		.then((ress) => {
+			dispatch(setFavorite(ress.data));
+		})
+		.catch((ex) => { console.log(ex) });
+	}
 
 	const handleLike = () => {
 		if (!user) {
@@ -208,7 +225,6 @@ const MusicPlayer = () => {
 			likeSong();
 		}
 	};
-
 	return (
 		<>
 			<LoginModal ref={modalRef} onClose={onClose} isOpen={isOpen} />
@@ -257,7 +273,7 @@ const MusicPlayer = () => {
 						justifyContent="center"
 						color="accent.main"
 						onClick={handleLike}>
-						{user?.favorites.includes(currentTrack.id) ? (
+						{favorites?.map(obj => obj.id)?.includes(currentTrack.id) ? (
 							<AiFillHeart color="inherit" />
 						) : (
 							<AiOutlineHeart color="#ddd" />

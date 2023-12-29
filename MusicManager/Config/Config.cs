@@ -15,7 +15,7 @@ namespace MusicManager.Config
             None
         }
 
-        public static string REQUEST_API = "http://localhost:5070/";
+        public static string REQUEST_API = "http://localhost:5067/";
         public static string FIREBASE_STORAGE = "musicproject-2737f.appspot.com";
         public static string FIREBASE_SONG_MP3_FOLDER = "mp3-song";
         public static string FIREBASE_ARTIST_IMG_FOLDER = "img-artist";

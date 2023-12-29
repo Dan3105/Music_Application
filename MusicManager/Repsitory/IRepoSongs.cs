@@ -17,5 +17,6 @@ namespace MusicManager.Repsitory
 
         Task AddSong(object imageSource, string media, Song song);
         Task UpdateSong(object imageSource, string media, Song song);
+        Task<IEnumerable<Song>> GetSongsByArtist(int id);
     }
 }

@@ -10,6 +10,7 @@ import {
 	InputRightElement,
 	Spinner,
 	Text,
+	useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -27,7 +28,7 @@ const RegisterPage = () => {
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const dispatch = useDispatch();
-
+	const toast = useToast();
 	const validateFields = () => {
 		if (email == "" || password == "") {
 			setError("All fields are required!");
@@ -42,7 +43,7 @@ const RegisterPage = () => {
 		if (validateFields()) {
 			setLoading(true);
 			await client
-				.post("/Auth/register", {
+				.post("/UserService/Auth/register", {
 					email,
 					password,
 				})
@@ -50,10 +51,17 @@ const RegisterPage = () => {
 					dispatch(resetPlayer());
 					dispatch(loginUser(res.data));
 					setLoading(false);
-
+					toast({
+						description: "Register Success",
+						status: "success",
+					});
 					
 				})
 				.catch((err) => {
+					toast({
+						description: "Register Failed!",
+						status: "error",
+					});
 					setError(err?.response?.data?.message);
 					setLoading(false);
 				});

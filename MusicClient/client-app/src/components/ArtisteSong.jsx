@@ -18,10 +18,12 @@ import { setUser } from "../redux/slices/userSlice";
 import { setModalMessage } from "../redux/slices/modalSlice";
 import "util";
 import { convertToMins } from "../utils";
+import { setFavorite } from "../redux/slices/favoriteSlice";
 const ArtisteSong = ({ song, handlePlay }) => {
   const dispatch = useDispatch();
   const { currentTrack, isPlaying } = useSelector((state) => state.player);
   const { user, token } = useSelector((state) => state.user);
+  const {favorites} = useSelector((state) => state.favorites);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const modalRef = useRef();
   const toast = useToast();
@@ -34,9 +36,10 @@ const ArtisteSong = ({ song, handlePlay }) => {
 
   const likeSong = async () => {
     await client
-      .patch(`/Song/like/${song?.id}`, null, { withCredentials: true })
+      .patch(`/MusicService/Song/like/${song?.id}`, null, { withCredentials: true })
       .then((res) => {
-        dispatch(setUser(res.data));
+        update();
+        
         toast({
           description: "Your favorites have been updated",
           status: "success",
@@ -50,6 +53,13 @@ const ArtisteSong = ({ song, handlePlay }) => {
       });
   };
 
+  const update = async () => {
+    await client.get(`/MusicService/FavoriteSongs/user/${user.id}`, {withCredentials:true})
+          .then((ress) => {
+            dispatch(setFavorite(ress.data));
+          })
+  }
+
   const handleLike = () => {
     if (!user) {
       dispatch(
@@ -58,9 +68,10 @@ const ArtisteSong = ({ song, handlePlay }) => {
       onOpen();
     } else {
       likeSong();
+      
+
     }
   };
-
   return (
     <>
       <LoginModal ref={modalRef} onClose={onClose} isOpen={isOpen} />
@@ -131,7 +142,7 @@ const ArtisteSong = ({ song, handlePlay }) => {
             color="accent.main"
             onClick={handleLike}
           >
-            {user?.favorites?.includes(song?.id) ? (
+            {favorites?.map(obj => obj.id)?.includes(song?.id) ? (
               <AiFillHeart color="inherit" />
             ) : (
               <AiOutlineHeart color="#ddd" />

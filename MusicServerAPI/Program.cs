@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MusicServerAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.IdentityModel.Tokens.Jwt;
 using MusicServerAPI.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -52,6 +51,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 #region Add Jwt Auth
 builder.Services.AddTransient<IJwtService, JwtService>();
 var jwtKey = builder.Configuration.GetValue<string>("JwtSetting:Key");

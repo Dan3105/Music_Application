@@ -58,7 +58,7 @@ namespace MusicManager.ViewModel
         {
             if (obj is Album album)
             {
-                if (MessageBox.Show("Are you sure to delete this Artist, you can't revert it if you click Yes",
+                if (MessageBox.Show("Are you sure to delete this Album, you can't revert it if you click Yes",
                   "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     DeleteAlbumFromServer(album);
@@ -66,7 +66,7 @@ namespace MusicManager.ViewModel
             }
             else
             {
-                MessageBox.Show("Artist is not selected");
+                MessageBox.Show("Album is not selected");
             }
         }
 

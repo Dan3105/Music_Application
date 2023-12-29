@@ -14,7 +14,7 @@ const LibraryPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get("/Song")
+			.get("/MusicService/Song")
 			.then((res) => {
 				setSongs(res.data);
 				setLoading(false);
@@ -29,7 +29,7 @@ const LibraryPage = () => {
 		setLoading(true);
 		setError(false);
 		await client
-			.get(`/Song/search/${textsearch}`)
+			.get(`/MusicService/Song/search/${textsearch}`)
 			.then((res) => {
 				setSongs(res.data);
 				setLoading(false);

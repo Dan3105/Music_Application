@@ -14,10 +14,10 @@ namespace MusicManager.Repsitory
 {
     public class RepoUser : IRepoUser
     {
-        private readonly string api_get_users = "api/User";
-        private readonly string api_get_user = "api/User";
-        private readonly string api_patch_user = "api/User";
-        private readonly string api_get_roles = "api/Role";
+        private readonly string api_get_users = "api/UserService/User";
+        private readonly string api_get_user = "api/UserService/User";
+        private readonly string api_patch_user = "api/UserService/User";
+        private readonly string api_get_roles = "api/UserService/Role";
         public RepoUser()
         {
         }

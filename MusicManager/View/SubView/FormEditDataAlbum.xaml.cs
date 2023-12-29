@@ -18,27 +18,25 @@ namespace MusicManager.View.SubView
     public partial class FormEditDataAlbum : Window
     {
         private ImageSourceType currentImageSourceType = ImageSourceType.None;
-        private ObservableCollection<Song> _allSongsParsing;
+        //private ObservableCollection<Song> _allSongsParsing;
         private ObservableCollection<Song> _currentSongContains;
         private ObservableCollection<Artist> _allArtistParsing;
         private Album _album;
         private ICommand SubmitCommand;
-        public FormEditDataAlbum(IEnumerable<Song> songs, IEnumerable<Artist> artist, ICommand submitCommand)
+        public FormEditDataAlbum(IEnumerable<Artist> artist, ICommand submitCommand)
         {
             InitializeComponent();
             _album = new Album();
-            _allSongsParsing = new ObservableCollection<Song>(songs);
             _allArtistParsing = new ObservableCollection<Artist>(artist);
             SubmitCommand = submitCommand;
 
             BindingUI();
         }
 
-        public FormEditDataAlbum(Album album, IEnumerable<Song> songs, IEnumerable<Artist> artist, ICommand submitCommand)
+        public FormEditDataAlbum(Album album, IEnumerable<Artist> artist, ICommand submitCommand)
         {
             InitializeComponent();
             _album = album;
-            _allSongsParsing = new ObservableCollection<Song>(songs);
             _allArtistParsing = new ObservableCollection<Artist>(artist);
             SubmitCommand = submitCommand;
 
@@ -53,8 +51,18 @@ namespace MusicManager.View.SubView
             {
                 _currentSongContains = new ObservableCollection<Song>(_album.Songs);
             }
+            else
+            {
+                _currentSongContains = new ObservableCollection<Song>();
+            }
             this.DGSong.ItemsSource = _currentSongContains;
             this.cbArtists.ItemsSource = _allArtistParsing;
+            if(_album.Artiste != null)
+            {
+                var selectedItem = _allArtistParsing.FirstOrDefault(p => p.Id == _album.Artiste.Id);
+                this.cbArtists.SelectedItem = selectedItem;
+            }
+            RefreshImage();
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
@@ -88,10 +96,21 @@ namespace MusicManager.View.SubView
             }
         }
 
-        private void btnAddSong_Click(object sender, RoutedEventArgs e)
+        private async void btnAddSong_Click(object sender, RoutedEventArgs e)
         {
-            MiniDGMusicSelect miniDGMusicSelect = new MiniDGMusicSelect(_allSongsParsing, _currentSongContains, CommandAfterCloseMiniDGMusicSelect);
-            miniDGMusicSelect.ShowDialog();
+            if(cbArtists.SelectedItem == null)
+            {
+                MessageBox.Show("Artist is not selected");
+                return;
+            }
+            if(cbArtists.SelectedItem is Artist artist)
+            {
+                var _allSongsParsing = await App.RepositoryManager.RepoSongs.GetSongsByArtist(artist.Id);
+                MiniDGMusicSelect miniDGMusicSelect = new MiniDGMusicSelect(_allSongsParsing, _currentSongContains, CommandAfterCloseMiniDGMusicSelect);
+                miniDGMusicSelect.ShowDialog();
+                return;
+            }
+            MessageBox.Show("Error in showing dialog");
         }
 
         private void CommandAfterCloseMiniDGMusicSelect(IEnumerable<Song> SongSelected)
@@ -121,6 +140,11 @@ namespace MusicManager.View.SubView
 
         private void btnRefreshImage_Click(object sender, RoutedEventArgs e)
         {
+            RefreshImage();
+        }
+
+        private void RefreshImage()
+        {
             try
             {
                 BitmapImage bitmapImage = new BitmapImage(new Uri(_album.ImageUrl));
@@ -142,31 +166,35 @@ namespace MusicManager.View.SubView
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (MessageBox.Show("Are you sure to submit?", "Submit", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                if (BindingToModelArtist())
+
+                try
                 {
-                    
-                    if (currentImageSourceType == ImageSourceType.File)
+                    if (BindingToModelArtist())
                     {
-                        object param = new Tuple<object, Album>(imgAlbum.Source, _album);
-                        SubmitCommand?.Execute(param);
-                    }
-                    else if (currentImageSourceType == ImageSourceType.Url)
-                    {
-                        object param = new Tuple<object, Album>(_album.ImageUrl, _album);
-                        SubmitCommand?.Execute(param);
 
-                    }
+                        if (currentImageSourceType == ImageSourceType.File)
+                        {
+                            object param = new Tuple<object, Album>(imgAlbum.Source, _album);
+                            SubmitCommand?.Execute(param);
+                        }
+                        else if (currentImageSourceType == ImageSourceType.Url)
+                        {
+                            object param = new Tuple<object, Album>(_album.ImageUrl, _album);
+                            SubmitCommand?.Execute(param);
 
-                    this.Close();
+                        }
+
+                        this.Close();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                if (MessageBox.Show(ex.Message, "Submit Got Error, Do you want to close this Form", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                catch (Exception ex)
                 {
-                    this.Close();
+                    if (MessageBox.Show(ex.Message, "Submit Got Error, Do you want to close this Form", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                    {
+                        this.Close();
+                    }
                 }
             }
         }

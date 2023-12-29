@@ -65,34 +65,38 @@ namespace MusicManager.View.SubView
         #region Handler Button Action UI
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (MessageBox.Show("Are you sure to submit?", "Submit", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                if (BindingToModelArtist())
+                try
                 {
-                    if (currentImageSourceType == ImageSourceType.File)
+                    if (BindingToModelArtist())
                     {
-                        object param = new Tuple<object, Artist>(imgArtist.Source, _artist);
-                        SubmitCommand?.Execute(param);
+                        if (currentImageSourceType == ImageSourceType.File)
+                        {
+                            object param = new Tuple<object, Artist>(imgArtist.Source, _artist);
+                            SubmitCommand?.Execute(param);
+                        }
+                        else if (currentImageSourceType == ImageSourceType.Url)
+                        {
+                            object param = new Tuple<object, Artist>(_artist.Image, _artist);
+                            SubmitCommand?.Execute(param);
+
+                        }
+
+                        ActionBeforeClose();
+                        this.Close();
                     }
-                    else if (currentImageSourceType == ImageSourceType.Url)
+                }
+                catch (Exception ex)
+                {
+                    if (MessageBox.Show(ex.Message, "Submit Got Error, Do you want to close this Form", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
                     {
-                        object param = new Tuple<object, Artist>(_artist.Image, _artist);
-                        SubmitCommand?.Execute(param);
-
+                        ActionBeforeClose();
+                        this.Close();
                     }
-
-                    ActionBeforeClose();
-                    this.Close();
                 }
             }
-            catch (Exception ex)
-            {
-                if (MessageBox.Show(ex.Message, "Submit Got Error, Do you want to close this Form", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
-                {
-                    ActionBeforeClose();
-                    this.Close();
-                }
-            }
+                
         }
 
         private bool BindingToModelArtist()

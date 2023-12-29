@@ -46,7 +46,7 @@ const EditPlaylistPage = () => {
 	const fetchPlaylist = async () => {
 		setFetchPlaylistStatus({ loading: true, error: false });
 		await client
-			.get(`/Playlist/${id}`, {withCredentials: true})
+			.get(`/MusicService/Playlist/${id}`, {withCredentials: true})
 			.then((res) => {
 				setInputs({
 					playlistName: res.data.title,
@@ -67,7 +67,7 @@ const EditPlaylistPage = () => {
 			return { ...prev, error: false, loading: true };
 		});
 		await client
-			.get("/Song/most-liked")
+			.get("/MusicService/Song/most-liked")
 			.then((res) => {
 				setOtherSongs((prev) => {
 					return { ...prev, data: res.data, loading: false };
@@ -138,7 +138,7 @@ const EditPlaylistPage = () => {
 			songIds,
 		};
 		await client
-			.patch(`/Playlist/edit/${id}`, playlistDetails, {
+			.patch(`/MusicService/Playlist/edit/${id}`, playlistDetails, {
 				withCredentials:true
 			})
 			.then(() => {

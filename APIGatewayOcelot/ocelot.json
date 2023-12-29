@@ -1,0 +1,28 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/UserService/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webuser_service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/UserService/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/MusicService/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webmusic_service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/MusicService/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "DELETE" ]
+    }
+  ]
+}
