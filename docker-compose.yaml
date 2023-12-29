@@ -1,22 +1,51 @@
 version: '0.3'
 
 services:
-  webapi:
-    image: 'webapi-image:latest'
-    build: 
-      context: ./MusicServerAPI
+  webmusic_service:
+    image: 'apimusic-service:latest'
+    build:
+      context: ./MusicService
       dockerfile: Dockerfile
-    ports: 
-      - "5070:80"
-      - "443:443"
+    ports:
+      - "5231:80"
     environment:
-      - ConnectionStrings__MusicServerAPI=User ID=postgres;Server=host.docker.internal;Port=5432;Database=music_pg;Password=postgres;Pooling=True;
-      - ASPNETCORE_URLS=http://+80
+      - ConnectionStrings__MusicServer=User ID=postgres;Server=host.docker.internal;Port=5432;Database=music_db;Password=postgres;Pooling=True;
     networks:
+      - ocelet-net
+    depends_on:
+      - postgres
+
+  webuser_service:
+    image: 'apiuser-service:latest'
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5233:80"
+    environment:
+      - ConnectionStrings__UserServer=User ID=postgres;Server=host.docker.internal;Port=5432;Database=user_db;Password=postgres;Pooling=True;
+    networks:
+      - ocelet-net
+    depends_on:
+      - postgres
+
+  ocelet:
+    image: 'ocelet:service'
+    environment:
+      - ASPNETCORE_ENVIROMENT=Development
+    build:
+      context: ./APIGatewayOcelot
+      dockerfile: Dockerfile
+    ports:
+      - "5067:80"
+    networks:
+      - ocelet-net
       - backend
       - frontend
     depends_on:
       - postgres
+      - webmusic_service
+      - webuser_service
 
   postgres:
     image: postgres:latest
@@ -40,13 +69,14 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - webapi
+      - ocelet
     networks:
       - frontend
 
 networks:
   backend:
   frontend:
+  ocelet-net:
 
 volumes:
   app-data:
