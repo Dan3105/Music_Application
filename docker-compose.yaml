@@ -2,7 +2,7 @@ version: '0.3'
 
 services:
   webmusic_service:
-    image: 'apimusic-service:latest'
+    image: 'chidanh0502/apimusic-service:latest'
     build:
       context: ./MusicService
       dockerfile: Dockerfile
@@ -16,7 +16,7 @@ services:
       - postgres
 
   webuser_service:
-    image: 'apiuser-service:latest'
+    image: 'chidanh0502/apiuser-service:latest'
     build:
       context: ./UserService
       dockerfile: Dockerfile
@@ -30,7 +30,7 @@ services:
       - postgres
 
   ocelet:
-    image: 'ocelet:service'
+    image: 'chidanh0502/ocelet:service'
     environment:
       - ASPNETCORE_ENVIROMENT=Development
     build:
@@ -41,7 +41,6 @@ services:
     networks:
       - ocelet-net
       - backend
-      - frontend
     depends_on:
       - postgres
       - webmusic_service
@@ -63,7 +62,7 @@ services:
     
 
   webclient:
-    image: 'webclient-image:latest'
+    image: 'chidanh0502/webclient-image:latest'
     build:
       context: ./MusicClient/client-app
     ports:
